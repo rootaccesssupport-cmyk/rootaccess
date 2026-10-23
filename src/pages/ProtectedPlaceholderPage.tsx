@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Terminal, LogOut, ShieldCheck, User, Mail, Calendar, KeyRound, Loader2, Sparkles } from 'lucide-react';
+import { LogOut, ShieldCheck, User, Mail, Calendar, KeyRound, Loader2, Sparkles } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 
 export const ProtectedPlaceholderPage: React.FC = () => {

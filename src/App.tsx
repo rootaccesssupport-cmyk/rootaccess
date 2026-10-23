@@ -8,8 +8,8 @@ import { SignUpPage } from './pages/SignUpPage';
 import { LoginPage } from './pages/LoginPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
-import { ProtectedPlaceholderPage } from './pages/ProtectedPlaceholderPage';
 import { HomePage } from './pages/HomePage';
+import { StudentDashboardPage } from './pages/StudentDashboardPage';
 
 export const App: React.FC = () => {
   return (
@@ -48,15 +48,16 @@ export const App: React.FC = () => {
           {/* Password Reset route (handles password recovery links from Supabase) */}
           <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-          {/* Protected Route for Phase 1 Authentication Verification */}
+          {/* Protected Route: Student Dashboard (Phase 3) */}
           <Route
             path="/app"
             element={
               <ProtectedRoute>
-                <ProtectedPlaceholderPage />
+                <StudentDashboardPage />
               </ProtectedRoute>
             }
           />
+          <Route path="/dashboard" element={<Navigate to="/app" replace />} />
 
           {/* Fallback route */}
           <Route path="*" element={<Navigate to="/" replace />} />

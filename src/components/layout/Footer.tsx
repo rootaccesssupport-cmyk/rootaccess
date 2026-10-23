@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Terminal, Mail, Shield, CheckCircle } from 'lucide-react';
+import { Mail, Shield, CheckCircle } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
