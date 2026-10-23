@@ -9,13 +9,13 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-slate-900">
-                <Terminal className="w-4 h-4 text-emerald-600" />
-              </div>
-              <span className="font-mono text-base font-bold text-white tracking-tight">
-                RootAccess
-              </span>
+            <div className="flex items-center gap-2">
+              <img
+                src="/logo-white.png"
+                alt="RootAccess"
+                className="h-9 sm:h-10 w-auto object-contain"
+              />
+              <span className="sr-only">RootAccess</span>
             </div>
             <p className="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">
               A practical career learning and job discovery platform for students, fresh graduates, and career switchers. Master real-world tech skills, prepare for rigorous interviews, and discover verified roles.

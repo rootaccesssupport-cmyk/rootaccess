@@ -20,13 +20,13 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-900 text-white shadow-xs group-hover:bg-slate-800 transition-colors">
-              <Terminal className="w-4 h-4 text-emerald-400" />
-            </div>
-            <span className="font-mono text-base font-extrabold tracking-tight text-slate-900">
-              RootAccess
-            </span>
+          <Link to="/" className="flex items-center gap-2 group">
+            <img
+              src="/logo.png"
+              alt="RootAccess"
+              className="h-8 sm:h-9 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+            />
+            <span className="sr-only">RootAccess</span>
           </Link>
 
           {/* Desktop Navigation Links */}
