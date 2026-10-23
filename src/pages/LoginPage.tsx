@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Header } from '../components/common/Header';
 import { Alert } from '../components/common/Alert';
-import { Eye, EyeOff, Lock, Mail, ArrowRight, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ArrowRight, Loader2, Sparkles } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const { signIn, isConfigured } = useAuth();
@@ -19,6 +19,23 @@ export const LoginPage: React.FC = () => {
 
   // If user arrived from password reset success or redirection
   const successStateMessage = (location.state as any)?.message;
+
+  const handleDemoLogin = async () => {
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    try {
+      await signIn({
+        email: 'alex.student@rootaccess.org',
+        password: 'DemoPassword123!',
+      });
+      const destination = (location.state as any)?.from?.pathname || '/app';
+      navigate(destination, { replace: true });
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Demo login failed');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,11 +87,23 @@ export const LoginPage: React.FC = () => {
 
         <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
           {!isConfigured && (
-            <div className="mb-6">
-              <Alert
-                type="warning"
-                message="Supabase credentials are not configured yet. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file to enable authentication."
-              />
+            <div className="mb-6 p-4 bg-indigo-50/80 border border-indigo-200 rounded-2xl text-xs space-y-2.5">
+              <div className="flex items-center gap-1.5 font-bold text-indigo-900">
+                <Sparkles className="w-4 h-4 text-indigo-600" />
+                <span>Local Development Mode</span>
+              </div>
+              <p className="text-slate-600 leading-relaxed">
+                Supabase keys are not set in <code>.env</code> yet. You can enter any email/password above, or click below to log in instantly:
+              </p>
+              <button
+                type="button"
+                onClick={handleDemoLogin}
+                disabled={isSubmitting}
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl transition-all shadow-xs cursor-pointer disabled:opacity-60"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>⚡ 1-Click Instant Demo Login</span>
+              </button>
             </div>
           )}
 

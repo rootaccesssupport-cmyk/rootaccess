@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Header } from '../components/common/Header';
 import { Alert } from '../components/common/Alert';
-import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, ShieldCheck, Sparkles } from 'lucide-react';
 
 export const SignUpPage: React.FC = () => {
   const { signUp, isConfigured } = useAuth();
+  const navigate = useNavigate();
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -80,8 +81,9 @@ export const SignUpPage: React.FC = () => {
       } else if (result.requiresEmailConfirmation) {
         // Verification email was sent by Supabase
         setVerificationRequired(true);
+      } else {
+        navigate('/app', { replace: true });
       }
-      // If result.success && !requiresEmailConfirmation, Auth state listener automatically updates user & triggers redirect
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred.');
     } finally {
@@ -126,11 +128,14 @@ export const SignUpPage: React.FC = () => {
 
         <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
           {!isConfigured && (
-            <div className="mb-6">
-              <Alert
-                type="warning"
-                message="Supabase credentials are not configured yet. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file to enable authentication."
-              />
+            <div className="mb-6 p-4 bg-indigo-50/80 border border-indigo-200 rounded-2xl text-xs space-y-1.5">
+              <div className="flex items-center gap-1.5 font-bold text-indigo-900">
+                <Sparkles className="w-4 h-4 text-indigo-600" />
+                <span>Local Development Mode</span>
+              </div>
+              <p className="text-slate-600 leading-relaxed">
+                Supabase keys are not set in <code>.env</code> yet. You can sign up with any test name, email, and password to immediately access your dashboard.
+              </p>
             </div>
           )}
 

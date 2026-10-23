@@ -20,13 +20,16 @@ import {
   Loader2,
   Edit2,
   Save,
-  X
+  X,
+  Bug,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { useProgress } from '../context/ProgressContext';
 
 export const StudentDashboardPage: React.FC = () => {
   const { user, profile, signOut, refreshProfile } = useAuth();
+  const { overallStats, getCourseProgress } = useProgress();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'interview' | 'enrollment'>('overview');
@@ -121,81 +124,86 @@ export const StudentDashboardPage: React.FC = () => {
   const modules = [
     {
       id: 1,
+      slug: 'manual-qa-fundamentals',
       title: 'Module 1: Manual QA & Defect Life Cycle',
       description: 'Master test case writing, bug reporting with Jira templates, boundary value analysis, and regression testing.',
       status: 'In Progress',
-      progress: 40,
+      progress: getCourseProgress('manual-qa-fundamentals').percent || 40,
       totalLessons: 8,
-      completedLessons: 3,
+      completedLessons: getCourseProgress('manual-qa-fundamentals').completedCount || 3,
       icon: <BookOpen className="w-5 h-5 text-indigo-600" />,
       topics: [
-        { name: 'Introduction to Software Testing Life Cycle (STLC)', completed: true },
-        { name: 'Designing Test Cases with Edge Conditions', completed: true },
-        { name: 'Equivalence Partitioning & Boundary Value Analysis', completed: true },
-        { name: 'Workplace Defect Logging: Jira Bug Report Standards', completed: false },
-        { name: 'Regression Testing & Retesting Workflows', completed: false },
+        { name: 'Introduction to Software Testing Life Cycle (STLC)', completed: true, lessonSlug: 'stlc-fundamentals' },
+        { name: 'Designing Test Cases with Edge Conditions', completed: true, lessonSlug: 'test-case-design-bva-ep' },
+        { name: 'Equivalence Partitioning & Boundary Value Analysis', completed: true, lessonSlug: 'test-case-design-bva-ep' },
+        { name: 'Workplace Defect Logging: Jira Bug Report Standards', completed: false, lessonSlug: 'jira-bug-reporting' },
+        { name: 'Regression Testing & Retesting Workflows', completed: false, lessonSlug: 'jira-bug-reporting' },
       ],
     },
     {
       id: 2,
+      slug: 'sql-for-qa-engineers',
       title: 'Module 2: SQL & Backend Database Audits',
       description: 'Validate data integrity across backend tables. Write real SELECT queries, multi-table JOINs, and data audits.',
       status: 'Up Next',
-      progress: 0,
+      progress: getCourseProgress('sql-for-qa-engineers').percent || 0,
       totalLessons: 6,
-      completedLessons: 0,
+      completedLessons: getCourseProgress('sql-for-qa-engineers').completedCount || 0,
       icon: <Database className="w-5 h-5 text-emerald-600" />,
       topics: [
-        { name: 'Relational Database Concepts for QA Testers', completed: false },
-        { name: 'Filtering Data with WHERE, IN, LIKE, and BETWEEN', completed: false },
-        { name: 'Multi-table Verification with INNER & LEFT JOINs', completed: false },
-        { name: 'Auditing Data Mismatches Between UI and Database', completed: false },
+        { name: 'Relational Database Concepts for QA Testers', completed: false, lessonSlug: 'sql-data-verification' },
+        { name: 'Filtering Data with WHERE, IN, LIKE, and BETWEEN', completed: false, lessonSlug: 'sql-data-verification' },
+        { name: 'Multi-table Verification with INNER & LEFT JOINs', completed: false, lessonSlug: 'sql-joins-and-orphaned-records' },
+        { name: 'Auditing Data Mismatches Between UI and Database', completed: false, lessonSlug: 'sql-joins-and-orphaned-records' },
       ],
     },
     {
       id: 3,
+      slug: 'api-testing-postman',
       title: 'Module 3: API Testing & Postman',
       description: 'Inspect RESTful endpoints, validate JSON payloads, automate assertion scripts, and inspect auth headers.',
       status: 'Locked',
-      progress: 0,
+      progress: getCourseProgress('api-testing-postman').percent || 0,
       totalLessons: 6,
-      completedLessons: 0,
+      completedLessons: getCourseProgress('api-testing-postman').completedCount || 0,
       icon: <Send className="w-5 h-5 text-amber-600" />,
       topics: [
-        { name: 'HTTP Protocol: Methods, Headers & Status Codes', completed: false },
-        { name: 'Creating Postman Collections & Environment Variables', completed: false },
-        { name: 'Writing Automated JavaScript Assertions in Postman', completed: false },
-        { name: 'Testing Token-Based Authentication Flows', completed: false },
+        { name: 'HTTP Protocol: Methods, Headers & Status Codes', completed: false, lessonSlug: 'rest-http-status-codes' },
+        { name: 'Creating Postman Collections & Environment Variables', completed: false, lessonSlug: 'rest-http-status-codes' },
+        { name: 'Writing Automated JavaScript Assertions in Postman', completed: false, lessonSlug: 'postman-automated-assertions' },
+        { name: 'Testing Token-Based Authentication Flows', completed: false, lessonSlug: 'postman-automated-assertions' },
       ],
     },
     {
       id: 4,
+      slug: 'playwright-automation',
       title: 'Module 4: Automation Testing Foundations',
       description: 'Understand test automation architecture, DOM locators, assertion runners, and reliable script design.',
       status: 'Locked',
-      progress: 0,
+      progress: getCourseProgress('playwright-automation').percent || 0,
       totalLessons: 6,
-      completedLessons: 0,
+      completedLessons: getCourseProgress('playwright-automation').completedCount || 0,
       icon: <Code2 className="w-5 h-5 text-purple-600" />,
       topics: [
-        { name: 'When to Automate vs Keep Manual', completed: false },
-        { name: 'Robust Element Locators (CSS & XPath)', completed: false },
-        { name: 'Writing Your First Automated E2E Test Script', completed: false },
+        { name: 'When to Automate vs Keep Manual', completed: false, lessonSlug: 'playwright-locators-and-assertions' },
+        { name: 'Robust Element Locators (CSS & XPath)', completed: false, lessonSlug: 'playwright-locators-and-assertions' },
+        { name: 'Writing Your First Automated E2E Test Script', completed: false, lessonSlug: 'playwright-locators-and-assertions' },
       ],
     },
     {
       id: 5,
+      slug: 'qa-interview-mastery',
       title: 'Module 5: Interview Prep & Bug Portfolio',
       description: 'Polish your QA portfolio, practice situational interview scenarios, and master technical question banks.',
       status: 'Locked',
-      progress: 0,
+      progress: getCourseProgress('qa-interview-mastery').percent || 0,
       totalLessons: 5,
-      completedLessons: 0,
+      completedLessons: getCourseProgress('qa-interview-mastery').completedCount || 0,
       icon: <Briefcase className="w-5 h-5 text-rose-600" />,
       topics: [
-        { name: 'Building a Recruiter-Ready Defect Portfolio', completed: false },
-        { name: 'Top 50 Real-World QA Interview Questions', completed: false },
-        { name: 'Live Mock Interview Scenarios & Rubrics', completed: false },
+        { name: 'Building a Recruiter-Ready Defect Portfolio', completed: false, lessonSlug: 'star-method-qa-interviews' },
+        { name: 'Top 50 Real-World QA Interview Questions', completed: false, lessonSlug: 'star-method-qa-interviews' },
+        { name: 'Live Mock Interview Scenarios & Rubrics', completed: false, lessonSlug: 'star-method-qa-interviews' },
       ],
     },
   ];
@@ -412,11 +420,22 @@ export const StudentDashboardPage: React.FC = () => {
                     Overall Track Progress
                   </div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-extrabold text-slate-900">15%</span>
+                    <span className="text-2xl font-extrabold text-slate-900">
+                      {Math.round((overallStats.totalLessonsCompleted / Math.max(1, overallStats.totalLessonsAvailable)) * 100)}%
+                    </span>
                     <span className="text-xs text-slate-500">completed</span>
                   </div>
                   <div className="w-full sm:w-48 bg-slate-200 h-2 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-indigo-600 h-2 rounded-full" style={{ width: '15%' }} />
+                    <div
+                      className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
+                      style={{
+                        width: `${Math.round(
+                          (overallStats.totalLessonsCompleted /
+                            Math.max(1, overallStats.totalLessonsAvailable)) *
+                            100
+                        )}%`,
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -429,7 +448,9 @@ export const StudentDashboardPage: React.FC = () => {
                   <BookOpen className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-slate-900">3 / 31</div>
+                  <div className="text-xl font-extrabold text-slate-900">
+                    {overallStats.totalLessonsCompleted} / {overallStats.totalLessonsAvailable}
+                  </div>
                   <div className="text-xs text-slate-500 font-medium">Lessons Completed</div>
                 </div>
               </div>
@@ -439,7 +460,9 @@ export const StudentDashboardPage: React.FC = () => {
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-slate-900">1</div>
+                  <div className="text-xl font-extrabold text-slate-900">
+                    {overallStats.bugsFoundCount}
+                  </div>
                   <div className="text-xs text-slate-500 font-medium">Defect Logged</div>
                 </div>
               </div>
@@ -449,7 +472,9 @@ export const StudentDashboardPage: React.FC = () => {
                   <HelpCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-slate-900">12</div>
+                  <div className="text-xl font-extrabold text-slate-900">
+                    {overallStats.quizAveragePercent}%
+                  </div>
                   <div className="text-xs text-slate-500 font-medium">Quizzes Answered</div>
                 </div>
               </div>
@@ -459,10 +484,36 @@ export const StudentDashboardPage: React.FC = () => {
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-slate-900">Beginner</div>
+                  <div className="text-xl font-extrabold text-slate-900">
+                    {overallStats.totalLessonsCompleted > 5 ? 'Intermediate' : 'Beginner'}
+                  </div>
                   <div className="text-xs text-slate-500 font-medium">QA Readiness Level</div>
                 </div>
               </div>
+            </div>
+
+            {/* INTERACTIVE DEFECT LAB HIGHLIGHT CARD */}
+            <div className="bg-gradient-to-r from-rose-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
+              <div className="space-y-1.5 max-w-xl">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  <Bug className="w-3.5 h-3.5" />
+                  <span>Workplace Defect Simulation Lab</span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold text-white">
+                  Live Checkout Defect Hunting &amp; Jira Bug Reporting
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Put your testing skills to the test. Step into our interactive staging environment, uncover 4 real boundary bugs and calculation defects, and log Jira-standard defect tickets for senior QA lead evaluation.
+                </p>
+              </div>
+
+              <Link
+                to="/simulator"
+                className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-slate-950 font-bold text-xs hover:bg-slate-100 transition-colors shadow-sm"
+              >
+                <Bug className="w-4 h-4 text-rose-600" />
+                <span>Launch Defect Lab ({overallStats.bugsFoundCount}/4 Bugs)</span>
+              </Link>
             </div>
 
             {/* CONTINUE LEARNING ACTIVE MODULE CARD */}
@@ -480,13 +531,13 @@ export const StudentDashboardPage: React.FC = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setActiveTab('curriculum')}
+                <Link
+                  to="/courses/manual-qa-fundamentals/lessons/stlc-fundamentals"
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shrink-0 cursor-pointer"
                 >
                   <Play className="w-3.5 h-3.5 fill-white" />
                   <span>Resume Learning</span>
-                </button>
+                </Link>
               </div>
 
               <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
@@ -589,22 +640,35 @@ export const StudentDashboardPage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="text-xs text-slate-500 font-medium shrink-0">
-                      {m.completedLessons} / {m.totalLessons} Lessons
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="text-xs text-slate-500 font-medium">
+                        {m.completedLessons} / {m.totalLessons} Lessons
+                      </span>
+                      <Link
+                        to={`/courses/${m.slug}`}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-2xs"
+                      >
+                        <span>Open Track</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
                   </div>
 
                   {/* Topics list */}
                   <div className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                     {m.topics.map((t, tIdx) => (
-                      <div key={tIdx} className="flex items-center gap-2 text-slate-700">
+                      <Link
+                        key={tIdx}
+                        to={`/courses/${m.slug}/lessons/${t.lessonSlug}`}
+                        className="flex items-center gap-2 text-slate-700 hover:text-indigo-600 transition-colors p-1 rounded-lg hover:bg-slate-50"
+                      >
                         {t.completed ? (
                           <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                         ) : (
                           <span className="w-4 h-4 rounded-full border border-slate-300 shrink-0 inline-block" />
                         )}
                         <span className={t.completed ? 'line-through text-slate-400' : ''}>{t.name}</span>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </div>
