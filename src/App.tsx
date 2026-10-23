@@ -9,12 +9,16 @@ import { LoginPage } from './pages/LoginPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProtectedPlaceholderPage } from './pages/ProtectedPlaceholderPage';
+import { HomePage } from './pages/HomePage';
 
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          {/* Public Homepage for Phase 2 */}
+          <Route path="/" element={<HomePage />} />
+
           {/* Public authentication routes (redirect to /app if already logged in) */}
           <Route
             path="/signup"
@@ -54,11 +58,8 @@ export const App: React.FC = () => {
             }
           />
 
-          {/* Default entry point: redirect to /app (which will route to /login if unauthenticated) */}
-          <Route path="/" element={<Navigate to="/app" replace />} />
-
           {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

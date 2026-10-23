@@ -39,8 +39,8 @@ describe('Authentication Validation Logic', () => {
   });
 
   it('detects password mismatch', () => {
-    const password = 'CorrectPassword1';
-    const mismatch = 'DifferentPassword1';
-    expect(password === mismatch).toBe(false);
+    const isMatching = (p1: string, p2: string): boolean => p1 === p2;
+    expect(isMatching('CorrectPassword1', 'DifferentPassword1')).toBe(false);
+    expect(isMatching('SamePassword1', 'SamePassword1')).toBe(true);
   });
 });
