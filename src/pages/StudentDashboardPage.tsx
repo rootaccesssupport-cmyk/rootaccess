@@ -22,6 +22,7 @@ import {
   Save,
   X,
   Bug,
+  Download,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -603,11 +604,23 @@ export const StudentDashboardPage: React.FC = () => {
         {/* TAB 2: CURRICULUM */}
         {activeTab === 'curriculum' && (
           <div className="space-y-6 animate-fadeIn">
-            <div>
-              <h2 className="text-xl font-bold text-slate-900">Curriculum &amp; Module Progression</h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                Step-by-step roadmap for the QA &amp; Software Testing Engineer track.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900">Curriculum &amp; Module Progression</h2>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  Step-by-step roadmap for the QA &amp; Software Testing Engineer track.
+                </p>
+              </div>
+              <a
+                href="/RootAccess_QA_Curriculum_Syllabus.pdf"
+                download="RootAccess_QA_Curriculum_Syllabus.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-colors shadow-2xs shrink-0"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download Syllabus (PDF)</span>
+              </a>
             </div>
 
             <div className="space-y-4">
