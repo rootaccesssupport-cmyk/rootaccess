@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import {
@@ -21,6 +22,7 @@ import {
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
+  const { user } = useAuth();
   // FAQ accordion state
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
@@ -30,62 +32,95 @@ export const HomePage: React.FC = () => {
 
   const tracks = [
     {
-      title: 'Manual QA & Test Design',
-      tag: 'Core Foundation',
-      icon: <FileText className="w-5 h-5 text-indigo-600" />,
-      description: 'Master the end-to-end bug life cycle, write comprehensive test cases, perform boundary analysis, and log industry-standard Jira defect reports.',
-      skills: ['Test Case Design', 'Defect Life Cycle', 'Jira Workflows', 'Boundary Value Analysis', 'Regression Testing'],
-    },
-    {
-      title: 'SQL for Software Testers',
-      tag: 'Database Verification',
-      icon: <Database className="w-5 h-5 text-emerald-600" />,
-      description: 'Learn database verification from scratch. Write real queries, multi-table joins, aggregations, and validate backend data integrity against frontend behaviors.',
-      skills: ['SELECT & Filters', 'INNER & LEFT JOINs', 'Data Integrity Audits', 'Subqueries', 'CRUD Operations'],
-    },
-    {
-      title: 'API Testing with Postman',
-      tag: 'Backend Testing',
-      icon: <Send className="w-5 h-5 text-amber-600" />,
-      description: 'Inspect RESTful endpoints, validate JSON responses, write automated Postman test scripts, handle authentication tokens, and run collection tests.',
-      skills: ['HTTP Methods & Status Codes', 'Postman Collections', 'JSON Assertions', 'Environment Variables', 'Auth Tokens'],
+      title: 'DevOps & Cloud Engineering',
+      courseName: 'DevOps Engineering — From Fundamentals to Practical Projects',
+      tag: 'Infrastructure & CI/CD',
+      badge: '36-Day Academy • Days 1–3 Live Now',
+      icon: <Terminal className="w-5 h-5 text-indigo-600" />,
+      description: 'Build real-world DevOps fluency: software delivery lifecycles, Linux filesystem architecture (FHS), permissions, process monitoring, log forensics, and automated CI/CD canary rollouts.',
+      skills: ['Delivery Lifecycle', 'Linux Navigation & FHS', 'Permissions & Ownership', 'Process Management', 'Log Forensics', 'Incident Triage'],
+      link: '/courses/devops-engineering',
+      actionText: 'Explore Curriculum',
+      isFeatured: true,
     },
     {
       title: 'Automation Testing Foundations',
+      courseName: 'Playwright Automation with JavaScript + AI',
       tag: 'Code & Automation',
+      badge: '20-Day Course • Days 1–4 Live Now',
       icon: <Code2 className="w-5 h-5 text-purple-600" />,
-      description: 'Bridge manual QA to automated testing. Understand DOM locators, test runners, assertion frameworks, and writing clean, reliable test scripts.',
-      skills: ['Locator Strategies', 'Assertions', 'Test Runners', 'CI/CD Concepts', 'Automation Best Practices'],
+      description: 'Master browser automation from scratch with pure JavaScript and AI tools. Zero TypeScript overhead. DevTools architecture, robust locators, and Page Object Model frameworks.',
+      skills: ['Playwright Test Runner', 'Locators & Auto-Waiting', 'Web-First Assertions', 'AI Locator Selection', 'Page Object Model', 'CI/CD & Headless'],
+      link: '/courses/playwright-automation',
+      actionText: 'Explore Curriculum',
+      isFeatured: true,
+    },
+    {
+      title: 'Manual QA & Test Design',
+      courseName: 'Manual QA in 5 Days: Interview Preparation',
+      tag: 'Core Quality Foundation',
+      badge: '5-Day Intensive • Live Now',
+      icon: <FileText className="w-5 h-5 text-indigo-600" />,
+      description: 'Master the end-to-end bug life cycle, write comprehensive test cases, perform boundary analysis, and log industry-standard Jira defect reports.',
+      skills: ['Test Case Design', 'Defect Life Cycle', 'Jira Workflows', 'Boundary Value Analysis', 'Regression Testing'],
+      link: '/courses/manual-qa-fundamentals',
+      actionText: 'Explore Curriculum',
+    },
+    {
+      title: 'SQL for Software Testers',
+      courseName: 'SQL & Database Audits for Engineers & Testers',
+      tag: 'Database Verification',
+      badge: 'Backend Track • Live Now',
+      icon: <Database className="w-5 h-5 text-emerald-600" />,
+      description: 'Learn database verification from scratch. Write real queries, multi-table joins, aggregations, and validate backend data integrity against frontend behaviors.',
+      skills: ['SELECT & Filters', 'INNER & LEFT JOINs', 'Data Integrity Audits', 'Subqueries', 'CRUD Operations'],
+      link: '/courses/sql-for-qa-engineers',
+      actionText: 'Explore Curriculum',
+    },
+    {
+      title: 'API Testing with Postman',
+      courseName: 'RESTful API Testing & Test Automation with Postman',
+      tag: 'Backend Testing',
+      badge: 'API Track • Live Now',
+      icon: <Send className="w-5 h-5 text-amber-600" />,
+      description: 'Inspect RESTful endpoints, validate JSON responses, write automated Postman test scripts, handle authentication tokens, and run collection tests.',
+      skills: ['HTTP Methods & Status Codes', 'Postman Collections', 'JSON Assertions', 'Environment Variables', 'Auth Tokens'],
+      link: '/courses/api-testing-postman',
+      actionText: 'Explore Curriculum',
     },
     {
       title: 'Interview & Resume Strategy',
+      courseName: 'Tech Interview Mastery & Scenario Playbook',
       tag: 'Career Launch',
+      badge: 'Career Blueprint • Live Now',
       icon: <Briefcase className="w-5 h-5 text-rose-600" />,
-      description: 'Tackle real behavioral and technical interview questions, build an authentic bug report portfolio, and learn how to present QA projects to recruiters.',
-      skills: ['Mock QA Interviews', 'Scenario Questions', 'Resume Optimization', 'Bug Report Portfolio', 'Recruiter Outreach'],
+      description: 'Tackle real behavioral and technical interview questions, build an authentic engineering portfolio, and learn how to present projects to hiring managers.',
+      skills: ['Mock Tech Interviews', 'Scenario Questions', 'Resume Optimization', 'Project Portfolio', 'Recruiter Outreach'],
+      link: '/courses/qa-interview-mastery',
+      actionText: 'Explore Curriculum',
     },
   ];
 
   const faqs = [
     {
       question: 'Do I need prior coding experience or a Computer Science degree?',
-      answer: 'Not at all. RootAccess starts with fundamental Manual QA and test design principles that do not require programming experience. When we introduce SQL and API testing, every concept is taught from the ground up with interactive practical exercises.',
+      answer: 'Not at all. RootAccess starts with fundamental manual QA and problem-solving concepts that do not require prior programming experience. When we introduce technical tools like SQL and API testing, every concept is taught from first principles with hands-on practice.',
+    },
+    {
+      question: 'Is RootAccess only for QA and testers, or is it for everyone in tech?',
+      answer: 'RootAccess is built for everyone in tech! Whether you are an aspiring software engineer, test automation developer, DevOps engineer, cloud practitioner, IT specialist, student, or career switcher, our platform covers the entire engineering spectrum: software delivery lifecycles, Linux infrastructure, browser test automation, database querying, API engineering, and production incident management.',
+    },
+    {
+      question: 'What is the Early Access / Partial Launch model?',
+      answer: 'RootAccess is launching in structured, production-tested milestones. Implemented days (such as DevOps Days 1–3, Playwright Days 1–4, and Manual QA Days 1–5) are 100% interactive, fully playable, and available to enrolled accounts today. As subsequent days are finalized and tested, they unlock automatically on your student dashboard.',
+    },
+    {
+      question: 'How does course enrollment work?',
+      answer: 'Anyone can create a free account to explore course syllabi, roadmaps, and lesson previews. To access hands-on interactive lessons, simulated Linux terminals, scenario missions, and certification assessments, simply enroll in the course from the course page or lesson gate.',
     },
     {
       question: 'How is RootAccess different from typical video courses?',
-      answer: 'Most platforms offer passive video watching where students quickly forget what they saw. RootAccess focuses on simulated workplace tasks: writing real test cases, inspecting actual broken UI samples, writing live database queries, and debugging mock endpoints.',
-    },
-    {
-      question: 'How does manual course enrollment and payment work?',
-      answer: 'To keep our platform extremely affordable and free from high third-party payment processing overheads, full course enrollments are handled directly via email with UPI or bank transfer verification. Once verified, your account is granted full access.',
-    },
-    {
-      question: 'What career paths does this initial track prepare me for?',
-      answer: 'The initial track is specifically built for roles such as Quality Assurance (QA) Engineer, Software Tester, QA Analyst, and Technical Support Specialist.',
-    },
-    {
-      question: 'When will the Jobs Portal feature be live?',
-      answer: 'Job discovery is part of Phase 5. Once the core learning and assessment features are verified, we will launch our curated job board with verified openings and direct application links.',
+      answer: 'Most platforms offer passive video watching where learners quickly forget what they saw. RootAccess focuses on simulated workplace tasks: interacting with simulated Linux terminal sandboxes, running live test automation, diagnosing real production 502 outages, and solving architectural scenario challenges.',
     },
   ];
 
@@ -101,37 +136,61 @@ export const HomePage: React.FC = () => {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             {/* Pill badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-800 mb-6 shadow-2xs">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-xs font-semibold text-indigo-900 mb-6 shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Practical Tech Career Acceleration</span>
+              <span>Partial Launch • Early Access • Practical Tech Platform for Everyone</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 max-w-4xl mx-auto leading-[1.15]">
               Practical tech skills. <br className="hidden sm:inline" />
-              Real interview prep.{' '}
-              <span className="text-indigo-600">Verified careers.</span>
+              Real workplace simulations.{' '}
+              <span className="text-indigo-600">Careers for everyone.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              RootAccess empowers students, fresh graduates, and career switchers to master in-demand Software Testing, SQL, and API engineering with hands-on exercises instead of passive video playlists.
+            <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              RootAccess is built for everyone in tech—developers, QA engineers, DevOps practitioners, and career switchers. Master Linux administration, CI/CD pipelines, Test Automation, and Cloud Infrastructure through hands-on challenges and incident simulations instead of passive videos.
             </p>
 
             {/* CTAs */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+              {user ? (
+                <Link
+                  to="/app"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-sm transition-all hover:shadow hover:-translate-y-0.5"
+                >
+                  <span>Go to Dashboard</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              ) : (
+                <Link
+                  to="/signup"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-sm transition-all hover:shadow hover:-translate-y-0.5"
+                >
+                  <span>Create Free Account</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              )}
               <Link
-                to="/signup"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-sm transition-all hover:shadow hover:-translate-y-0.5"
+                to="/courses/devops-engineering"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-all shadow-2xs"
               >
-                <span>Create Free Account</span>
-                <ArrowRight className="w-4 h-4" />
+                <Terminal className="w-4 h-4 text-indigo-600" />
+                <span>DevOps Academy (Days 1–3 Live)</span>
+              </Link>
+              <Link
+                to="/courses/playwright-automation"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl transition-all shadow-2xs"
+              >
+                <Code2 className="w-4 h-4 text-purple-600" />
+                <span>Playwright JS (Days 1–4 Live)</span>
               </Link>
               <a
                 href="#tracks"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all"
               >
-                Explore Learning Tracks
+                Explore All Tracks
               </a>
             </div>
 
@@ -190,21 +249,37 @@ export const HomePage: React.FC = () => {
               {tracks.map((track, idx) => (
                 <div
                   key={idx}
-                  className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between"
+                  className={`bg-white rounded-2xl border p-6 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between ${
+                    track.isFeatured ? 'border-purple-300 ring-1 ring-purple-100' : 'border-slate-200 hover:border-slate-300'
+                  }`}
                 >
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
                         {track.icon}
                       </div>
-                      <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
-                        {track.tag}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {track.badge && (
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            track.isFeatured ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-slate-100 text-slate-700'
+                          }`}>
+                            {track.badge}
+                          </span>
+                        )}
+                        <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                          {track.tag}
+                        </span>
+                      </div>
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">
+                    <h3 className="text-lg font-bold text-slate-900 mb-1">
                       {track.title}
                     </h3>
+                    {track.courseName && (
+                      <p className="text-xs font-semibold text-purple-700 mb-2">
+                        {track.courseName}
+                      </p>
+                    )}
                     <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
                       {track.description}
                     </p>
@@ -215,7 +290,7 @@ export const HomePage: React.FC = () => {
                       <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
                         Core Competencies:
                       </div>
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-1.5 mb-4">
                         {track.skills.map((skill, sIdx) => (
                           <span
                             key={sIdx}
@@ -225,6 +300,20 @@ export const HomePage: React.FC = () => {
                           </span>
                         ))}
                       </div>
+
+                      {track.link && (
+                        <Link
+                          to={track.link}
+                          className={`w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-xl transition-all shadow-xs ${
+                            track.isFeatured
+                              ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                              : 'bg-slate-900 hover:bg-slate-800 text-white'
+                          }`}
+                        >
+                          <span>{track.actionText}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -433,10 +522,10 @@ export const HomePage: React.FC = () => {
                   </li>
                 </ul>
                 <Link
-                  to="/signup"
+                  to={user ? "/app" : "/signup"}
                   className="inline-flex items-center justify-center w-full px-4 py-2.5 text-xs font-semibold text-slate-900 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors"
                 >
-                  Create Free Account
+                  {user ? 'Go to Your Dashboard' : 'Create Free Account'}
                 </Link>
               </div>
 
@@ -534,18 +623,20 @@ export const HomePage: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
-                to="/signup"
+                to={user ? "/app" : "/signup"}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-900 bg-white hover:bg-slate-100 rounded-xl transition-all shadow-sm"
               >
-                <span>Create Free Account</span>
+                <span>{user ? 'Go to Dashboard' : 'Create Free Account'}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link
-                to="/login"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors"
-              >
-                Sign In to Existing Account
-              </Link>
+              {!user && (
+                <Link
+                  to="/login"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors"
+                >
+                  Sign In to Existing Account
+                </Link>
+              )}
             </div>
           </div>
         </section>

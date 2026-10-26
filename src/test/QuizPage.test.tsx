@@ -6,7 +6,18 @@ import { ProgressProvider } from '../context/ProgressContext';
 import { AuthProvider } from '../context/AuthContext';
 
 describe('QuizPage Component (Phase 4)', () => {
-  const renderQuiz = (courseSlug: string) => {
+  const renderQuiz = (courseSlug: string, isEnrolled: boolean = true) => {
+    localStorage.clear();
+    if (isEnrolled) {
+      const progressData = JSON.stringify({
+        completedLessons: [],
+        quizScores: {},
+        reportedBugs: {},
+        enrolledCourses: [courseSlug],
+      });
+      localStorage.setItem('rootaccess_progress_guest', progressData);
+      localStorage.setItem('rootaccess_progress_local-dev-student-1', progressData);
+    }
     return render(
       <MemoryRouter initialEntries={[`/courses/${courseSlug}/quiz`]}>
         <AuthProvider>
@@ -20,8 +31,20 @@ describe('QuizPage Component (Phase 4)', () => {
     );
   };
 
+  it('renders Course Enrollment Required gate when unenrolled and unlocks on clicking enroll', () => {
+    renderQuiz('sql-for-qa-engineers', false);
+
+    expect(screen.getByText('Course Enrollment Required')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /enroll in course/i }));
+    expect(
+      screen.getByRole('heading', { name: 'SQL for QA Engineers Certification Quiz' })
+    ).toBeInTheDocument();
+  });
+
   it('renders quiz title and all questions for SQL course', () => {
-    renderQuiz('sql-for-qa-engineers');
+    renderQuiz('sql-for-qa-engineers', true);
 
     expect(
       screen.getByRole('heading', { name: 'SQL for QA Engineers Certification Quiz' })

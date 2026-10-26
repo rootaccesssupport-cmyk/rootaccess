@@ -27,6 +27,9 @@ interface ProgressContextType {
     bugsFoundCount: number;
     totalBugsAvailable: number;
   };
+  enrolledCourses: string[];
+  isCourseEnrolled: (courseSlug: string) => boolean;
+  enrollInCourse: (courseSlug: string) => void;
   resetProgress: () => void;
 }
 
@@ -34,31 +37,10 @@ const ProgressContext = createContext<ProgressContextType | undefined>(undefined
 
 // Initial default seed for student demo
 const DEFAULT_INITIAL_STATE: ProgressState = {
-  completedLessons: [
-    'lesson-stlc-fundamentals',
-    'lesson-test-case-design',
-  ],
-  quizScores: {
-    'manual-qa-fundamentals': {
-      score: 4,
-      total: 4,
-      percentage: 100,
-      passed: true,
-      completedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    },
-  },
-  reportedBugs: {
-    'bug-negative-quantity': {
-      scenarioId: 'checkout-bug-hunt',
-      bugId: 'bug-negative-quantity',
-      title: 'Cart allows negative quantity calculation resulting in fraudulent credit',
-      severity: 'Critical',
-      stepsToReproduce: '1. Add item to cart\n2. Change quantity to -1\n3. Click Update Cart',
-      expectedBehavior: 'Input should enforce min="1" and reject negative quantities',
-      actualBehavior: 'Total price decreases to negative value',
-      submittedAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-  },
+  completedLessons: [],
+  enrolledCourses: [],
+  quizScores: {},
+  reportedBugs: {},
 };
 
 export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -71,7 +53,15 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const stored = localStorage.getItem(storageKey);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        return {
+          ...DEFAULT_INITIAL_STATE,
+          ...parsed,
+          completedLessons: parsed.completedLessons || [],
+          quizScores: parsed.quizScores || {},
+          reportedBugs: parsed.reportedBugs || {},
+          enrolledCourses: parsed.enrolledCourses || [],
+        };
       }
     } catch (e) {
       console.warn('Failed to load stored progress:', e);
@@ -84,7 +74,15 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const stored = localStorage.getItem(storageKey);
       if (stored) {
-        setState(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        setState({
+          ...DEFAULT_INITIAL_STATE,
+          ...parsed,
+          completedLessons: parsed.completedLessons || [],
+          quizScores: parsed.quizScores || {},
+          reportedBugs: parsed.reportedBugs || {},
+          enrolledCourses: parsed.enrolledCourses || [],
+        });
       } else {
         setState(DEFAULT_INITIAL_STATE);
       }
@@ -253,11 +251,35 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
   }, [state.completedLessons, state.quizScores, state.reportedBugs]);
 
+  const isCourseEnrolled = useCallback(
+    (courseSlug: string): boolean => {
+      const list = state.enrolledCourses || [];
+      if (list.includes(courseSlug)) return true;
+      if (courseSlug === 'manual-testing' && list.includes('manual-qa-fundamentals')) return true;
+      if (courseSlug === 'manual-qa-fundamentals' && list.includes('manual-testing')) return true;
+      return false;
+    },
+    [state.enrolledCourses]
+  );
+
+  const enrollInCourse = useCallback((courseSlug: string) => {
+    setState((prev) => {
+      const current = prev.enrolledCourses || [];
+      const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
+      if (current.includes(normalized)) return prev;
+      return {
+        ...prev,
+        enrolledCourses: [...current, normalized],
+      };
+    });
+  }, []);
+
   const resetProgress = useCallback(() => {
     setState({
       completedLessons: [],
       quizScores: {},
       reportedBugs: {},
+      enrolledCourses: [],
     });
   }, []);
 
@@ -267,6 +289,9 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         completedLessons: state.completedLessons,
         quizScores: state.quizScores,
         reportedBugs: state.reportedBugs,
+        enrolledCourses: state.enrolledCourses || [],
+        isCourseEnrolled,
+        enrollInCourse,
         isLessonCompleted,
         markLessonComplete,
         saveQuizResult,
@@ -285,16 +310,11 @@ export const useProgress = (): ProgressContextType => {
   const context = useContext(ProgressContext);
   if (!context) {
     return {
-      completedLessons: ['lesson-stlc-fundamentals', 'lesson-test-case-design'],
-      quizScores: {
-        'manual-qa-fundamentals': {
-          score: 4,
-          total: 4,
-          percentage: 100,
-          passed: true,
-          completedAt: new Date().toISOString(),
-        },
-      },
+      completedLessons: [],
+      enrolledCourses: [],
+      isCourseEnrolled: () => false,
+      enrollInCourse: () => {},
+      quizScores: {},
       reportedBugs: {
         'bug-negative-quantity': {
           scenarioId: 'checkout-bug-hunt',

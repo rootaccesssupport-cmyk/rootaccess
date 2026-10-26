@@ -79,8 +79,30 @@ describe('HomePage Component (Phase 2)', () => {
   it('adapts Navbar when user is logged in', () => {
     renderComponent({ id: 'student-123', email: 'alex@example.com' });
 
-    // Should show "Go to App" button with user's name
-    expect(screen.getAllByText(/go to app/i).length).toBeGreaterThanOrEqual(1);
+    // In a realistic app, authenticated users see in-app navigation, profile chip, and sign out
+    expect(screen.getAllByRole('link', { name: /dashboard/i }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('Test Student')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /sign out/i })).toBeInTheDocument();
+    expect(screen.queryByText(/go to app/i)).not.toBeInTheDocument();
+  });
+
+  it('renders Playwright Automation and Manual QA course cards with curriculum links', () => {
+    renderComponent(null);
+
+    expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
+    expect(screen.getByText('Manual QA in 5 Days: Interview Preparation')).toBeInTheDocument();
+
+    const curriculumBtns = screen.getAllByRole('link', { name: /explore curriculum/i });
+    expect(curriculumBtns.length).toBeGreaterThanOrEqual(2);
+
+    const playwrightLink = curriculumBtns.find(
+      (btn) => btn.getAttribute('href') === '/courses/playwright-automation'
+    );
+    expect(playwrightLink).toBeInTheDocument();
+
+    const manualQaLink = curriculumBtns.find(
+      (btn) => btn.getAttribute('href') === '/courses/manual-qa-fundamentals'
+    );
+    expect(manualQaLink).toBeInTheDocument();
   });
 });

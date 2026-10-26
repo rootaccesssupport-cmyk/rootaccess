@@ -19,12 +19,15 @@ import {
   AlertTriangle,
   Info,
   Briefcase,
+  Lock,
+  Sparkles,
+  BookOpen,
 } from 'lucide-react';
 
 export const LessonViewerPage: React.FC = () => {
   const { courseSlug, lessonSlug } = useParams<{ courseSlug: string; lessonSlug: string }>();
   const navigate = useNavigate();
-  const { isLessonCompleted, markLessonComplete } = useProgress();
+  const { isLessonCompleted, markLessonComplete, isCourseEnrolled, enrollInCourse } = useProgress();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copiedCodeIndex, setCopiedCodeIndex] = useState<number | null>(null);
@@ -46,6 +49,69 @@ export const LessonViewerPage: React.FC = () => {
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Dashboard</span>
         </Link>
+      </div>
+    );
+  }
+
+  const isEnrolled = isCourseEnrolled(course.slug) || isCourseEnrolled(course.id);
+
+  if (!isEnrolled) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
+        <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <Link
+              to={`/courses/${course.slug}`}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Course Syllabus</span>
+            </Link>
+          </div>
+        </header>
+        <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex items-center justify-center">
+          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-sm text-center max-w-xl space-y-6">
+            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-100 shadow-2xs">
+              <Lock className="w-7 h-7" />
+            </div>
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>Course Enrollment Required</span>
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {course.title}
+              </h1>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Free students can explore the course curriculum and syllabus. To access this lesson, code walkthroughs, hands-on tasks, and certification, please enroll in this course.
+              </p>
+            </div>
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-left space-y-2 text-slate-700">
+              <div className="font-bold text-slate-900">What full course enrollment unlocks:</div>
+              <ul className="space-y-1.5 list-disc pl-4 text-slate-600">
+                <li>Access to all {course.lessons.length} core interactive lessons and technical guides</li>
+                <li>Simulated workplace code walkthroughs and verification exercises</li>
+                <li>Course certification assessment quiz and completion tracking</li>
+              </ul>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              <button
+                onClick={() => enrollInCourse(course.slug)}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Enroll in Course</span>
+              </button>
+              <Link
+                to={`/courses/${course.slug}`}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-colors"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>View Full Curriculum</span>
+              </Link>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }

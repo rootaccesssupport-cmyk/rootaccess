@@ -86,11 +86,11 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     fireEvent.click(interviewTab);
     expect(screen.getByText(/technical & behavioral interview vault/i)).toBeInTheDocument();
 
-    // Switch to Cohort Enrollment tab
-    const enrollmentTab = screen.getByRole('button', { name: /cohort enrollment status/i });
-    fireEvent.click(enrollmentTab);
-    expect(screen.getByText(/full cohort enrollment & verification/i)).toBeInTheDocument();
-    expect(screen.getByText(/support@rootaccess\.org/i)).toBeInTheDocument();
+    // Switch to Explore All Courses (Catalog) tab
+    const catalogTab = screen.getByRole('button', { name: /explore all courses/i });
+    fireEvent.click(catalogTab);
+    expect(screen.getByText('Course Catalog & Active Enrollments')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/search courses/i)).toBeInTheDocument();
   });
 
   it('opens profile editor modal and allows full name editing', async () => {
@@ -120,5 +120,54 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     await waitFor(() => {
       expect(mockSignOut).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('displays Playwright Automation course across Overview, Curriculum, and Enrollment tabs', () => {
+    renderComponent();
+
+    // 1. Overview tab shows Playwright card
+    expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
+    const startCourseLinks = screen.getAllByRole('link', { name: /enroll & start course/i });
+    expect(startCourseLinks.length).toBeGreaterThanOrEqual(1);
+    expect(startCourseLinks.some((l) => l.getAttribute('href') === '/courses/playwright-automation')).toBe(true);
+
+    // 2. Curriculum tab shows Module 4 Available
+    const curriculumTab = screen.getByRole('button', { name: /curriculum & modules/i });
+    fireEvent.click(curriculumTab);
+    expect(screen.getByText(/Module 4: Playwright Automation with JavaScript \+ AI/i)).toBeInTheDocument();
+
+    // 3. Catalog tab shows course catalog with Playwright
+    const catalogTab = screen.getByRole('button', { name: /explore all courses/i });
+    fireEvent.click(catalogTab);
+    expect(screen.getByText('Course Catalog & Active Enrollments')).toBeInTheDocument();
+    expect(screen.getByText('20-Day Automation Masterclass')).toBeInTheDocument();
+  });
+
+  it('filters courses by search query and category pills in catalog tab', () => {
+    renderComponent();
+
+    // Switch to Catalog
+    const catalogTab = screen.getByRole('button', { name: /explore all courses/i });
+    fireEvent.click(catalogTab);
+
+    // Search for "DevOps"
+    const searchInput = screen.getByPlaceholderText(/search courses, skills, or topics/i);
+    fireEvent.change(searchInput, { target: { value: 'DevOps' } });
+
+    expect(screen.getByText('DevOps Engineering: Fundamentals to Production Projects')).toBeInTheDocument();
+    expect(screen.queryByText('Playwright Automation with JavaScript + AI')).not.toBeInTheDocument();
+
+    // Clear search
+    const clearBtn = screen.getByLabelText(/clear search/i);
+    fireEvent.click(clearBtn);
+
+    expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
+
+    // Filter by "Test Automation" category pill
+    const autoPill = screen.getByRole('button', { name: 'Test Automation' });
+    fireEvent.click(autoPill);
+
+    expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
+    expect(screen.queryByText('SQL & Backend Database Audits for QA')).not.toBeInTheDocument();
   });
 });

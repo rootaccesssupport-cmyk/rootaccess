@@ -189,6 +189,62 @@ Coupon is accepted. Total calculation shows: $35.00 - $50.00 = -$15.00.
         ],
         interactiveLabId: 'checkout-bug-hunt',
       },
+      {
+        id: 'lesson-agile-qa-workflows',
+        slug: 'agile-qa-workflows',
+        title: 'Agile QA Workflows & Sprint Ceremonies',
+        durationMinutes: 30,
+        difficulty: 'Intermediate',
+        summary: 'Navigate the QA engineer role inside Agile & Scrum sprints: User story analysis, acceptance criteria ambiguities, daily stand-ups, and sprint sign-off.',
+        sections: [
+          {
+            title: '1. The QA Engineer in Agile & Scrum',
+            content: 'In modern Agile software delivery, QA is embedded directly inside cross-functional squads rather than acting as a late-stage bottleneck. QA participates actively in Sprint Planning, Daily Stand-ups, Backlog Refinement, and Sprint Retrospectives.',
+          },
+          {
+            title: '2. Challenging User Stories & Acceptance Criteria',
+            content: 'A User Story follows the format: "As a [persona], I want [feature] so that [benefit]". QA critically analyzes the Acceptance Criteria (AC) for unstated boundary conditions, session timeouts, and exception handling before developers write a single line of code.',
+          },
+        ],
+        keyTakeaways: [
+          'Shift-left testing in Sprint Planning prevents up to 60% of downstream defects.',
+          'Always clarify missing error flows and edge conditions in user stories.',
+          'The Definition of Done (DoD) requires QA verification before story closure.',
+        ],
+        practicalChecklist: [
+          'Review user story acceptance criteria during sprint backlog grooming',
+          'Identify missing error states and fallback behaviors',
+          'Document test charters for timeboxed exploratory testing',
+        ],
+      },
+      {
+        id: 'lesson-test-execution-regression',
+        slug: 'test-execution-regression',
+        title: 'Test Execution, Retesting & Final Certification Assessment',
+        durationMinutes: 35,
+        difficulty: 'Advanced',
+        summary: 'Execute structured test cycles, distinguish Retesting from Regression Testing, perform Smoke & Sanity checks, and produce stakeholder Test Summary Reports.',
+        sections: [
+          {
+            title: '1. Test Execution Cycles & Defect Verification',
+            content: 'When a new software build arrives in staging, QA performs Smoke Testing to verify overall stability. After developers mark bug tickets as Fixed, QA performs Retesting on the specific defect and Regression Testing across unchanged modules.',
+          },
+          {
+            title: '2. Test Closure & Sign-Off Reports',
+            content: 'The Test Summary Report provides engineering leadership and product managers with actionable data to make informed Go / No-Go production release decisions.',
+          },
+        ],
+        keyTakeaways: [
+          'Retesting verifies the bug fix; Regression testing protects against unintended regressions.',
+          'Smoke testing verifies build stability; Sanity testing verifies specific functionality post-fix.',
+          'A formal Test Summary Report documents pass rates and residual release risks.',
+        ],
+        practicalChecklist: [
+          'Execute smoke tests on new staging deployment',
+          'Retest verified defect fixes using original steps to reproduce',
+          'Run regression test suite before production release sign-off',
+        ],
+      },
     ],
     quiz: {
       id: 'quiz-manual-qa',
@@ -556,61 +612,135 @@ pm.test("Save auth token for chained requests", function () {
     slug: 'playwright-automation',
     trackId: 'track-automation',
     trackName: 'Web Automation (Playwright)',
-    title: 'Modern Web Automation with Playwright & TypeScript',
-    description: 'Learn modern browser automation using Playwright. Master reliable locator strategies, auto-waiting, Page Object Models, and flaky test mitigation.',
+    title: 'Playwright Automation with JavaScript + AI',
+    description: 'Master modern browser automation using pure JavaScript and AI-assisted engineering. Learn reliable locators, auto-waiting, Page Object Models, and flaky test mitigation across 20 daily milestones.',
     iconName: 'Code2',
-    badge: 'Automation Track',
-    estimatedHours: 9,
+    badge: '20-Day Masterclass',
+    estimatedHours: 20,
     learningOutcomes: [
-      'Write robust end-to-end tests using Playwright Test Runner and TypeScript',
+      'Write robust end-to-end tests using Playwright Test Runner and pure JavaScript',
       'Use user-facing locators (getByRole, getByLabel, getByText) recommended by W3C standards',
       'Leverage Playwright auto-waiting to eliminate arbitrary sleep timers and flaky test failures',
       'Structure test suites with the Page Object Model (POM) pattern for high maintainability',
+      'Leverage AI tools for resilient locator generation, diagnostic analysis, and test optimization',
+      'Understand Chrome DevTools Protocol (CDP) WebSocket architecture vs HTTP JSON Wire',
     ],
     lessons: [
       {
-        id: 'lesson-playwright-locators',
-        slug: 'playwright-locators-and-assertions',
-        title: 'Robust Locators, Actions & Web-First Assertions',
-        durationMinutes: 30,
-        difficulty: 'Intermediate',
-        summary: 'Learn why XPath and brittle CSS selectors cause test flakiness, and how to use Playwright accessibility-based locators.',
+        id: 'lesson-playwright-day-1',
+        slug: 'day-1-automation-fundamentals',
+        title: 'Day 1: Automation Testing & Playwright Fundamentals',
+        durationMinutes: 120,
+        difficulty: 'Beginner',
+        summary: 'Explore core automation concepts, manual vs automation trade-offs, Playwright architecture vs Selenium, and the 20-day course roadmap.',
         sections: [
           {
-            title: '1. Recommended Locator Priority',
-            content: 'Playwright strongly recommends using locators that mirror how actual users interact with the page:\n\n1. `page.getByRole(\'button\', { name: \'Submit\' })`\n2. `page.getByLabel(\'Email Address\')`\n3. `page.getByPlaceholder(\'Enter promo code\')`\n4. `page.getByText(\'Order Confirmed\')`\n5. `page.getByTestId(\'checkout-btn\')` (fallback when accessible role is unavailable)\n\nAvoid brittle selectors like `xpath=//div[3]/form/button[2]` which break whenever HTML styling changes!',
+            title: '1. Why Automation Testing Matters',
+            content: 'Automation testing executes repeatable test suites with speed and precision, protecting regression baselines and enabling rapid CI/CD releases.',
           },
           {
-            title: '2. Web-First Assertions',
-            content: 'Web-first assertions in Playwright automatically poll and wait for the expected condition to become true before timing out:',
-            codeSnippet: {
-              language: 'typescript',
-              code: `import { test, expect } from '@playwright/test';
-
-test('User successfully logs in and views dashboard', async ({ page }) => {
-  await page.goto('http://localhost:5173/login');
-
-  // Fill in credentials using accessible locators
-  await page.getByLabel('Email address').fill('alex.student@rootaccess.org');
-  await page.getByLabel('Password').fill('SecurePassword123!');
-  await page.getByRole('button', { name: 'Sign in' }).click();
-
-  // Web-first assertion: auto-waits up to 5s for URL and element
-  await expect(page).toHaveURL(/.*app/);
-  await expect(page.getByRole('heading', { name: /student dashboard/i })).toBeVisible();
-  await expect(page.getByText('Alex Student')).toBeVisible();
-});`,
-            },
+            title: '2. Playwright WebSocket Architecture',
+            content: 'Playwright communicates directly with Chromium, Firefox, and WebKit browser engines over a single bidirectional WebSocket connection using Chrome DevTools Protocol (CDP).',
           },
         ],
         keyTakeaways: [
-          'Prioritize getByRole and getByLabel over raw CSS selectors or XPath.',
-          'Playwright auto-waits before executing clicks, fills, and assertions.',
-          'Never use arbitrary page.waitForTimeout(5000); let web-first assertions handle timing.',
+          'Automation provides fast regression feedback but does not eliminate exploratory testing.',
+          'Playwright uses single WebSocket connection for blazing fast execution without external drivers.',
         ],
         practicalChecklist: [
-          'Verify all form inputs have accessible labels in source code',
-          'Use expect(locator).toBeVisible() instead of checking DOM existence',
+          'Read all 5 core topics',
+          'Complete candidate classification assignment',
+          'Review interview question bank',
+          'Pass Day 1 checkpoint quiz',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-2',
+        slug: 'day-2-javascript-essentials',
+        title: 'Day 2: JavaScript Essentials for Test Automation',
+        durationMinutes: 150,
+        difficulty: 'Beginner',
+        summary: 'Master JavaScript variables (const/let), conditionals, loops, functions, array/object test fixtures, and asynchronous Promise / async-await handling.',
+        sections: [
+          {
+            title: '1. JavaScript Essentials for QA Automation',
+            content: 'Playwright tests are pure JavaScript. Understanding statements, block-scoping with const and let, strict equality (===), and async/await is mandatory.',
+          },
+          {
+            title: '2. Test Data Fixtures and Asynchronous Utilities',
+            content: 'Learn how to construct arrays of test scenarios, compute pass metrics, and handle async setups with try...catch error handling.',
+          },
+        ],
+        keyTakeaways: [
+          'Always use const and let; avoid var to eliminate hoisting bugs.',
+          'Playwright actions are asynchronous Promises requiring await.',
+          'Strict equality (===) prevents unintended type coercion bugs in assertions.',
+        ],
+        practicalChecklist: [
+          'Study 6 topics and complete interactive exercises',
+          'Create JavaScript Test Data Utility and satisfy 10-point rubric',
+          'Review 10 interview preparation questions',
+          'Score 80%+ on Day 2 Checkpoint Quiz',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-3',
+        slug: 'day-3-environment-setup-and-first-test',
+        title: 'Day 3: Environment Setup and Your First Playwright Test',
+        durationMinutes: 150,
+        difficulty: 'Beginner',
+        summary: 'Set up Playwright locally with Node.js, create project structure, author your first test script in JavaScript, execute across Chromium/Firefox/WebKit, and diagnose common issues.',
+        sections: [
+          {
+            title: '1. Node.js & Playwright CLI Initialization',
+            content: 'Verify Node.js LTS, initialize a clean project directory with `npm init -y`, install `@playwright/test`, and download browser binaries with `npx playwright install`.',
+          },
+          {
+            title: '2. Writing Your First Test Script (.spec.js)',
+            content: 'Structure test suites using `test()` blocks and web-first assertions like `await expect(page).toHaveTitle()`. Understand CommonJS and ES Modules import syntax.',
+          },
+        ],
+        keyTakeaways: [
+          'Node.js LTS (v18+) is required for Playwright.',
+          'Always use web-first assertions such as await expect(page).toHaveTitle() rather than page.title() === "..." to leverage auto-retrying.',
+          'Playwright bundles isolated browser binaries for Chromium, Firefox, and WebKit.',
+        ],
+        practicalChecklist: [
+          'Read all 6 core setup and test execution topics',
+          'Complete interactive practice exercises',
+          'Author and evaluate practical test script satisfying 10-point rubric',
+          'Review 10 interview preparation questions',
+          'Pass Day 3 Checkpoint Quiz with 80%+',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-4',
+        slug: 'day-4-locators-and-element-identification',
+        title: 'Day 4: Locators and Element Identification',
+        durationMinutes: 180,
+        difficulty: 'Intermediate',
+        summary: 'Master Playwright user-facing locators (getByRole, getByLabel, getByText), CSS & XPath trade-offs, strict mode, locator filtering, chaining, debugging, and AI-assisted locator selection.',
+        sections: [
+          {
+            title: '1. User-Facing Locators & Web-First Design',
+            content: 'Learn why accessible locators (getByRole, getByLabel, getByPlaceholder, getByText, getByTestId) mirror real user behavior and make automation resilient to underlying HTML refactors.',
+          },
+          {
+            title: '2. Strict Mode, Filtering & AI Locator Evaluation',
+            content: 'Understand strict mode violations, disambiguate repeated buttons using filter() and chaining, and systematically evaluate AI-suggested locators.',
+          },
+        ],
+        keyTakeaways: [
+          'Prioritize getByRole and getByLabel over brittle XPath or auto-generated CSS classes.',
+          'Playwright enforces strict mode: action methods fail if a locator matches more than one element.',
+          'Use locator.filter({ hasText: ... }) to uniquely target buttons within repeating cards or containers.',
+          'Always verify AI locator suggestions against the real DOM and back them with web-first assertions.',
+        ],
+        practicalChecklist: [
+          'Read all 7 core topics and complete interactive exercises',
+          'Author and evaluate practical locator test script satisfying 10-point rubric',
+          'Review 10 interview preparation questions',
+          'Pass Day 4 Checkpoint Quiz with 80%+',
         ],
       },
     ],

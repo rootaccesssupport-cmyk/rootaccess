@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
               <span className="sr-only">RootAccess</span>
             </div>
             <p className="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">
-              A practical career learning and job discovery platform for students, fresh graduates, and career switchers. Master real-world tech skills, prepare for rigorous interviews, and discover verified roles.
+              A practical tech career platform for everyone—developers, QA engineers, DevOps professionals, and career switchers. Master real-world engineering skills, solve incident simulations, and build verifiable workplace expertise.
             </p>
             <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
               <Mail className="w-3.5 h-3.5 text-indigo-400" />
@@ -33,29 +33,34 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#tracks" className="hover:text-white transition-colors">
+                <Link to="/courses/devops-engineering" className="hover:text-white transition-colors text-indigo-400 font-medium">
+                  DevOps Academy (Days 1–3 Live)
+                </Link>
+              </li>
+              <li>
+                <Link to="/courses/playwright-automation" className="hover:text-white transition-colors text-purple-400 font-medium">
+                  Playwright JS (Days 1–4 Live)
+                </Link>
+              </li>
+              <li>
+                <Link to="/courses/manual-qa" className="hover:text-white transition-colors">
                   Manual QA &amp; Test Design
+                </Link>
+              </li>
+              <li>
+                <a href="#tracks" className="hover:text-white transition-colors">
+                  SQL for Data &amp; Engineering
                 </a>
               </li>
               <li>
                 <a href="#tracks" className="hover:text-white transition-colors">
-                  SQL for Software Testers
-                </a>
-              </li>
-              <li>
-                <a href="#tracks" className="hover:text-white transition-colors">
-                  API Testing with Postman
-                </a>
-              </li>
-              <li>
-                <a href="#tracks" className="hover:text-white transition-colors">
-                  Automation Testing
+                  API Engineering with Postman
                 </a>
               </li>
               <li>
                 <span className="inline-flex items-center gap-1.5 text-slate-400">
-                  <span>Full-Stack QA</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-indigo-400 font-mono">Coming Soon</span>
+                  <span>Cloud Architecture</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-indigo-400 font-mono">Upcoming</span>
                 </span>
               </li>
             </ul>

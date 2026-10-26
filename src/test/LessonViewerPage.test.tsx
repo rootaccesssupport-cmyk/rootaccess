@@ -6,7 +6,18 @@ import { ProgressProvider } from '../context/ProgressContext';
 import { AuthProvider } from '../context/AuthContext';
 
 describe('LessonViewerPage Component (Phase 4)', () => {
-  const renderLesson = (courseSlug: string, lessonSlug: string) => {
+  const renderLesson = (courseSlug: string, lessonSlug: string, isEnrolled: boolean = true) => {
+    localStorage.clear();
+    if (isEnrolled) {
+      const progressData = JSON.stringify({
+        completedLessons: [],
+        quizScores: {},
+        reportedBugs: {},
+        enrolledCourses: [courseSlug],
+      });
+      localStorage.setItem('rootaccess_progress_guest', progressData);
+      localStorage.setItem('rootaccess_progress_local-dev-student-1', progressData);
+    }
     return render(
       <MemoryRouter initialEntries={[`/courses/${courseSlug}/lessons/${lessonSlug}`]}>
         <AuthProvider>
@@ -23,8 +34,22 @@ describe('LessonViewerPage Component (Phase 4)', () => {
     );
   };
 
-  it('renders lesson title, content sections, takeaways, and practical checklist', () => {
-    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals');
+  it('renders Course Enrollment Required gate when unenrolled and unlocks upon enrolling', () => {
+    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals', false);
+
+    expect(screen.getByText('Course Enrollment Required')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /view full curriculum/i })).toBeInTheDocument();
+
+    // Click enroll
+    fireEvent.click(screen.getByRole('button', { name: /enroll in course/i }));
+    expect(
+      screen.getByText('Software Testing Life Cycle (STLC) & Modern QA Workflows')
+    ).toBeInTheDocument();
+  });
+
+  it('renders lesson title, content sections, takeaways, and practical checklist when enrolled', () => {
+    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals', true);
 
     expect(
       screen.getByText('Software Testing Life Cycle (STLC) & Modern QA Workflows')
@@ -37,7 +62,7 @@ describe('LessonViewerPage Component (Phase 4)', () => {
   });
 
   it('allows checking checklist items interactively', () => {
-    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals');
+    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals', true);
 
     const checklistItem = screen.getByText(/Read acceptance criteria thoroughly before writing test steps/i);
     expect(checklistItem).toBeInTheDocument();
@@ -49,14 +74,14 @@ describe('LessonViewerPage Component (Phase 4)', () => {
   });
 
   it('allows toggling completion state via Mark as Done button', () => {
-    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals');
+    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals', true);
 
-    // In default seed, stlc-fundamentals is completed, so it shows 'Completed'
-    const completionBtn = screen.getByRole('button', { name: /completed/i });
-    expect(completionBtn).toBeInTheDocument();
+    // On clean initial state, lesson is not completed, so it shows 'Mark as Done'
+    const markDoneBtn = screen.getByRole('button', { name: /mark as done/i });
+    expect(markDoneBtn).toBeInTheDocument();
 
-    // Toggle off
-    fireEvent.click(completionBtn);
-    expect(screen.getByRole('button', { name: /mark as done/i })).toBeInTheDocument();
+    // Toggle to completed
+    fireEvent.click(markDoneBtn);
+    expect(screen.getByRole('button', { name: /completed/i })).toBeInTheDocument();
   });
 });

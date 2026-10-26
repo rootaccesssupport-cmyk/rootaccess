@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { COURSES } from '../data/curriculumData';
 import { useProgress } from '../context/ProgressContext';
+import { useAuth } from '../context/AuthContext';
 import {
   BookOpen,
   Database,
@@ -19,12 +20,15 @@ import {
   Bug,
   HelpCircle,
   Download,
+  Lock,
+  Sparkles,
 } from 'lucide-react';
 
 export const CourseDetailPage: React.FC = () => {
   const { courseSlug } = useParams<{ courseSlug: string }>();
   const navigate = useNavigate();
-  const { isLessonCompleted, getCourseProgress } = useProgress();
+  const { user } = useAuth();
+  const { isLessonCompleted, getCourseProgress, isCourseEnrolled, enrollInCourse } = useProgress();
 
   const course = COURSES.find((c) => c.slug === courseSlug);
 
@@ -172,16 +176,56 @@ export const CourseDetailPage: React.FC = () => {
                 </p>
               </div>
 
-              {firstUnfinishedLesson ? (
+              {!isCourseEnrolled(course.slug) ? (
+                <div className="space-y-3">
+                  <div className="p-3 bg-amber-50 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2">
+                    <Lock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold">Curriculum &amp; Syllabus</p>
+                      <p className="text-[11px] text-amber-800 mt-0.5">
+                        Free students can explore the curriculum and syllabus below. Enroll to access all interactive lessons and practical labs.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (!user) {
+                        navigate('/signup');
+                      } else {
+                        enrollInCourse(course.slug);
+                        if (course.slug === 'playwright-automation') {
+                          navigate('/courses/playwright-automation/day-1');
+                        } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
+                          navigate('/manual-qa/day/1');
+                        } else if (firstUnfinishedLesson) {
+                          navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
+                        }
+                      }
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>{user ? 'Enroll in Course' : 'Create Free Account to Enroll'}</span>
+                  </button>
+                </div>
+              ) : firstUnfinishedLesson ? (
                 <button
-                  onClick={() =>
-                    navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`)
-                  }
+                  onClick={() => {
+                    if (course.slug === 'playwright-automation') {
+                      navigate('/courses/playwright-automation/day-1');
+                    } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
+                      navigate('/manual-qa');
+                    } else {
+                      navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
+                    }
+                  }}
                   className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors"
                 >
                   <Play className="w-4 h-4 fill-white" />
                   <span>
-                    {progress.completedCount > 0 ? 'Continue Learning' : 'Start Course'}
+                    {progress.completedCount > 0
+                      ? 'Continue Learning'
+                      : 'Start Course'}
                   </span>
                 </button>
               ) : (
@@ -280,13 +324,42 @@ export const CourseDetailPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <Link
-                    to={`/courses/${course.slug}/lessons/${lesson.slug}`}
-                    className="shrink-0 inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 transition-all shadow-2xs"
-                  >
-                    <span>{isCompleted ? 'Review' : 'Open'}</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
+                  {/* Syllabus Action: Enrolled vs Unlocked */}
+                  {!isCourseEnrolled(course.slug) ? (
+                    <button
+                      onClick={() => {
+                        if (!user) navigate('/signup');
+                        else {
+                          enrollInCourse(course.slug);
+                          if (course.slug === 'playwright-automation') {
+                            navigate(`/courses/playwright-automation/day-${idx + 1}`);
+                          } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
+                            navigate(`/manual-qa/day/${idx + 1}`);
+                          } else {
+                            navigate(`/courses/${course.slug}/lessons/${lesson.slug}`);
+                          }
+                        }
+                      }}
+                      className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-purple-100 hover:text-purple-700 text-slate-500 transition-all cursor-pointer"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Enroll to Unlock</span>
+                    </button>
+                  ) : (
+                    <Link
+                      to={
+                        course.slug === 'playwright-automation'
+                          ? `/courses/playwright-automation/day-${idx + 1}`
+                          : course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing'
+                          ? `/manual-qa/day/${idx + 1}`
+                          : `/courses/${course.slug}/lessons/${lesson.slug}`
+                      }
+                      className="shrink-0 inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 transition-all shadow-2xs"
+                    >
+                      <span>{isCompleted ? 'Review' : 'Open'}</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
                 </div>
               );
             })}

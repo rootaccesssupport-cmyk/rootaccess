@@ -8,6 +8,11 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "generate:pdf": "node scripts/generateCurriculumPdf.cjs",
+    "generate:manual-qa-pdfs": "vite-node scripts/generateManualQaDayPdfs.ts",
+    "generate:playwright-pdfs": "vite-node scripts/generatePlaywrightDay1Pdf.ts && vite-node scripts/generatePlaywrightDay2Pdf.ts && vite-node scripts/generatePlaywrightDay3Pdf.ts && vite-node scripts/generatePlaywrightDay4Pdf.ts",
+    "generate:business-plan-pdf": "vite-node scripts/generateBusinessPlanAndGrowthStrategyPdf.ts",
+    "generate:all-pdfs": "npm run generate:pdf && npm run generate:manual-qa-pdfs && npm run generate:playwright-pdfs && npm run generate:business-plan-pdf",
+    "db:verify": "npx vite-node scripts/verifyDatabaseConnection.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -171,15 +171,15 @@ const CURRICULUM = [
   },
   {
     trackId: 'track-automation',
-    trackName: 'Track 4: Modern Web Automation with Playwright & TypeScript',
-    badge: 'Automation Engineering Track',
-    estimatedHours: '9 Hours',
-    description: 'Learn modern browser automation using Playwright. Master reliable locator strategies, auto-waiting, Page Object Models, and flaky test mitigation.',
+    trackName: 'Track 4: Playwright Automation with JavaScript + AI (20-Day Track)',
+    badge: 'Automation & AI Engineering Track',
+    estimatedHours: '20 Days (40 Hours)',
+    description: 'Master modern browser automation with Playwright using JavaScript and AI-assisted engineering workflows. Learn auto-waiting, robust accessibility locators, Page Object Models, and AI test generation.',
     learningOutcomes: [
-      'Write robust end-to-end tests using Playwright Test Runner and TypeScript',
-      'Use user-facing locators (getByRole, getByLabel, getByText) recommended by W3C standards',
+      'Write robust end-to-end tests using Playwright Test Runner and pure JavaScript (ES Modules)',
+      'Use user-facing accessibility locators (getByRole, getByLabel, getByText) recommended by W3C standards',
       'Leverage Playwright auto-waiting to eliminate arbitrary sleep timers and flaky test failures',
-      'Structure test suites with the Page Object Model (POM) pattern for high maintainability',
+      'Structure test suites with the Page Object Model (POM) pattern and AI-assisted test authoring',
     ],
     lessons: [
       {
@@ -191,7 +191,7 @@ const CURRICULUM = [
           'Recommended locator hierarchy: getByRole, getByLabel, getByPlaceholder, getByText, getByTestId',
           'Why brittle selectors like xpath=//div[3]/form/button[2] break on redesigns',
           'Web-First Assertions: Automatic polling with expect(locator).toBeVisible() without hardcoded sleeps',
-          'Writing an End-to-End User Login and Dashboard Verification test script in TypeScript',
+          'Writing an End-to-End User Login and Dashboard Verification test script in pure JavaScript',
         ],
         takeaways: [
           'Prioritize getByRole and getByLabel over raw CSS selectors or XPath.',
@@ -416,18 +416,27 @@ function generatePDF(outputPath) {
   const range = doc.bufferedPageRange();
   for (let i = range.start; i < range.start + range.count; i++) {
     doc.switchToPage(i);
-    doc.rect(40, 800, 515, 0.5).fill(BORDER);
+    const oldBottom = doc.page.margins.bottom;
+    const oldTop = doc.page.margins.top;
+    doc.page.margins.bottom = 0;
+    doc.page.margins.top = 0;
+
+    doc.rect(40, doc.page.height - 30, 515, 0.5).fill(BORDER);
     doc.fillColor(MUTED).fontSize(8).font('Helvetica').text(
       'RootAccess QA Engineering Curriculum Syllabus  •  Confidential & Proprietary',
       40,
-      810
+      doc.page.height - 22,
+      { width: 340, align: 'left', lineBreak: false }
     );
     doc.fillColor(MUTED).fontSize(8).font('Helvetica').text(
       `Page ${i + 1} of ${range.count}`,
-      480,
-      810,
-      { width: 75, align: 'right' }
+      doc.page.width - 140,
+      doc.page.height - 22,
+      { width: 100, align: 'right', lineBreak: false }
     );
+
+    doc.page.margins.bottom = oldBottom;
+    doc.page.margins.top = oldTop;
   }
 
   doc.end();

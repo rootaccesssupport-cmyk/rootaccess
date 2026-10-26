@@ -97,5 +97,6 @@ export interface ProgressState {
   completedLessons: string[]; // list of lesson IDs
   quizScores: Record<string, QuizScoreRecord>; // keyed by course slug
   reportedBugs: Record<string, BugReportSubmission>; // keyed by bugId
+  enrolledCourses?: string[]; // course slugs e.g. ['manual-qa-fundamentals']
   lastVisitedPath?: string;
 }
