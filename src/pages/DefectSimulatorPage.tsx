@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
 import { SIMULATED_BUGS } from '../data/curriculumData';
 import type { BugReportSubmission } from '../types/curriculum';
@@ -24,7 +25,10 @@ interface CartItem {
 }
 
 export const DefectSimulatorPage: React.FC = () => {
+  const { user, profile } = useAuth();
   const { reportedBugs, submitBugReport } = useProgress();
+
+  const defaultCustomerName = profile?.full_name || user?.user_metadata?.full_name || (user?.email ? user.email.split('@')[0] : 'QA Student');
 
   // Mock checkout app state (Target Under Test)
   const [cartItems, setCartItems] = useState<CartItem[]>([
@@ -35,7 +39,13 @@ export const DefectSimulatorPage: React.FC = () => {
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0);
   const [couponFeedback, setCouponFeedback] = useState<string | null>(null);
 
-  const [customerName, setCustomerName] = useState('Alex Student');
+  const [customerName, setCustomerName] = useState(defaultCustomerName);
+
+  useEffect(() => {
+    if (defaultCustomerName && customerName === 'QA Student') {
+      setCustomerName(defaultCustomerName);
+    }
+  }, [defaultCustomerName]);
   const [streetAddress, setStreetAddress] = useState('742 Evergreen Terrace');
   const [phone, setPhone] = useState(''); // empty triggers silent bug
   const [deliveryNotes, setDeliveryNotes] = useState('');

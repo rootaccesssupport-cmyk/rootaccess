@@ -25,8 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return {
         id: currentUser.id,
-        full_name: currentUser.user_metadata?.full_name || 'Alex Student',
-        email: currentUser.email || 'student@rootaccess.org',
+        full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Student',
+        email: currentUser.email || '',
       };
     }
 
@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.warn('Could not fetch from profiles table, using auth metadata:', error.message);
         return {
           id: currentUser.id,
-          full_name: currentUser.user_metadata?.full_name || 'RootAccess Student',
+          full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Student',
           email: currentUser.email || '',
         };
       }
@@ -76,35 +76,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let isMounted = true;
 
     async function initializeAuth() {
+      // Clean up any legacy dummy student accounts stored previously
+      const stored = localStorage.getItem('rootaccess_local_user');
+      if (stored && (stored.includes('alex.student@rootaccess.org') || stored.includes('Alex Student') || stored.includes('local-dev-student-1'))) {
+        localStorage.removeItem('rootaccess_local_user');
+      }
+
       // Local development mode when Supabase is not configured
       if (!isSupabaseConfigured) {
-        let stored = localStorage.getItem('rootaccess_local_user');
-        const hasExplicitlyLoggedOut = sessionStorage.getItem('rootaccess_explicit_logout');
-
-        // Pre-authenticate demo student account by default if not explicitly logged out
-        if (!stored && !hasExplicitlyLoggedOut) {
-          const demoUser: User = {
-            id: 'local-dev-student-1',
-            email: 'alex.student@rootaccess.org',
-            user_metadata: { full_name: 'Alex Student' },
-            app_metadata: {},
-            aud: 'authenticated',
-            created_at: new Date().toISOString(),
-          } as any;
-
-          const demoProfile: UserProfile = {
-            id: demoUser.id,
-            full_name: 'Alex Student',
-            email: 'alex.student@rootaccess.org',
-          };
-
-          stored = JSON.stringify({ user: demoUser, profile: demoProfile });
-          localStorage.setItem('rootaccess_local_user', stored);
-        }
-
-        if (stored) {
+        const cleanStored = localStorage.getItem('rootaccess_local_user');
+        if (cleanStored) {
           try {
-            const parsed = JSON.parse(stored);
+            const parsed = JSON.parse(cleanStored);
             if (isMounted && parsed.user) {
               setUser(parsed.user);
               setSession({ access_token: 'local-dev-token' } as any);
@@ -117,6 +100,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (isMounted) setLoading(false);
         return;
       }
+
+      // When Supabase is configured, clean up any mock local user
+      localStorage.removeItem('rootaccess_local_user');
 
       try {
         const { data: { session: initialSession }, error } = await supabase.auth.getSession();

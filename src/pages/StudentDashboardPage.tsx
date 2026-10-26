@@ -225,7 +225,7 @@ export const StudentDashboardPage: React.FC = () => {
   const [profileSaveError, setProfileSaveError] = useState<string | null>(null);
 
   const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Student';
-  const email = user?.email || 'student@rootaccess.org';
+  const email = user?.email || '';
 
   const checkCourseEnrolled = (slug: string) => {
     if (slug === 'devops-engineering') {
