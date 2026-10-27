@@ -77,32 +77,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     async function initializeAuth() {
       // Clean up any legacy dummy student accounts stored previously
-      const stored = localStorage.getItem('rootaccess_local_user');
-      if (stored && (stored.includes('alex.student@rootaccess.org') || stored.includes('Alex Student') || stored.includes('local-dev-student-1'))) {
-        localStorage.removeItem('rootaccess_local_user');
-      }
+      localStorage.removeItem('rootaccess_local_user');
 
-      // Local development mode when Supabase is not configured
       if (!isSupabaseConfigured) {
-        const cleanStored = localStorage.getItem('rootaccess_local_user');
-        if (cleanStored) {
-          try {
-            const parsed = JSON.parse(cleanStored);
-            if (isMounted && parsed.user) {
-              setUser(parsed.user);
-              setSession({ access_token: 'local-dev-token' } as any);
-              setProfile(parsed.profile);
-            }
-          } catch (e) {
-            console.error('Failed to parse local user:', e);
-          }
-        }
         if (isMounted) setLoading(false);
         return;
       }
-
-      // When Supabase is configured, clean up any mock local user
-      localStorage.removeItem('rootaccess_local_user');
 
       try {
         const { data: { session: initialSession }, error } = await supabase.auth.getSession();
@@ -169,41 +149,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     password: string;
     fullName: string;
   }): Promise<SignUpResult> => {
-    // Seamless Local Dev fallback if Supabase credentials are not in .env
+    localStorage.removeItem('rootaccess_local_user');
+
     if (!isSupabaseConfigured) {
-      const localUser: User = {
-        id: `local-dev-${Date.now()}`,
-        email: email.trim(),
-        user_metadata: { full_name: fullName.trim() },
-        app_metadata: {},
-        aud: 'authenticated',
-        created_at: new Date().toISOString(),
-      } as any;
-
-      const localProfile: UserProfile = {
-        id: localUser.id,
-        full_name: fullName.trim(),
-        email: localUser.email || '',
-      };
-
-      localStorage.setItem('rootaccess_local_user', JSON.stringify({ user: localUser, profile: localProfile }));
-      setUser(localUser);
-      setSession({ access_token: 'local-dev-token' } as any);
-      setProfile(localProfile);
-
       return {
-        success: true,
+        success: false,
         requiresEmailConfirmation: false,
+        error: 'Authentication service is not configured. Please contact the administrator.',
       };
     }
 
     try {
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.trim(),
         password,
         options: {
           data: {
-            full_name: fullName,
+            full_name: fullName.trim(),
           },
           emailRedirectTo: `${window.location.origin}/login`,
         },
@@ -236,42 +198,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     password: string;
   }): Promise<AuthActionResult> => {
     sessionStorage.removeItem('rootaccess_explicit_logout');
-    // Seamless Local Dev fallback if Supabase credentials are not in .env
+    localStorage.removeItem('rootaccess_local_user');
+
     if (!isSupabaseConfigured) {
-      const fallbackName = email.includes('@') ? email.split('@')[0].replace('.', ' ') : 'Student';
-      const cleanName = fallbackName.charAt(0).toUpperCase() + fallbackName.slice(1);
-
-      const localUser: User = {
-        id: 'local-dev-student-1',
-        email: email.trim(),
-        user_metadata: { full_name: cleanName },
-        app_metadata: {},
-        aud: 'authenticated',
-        created_at: new Date().toISOString(),
-      } as any;
-
-      const localProfile: UserProfile = {
-        id: localUser.id,
-        full_name: cleanName,
-        email: localUser.email || '',
+      return {
+        success: false,
+        error: 'Authentication service is not configured. Please contact the administrator.',
       };
-
-      localStorage.setItem('rootaccess_local_user', JSON.stringify({ user: localUser, profile: localProfile }));
-      setUser(localUser);
-      setSession({ access_token: 'local-dev-token' } as any);
-      setProfile(localProfile);
-
-      return { success: true };
     }
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
         password,
       });
 
       if (error) {
         return { success: false, error: error.message };
+      }
+
+      if (data?.user) {
+        setUser(data.user);
+        setSession(data.session);
+        const userProfile = await fetchProfile(data.user);
+        setProfile(userProfile);
       }
 
       return { success: true };
@@ -310,12 +260,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const resetPasswordForEmail = async (email: string): Promise<AuthActionResult> => {
     if (!isSupabaseConfigured) {
-      return { success: true };
+      return {
+        success: false,
+        error: 'Authentication service is not configured. Please contact the administrator.',
+      };
     }
 
     try {
       const redirectTo = `${window.location.origin}/reset-password`;
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo,
       });
 
@@ -334,7 +287,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updatePassword = async (newPassword: string): Promise<AuthActionResult> => {
     if (!isSupabaseConfigured) {
-      return { success: true };
+      return {
+        success: false,
+        error: 'Authentication service is not configured. Please contact the administrator.',
+      };
     }
 
     try {

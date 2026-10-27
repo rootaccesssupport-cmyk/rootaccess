@@ -1,8 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
-const rawUrl = import.meta.env.VITE_SUPABASE_URL?.trim() || '';
+// Production Supabase project defaults for RootAccess
+const DEFAULT_SUPABASE_URL = 'https://hjnmfxaaccxvfstdmflb.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhqbm1meGFhY2N4dmZzdGRtZmxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMwMjk3MDcsImV4cCI6MjEwODYwNTcwN30.jsLDQUIZIS6IlJQm2bXKps4z_5aIzMo5IcmALYVeq1w';
+
+const envUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const rawUrl = envUrl && envUrl !== 'undefined' && envUrl !== '' ? envUrl : DEFAULT_SUPABASE_URL;
 const supabaseUrl = rawUrl.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() || '';
+
+const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+const supabaseAnonKey =
+  envKey && envKey !== 'undefined' && envKey !== '' ? envKey : DEFAULT_SUPABASE_ANON_KEY;
 
 // Verify whether real Supabase credentials have been configured
 export const isSupabaseConfigured = Boolean(
@@ -13,11 +22,7 @@ export const isSupabaseConfigured = Boolean(
   supabaseUrl.startsWith('https://')
 );
 
-// Fallback to avoid runtime crashes before the user fills in .env
-const resolvedUrl = isSupabaseConfigured ? supabaseUrl : 'https://placeholder-domain.supabase.co';
-const resolvedKey = isSupabaseConfigured ? supabaseAnonKey : 'placeholder-anon-key-abc123xyz';
-
-export const supabase = createClient(resolvedUrl, resolvedKey, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
