@@ -74,12 +74,8 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
   it('switches between dashboard tabs', () => {
     renderComponent();
 
-    // Switch to Curriculum tab
-    const curriculumTab = screen.getByRole('button', { name: /curriculum & modules/i });
-    fireEvent.click(curriculumTab);
-    expect(screen.getByText('Curriculum & Module Progression')).toBeInTheDocument();
-    expect(screen.getByText('Module 1: Manual QA & Defect Life Cycle')).toBeInTheDocument();
-    expect(screen.getByText('Module 2: SQL & Backend Database Audits')).toBeInTheDocument();
+    // Verify initial tab is Enrolled Courses
+    expect(screen.getByText(/my enrolled courses/i)).toBeInTheDocument();
 
     // Switch to Interview Vault tab
     const interviewTab = screen.getByRole('button', { name: /daily interview scenario/i });
@@ -91,6 +87,11 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     fireEvent.click(catalogTab);
     expect(screen.getByText('Course Catalog & Active Enrollments')).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/search courses/i)).toBeInTheDocument();
+
+    // Switch back to Enrolled Courses tab
+    const enrolledTab = screen.getByRole('button', { name: /enrolled courses/i });
+    fireEvent.click(enrolledTab);
+    expect(screen.getByText(/my enrolled courses/i)).toBeInTheDocument();
   });
 
   it('opens profile editor modal and allows full name editing', async () => {
@@ -122,24 +123,15 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     });
   });
 
-  it('displays Playwright Automation course across Overview, Curriculum, and Enrollment tabs', () => {
+  it('displays Playwright Automation course in Explore All Courses catalog and allows exploration', () => {
     renderComponent();
 
-    // 1. Overview tab shows Playwright card
-    expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
-    const startCourseLinks = screen.getAllByRole('link', { name: /enroll & start course/i });
-    expect(startCourseLinks.length).toBeGreaterThanOrEqual(1);
-    expect(startCourseLinks.some((l) => l.getAttribute('href') === '/courses/playwright-automation')).toBe(true);
-
-    // 2. Curriculum tab shows Module 4 Available
-    const curriculumTab = screen.getByRole('button', { name: /curriculum & modules/i });
-    fireEvent.click(curriculumTab);
-    expect(screen.getByText(/Module 4: Playwright Automation with JavaScript \+ AI/i)).toBeInTheDocument();
-
-    // 3. Catalog tab shows course catalog with Playwright
+    // Switch to Catalog
     const catalogTab = screen.getByRole('button', { name: /explore all courses/i });
     fireEvent.click(catalogTab);
+
     expect(screen.getByText('Course Catalog & Active Enrollments')).toBeInTheDocument();
+    expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
     expect(screen.getByText('20-Day Automation Masterclass')).toBeInTheDocument();
   });
 

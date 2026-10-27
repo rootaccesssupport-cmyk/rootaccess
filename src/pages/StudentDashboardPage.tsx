@@ -20,11 +20,8 @@ import {
   Save,
   X,
   Bug,
-  Download,
-  ArrowRight,
   Terminal,
   Search,
-  Layers,
   Compass,
   Check,
 } from 'lucide-react';
@@ -176,25 +173,24 @@ const COURSE_CATEGORIES = [
 
 export const StudentDashboardPage: React.FC = () => {
   const { user, profile, signOut, refreshProfile } = useAuth();
-  const { overallStats, getCourseProgress, isCourseEnrolled, isLessonCompleted, enrollInCourse } = useProgress();
+  const { overallStats, getCourseProgress, isCourseEnrolled, enrollInCourse } = useProgress();
   const { state: devOpsState, getOverallStats: getDevOpsStats, enrollInCourse: enrollInDevOpsCourse } = useDevOps();
   const devopsStats = getDevOpsStats();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Tab State: 'enrolled' (My Learning), 'catalog' (All Courses & Search), 'curriculum', 'interview'
+  // Tab State: 'enrolled' (My Learning), 'catalog' (All Courses & Search), 'interview'
   const tabParam = searchParams.get('tab');
   const initialTab =
-    tabParam === 'catalog' || tabParam === 'curriculum' || tabParam === 'interview'
+    tabParam === 'catalog' || tabParam === 'interview'
       ? tabParam
       : 'enrolled';
-  const [activeTab, setActiveTab] = useState<'enrolled' | 'catalog' | 'curriculum' | 'interview'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'enrolled' | 'catalog' | 'interview'>(initialTab);
 
   useEffect(() => {
     const currentTab = searchParams.get('tab');
     if (
       currentTab === 'catalog' ||
-      currentTab === 'curriculum' ||
       currentTab === 'interview' ||
       currentTab === 'enrolled'
     ) {
@@ -202,7 +198,7 @@ export const StudentDashboardPage: React.FC = () => {
     }
   }, [searchParams]);
 
-  const handleTabChange = (tab: 'enrolled' | 'catalog' | 'curriculum' | 'interview') => {
+  const handleTabChange = (tab: 'enrolled' | 'catalog' | 'interview') => {
     setActiveTab(tab);
     setSearchParams({ tab });
   };
@@ -359,109 +355,6 @@ export const StudentDashboardPage: React.FC = () => {
     }
   };
 
-  const modules = [
-    {
-      id: 1,
-      slug: 'manual-qa-fundamentals',
-      title: 'Module 1: Manual QA & Defect Life Cycle',
-      description: 'Master test case writing, bug reporting with Jira templates, boundary value analysis, and regression testing.',
-      status: 'In Progress',
-      progress: getCourseProgress('manual-qa-fundamentals').percent || 40,
-      totalLessons: 8,
-      completedLessons: getCourseProgress('manual-qa-fundamentals').completedCount || 3,
-      icon: <BookOpen className="w-5 h-5 text-indigo-600" />,
-      topics: [
-        { name: 'Software Testing Life Cycle (STLC) & Modern QA Workflows', completed: isLessonCompleted('lesson-stlc-fundamentals'), lessonSlug: 'stlc-fundamentals' },
-        { name: 'Test Design Techniques: Boundary Value Analysis & Equivalence Partitioning', completed: isLessonCompleted('lesson-test-case-design'), lessonSlug: 'test-case-design-bva-ep' },
-        { name: 'Workplace Defect Logging: Jira Bug Report Standards', completed: isLessonCompleted('lesson-jira-bug-reporting'), lessonSlug: 'jira-bug-reporting' },
-        { name: 'Agile QA Workflows & Sprint Ceremonies', completed: isLessonCompleted('lesson-agile-qa-workflows'), lessonSlug: 'agile-qa-workflows' },
-      ],
-    },
-    {
-      id: 2,
-      slug: 'sql-for-qa-engineers',
-      title: 'Module 2: SQL & Backend Database Audits',
-      description: 'Validate database records, write SQL queries, verify data integrity, and catch backend defects.',
-      status: 'Locked',
-      progress: getCourseProgress('sql-for-qa-engineers').percent || 0,
-      totalLessons: 6,
-      completedLessons: getCourseProgress('sql-for-qa-engineers').completedCount || 0,
-      icon: <Database className="w-5 h-5 text-emerald-600" />,
-      topics: [
-        { name: 'Relational Database Concepts for QA Testers', completed: false, lessonSlug: 'sql-data-verification' },
-        { name: 'Filtering Data with WHERE, IN, LIKE, and BETWEEN', completed: false, lessonSlug: 'sql-data-verification' },
-        { name: 'Multi-table Verification with INNER & LEFT JOINs', completed: false, lessonSlug: 'sql-joins-and-orphaned-records' },
-        { name: 'Auditing Data Mismatches Between UI and Database', completed: false, lessonSlug: 'sql-joins-and-orphaned-records' },
-      ],
-    },
-    {
-      id: 3,
-      slug: 'api-testing-postman',
-      title: 'Module 3: API Testing & Postman',
-      description: 'Inspect RESTful endpoints, validate JSON payloads, automate assertion scripts, and inspect auth headers.',
-      status: 'Locked',
-      progress: getCourseProgress('api-testing-postman').percent || 0,
-      totalLessons: 6,
-      completedLessons: getCourseProgress('api-testing-postman').completedCount || 0,
-      icon: <Send className="w-5 h-5 text-amber-600" />,
-      topics: [
-        { name: 'HTTP Protocol: Methods, Headers & Status Codes', completed: false, lessonSlug: 'rest-http-status-codes' },
-        { name: 'Creating Postman Collections & Environment Variables', completed: false, lessonSlug: 'rest-http-status-codes' },
-        { name: 'Writing Automated JavaScript Assertions in Postman', completed: false, lessonSlug: 'postman-automated-assertions' },
-        { name: 'Testing Token-Based Authentication Flows', completed: false, lessonSlug: 'postman-automated-assertions' },
-      ],
-    },
-    {
-      id: 4,
-      slug: 'playwright-automation',
-      title: 'Module 4: Playwright Automation with JavaScript + AI (20 Days)',
-      description: 'Master modern browser automation using pure JavaScript and AI tools. Learn reliable locators, auto-waiting, Page Object Models, and flaky test mitigation across 20 daily milestones.',
-      status: 'Available',
-      progress: getCourseProgress('playwright-automation').percent || 0,
-      totalLessons: 20,
-      completedLessons: getCourseProgress('playwright-automation').completedCount || 0,
-      icon: <Code2 className="w-5 h-5 text-purple-600" />,
-      topics: [
-        { name: 'Day 1: Automation Testing & Playwright Fundamentals', completed: isLessonCompleted('lesson-playwright-day-1'), lessonSlug: 'day-1' },
-        { name: 'Day 2: JavaScript Essentials for Test Automation', completed: isLessonCompleted('lesson-playwright-day-2'), lessonSlug: 'day-2' },
-        { name: 'Day 3: Environment Setup and Your First Playwright Test', completed: isLessonCompleted('lesson-playwright-day-3'), lessonSlug: 'day-3' },
-        { name: 'Day 4: Locators and Element Identification', completed: isLessonCompleted('lesson-playwright-day-4'), lessonSlug: 'day-4' },
-      ],
-    },
-    {
-      id: 5,
-      slug: 'qa-interview-mastery',
-      title: 'Module 5: Interview Prep & Bug Portfolio',
-      description: 'Polish your QA portfolio, practice situational interview scenarios, and master technical question banks.',
-      status: 'Locked',
-      progress: getCourseProgress('qa-interview-mastery').percent || 0,
-      totalLessons: 5,
-      completedLessons: getCourseProgress('qa-interview-mastery').completedCount || 0,
-      icon: <Briefcase className="w-5 h-5 text-rose-600" />,
-      topics: [
-        { name: 'Building a Recruiter-Ready Defect Portfolio', completed: false, lessonSlug: 'star-method-qa-interviews' },
-        { name: 'Top 50 Real-World QA Interview Questions', completed: false, lessonSlug: 'star-method-qa-interviews' },
-        { name: 'Live Mock Interview Scenarios & Rubrics', completed: false, lessonSlug: 'star-method-qa-interviews' },
-      ],
-    },
-    {
-      id: 6,
-      slug: 'devops-engineering',
-      title: 'Module 6: DevOps Engineering — From Fundamentals to Practical Projects (36 Days)',
-      description: 'Master the delivery lifecycle, Linux internals, terminal commands, permissions, process triage, and incident troubleshooting with live simulations.',
-      status: devOpsState.enrolled ? (devopsStats.completedDaysCount > 0 ? 'In Progress' : 'Enrolled') : 'Available',
-      progress: devopsStats.completionPercentage,
-      totalLessons: 36,
-      completedLessons: devopsStats.completedDaysCount,
-      icon: <Terminal className="w-5 h-5 text-sky-600" />,
-      topics: [
-        { name: 'Day 1: Understanding DevOps and the Software Delivery Lifecycle', completed: Boolean(devOpsState.days?.[1]?.isCompleted), lessonSlug: 'day-1' },
-        { name: 'Day 2: Linux Fundamentals and Command-Line Navigation', completed: Boolean(devOpsState.days?.[2]?.isCompleted), lessonSlug: 'day-2' },
-        { name: 'Day 3: Linux Permissions, Processes, Logs, and Troubleshooting', completed: Boolean(devOpsState.days?.[3]?.isCompleted), lessonSlug: 'day-3' },
-      ],
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 selection:bg-indigo-500 selection:text-white">
       {/* TOP DASHBOARD HEADER */}
@@ -543,18 +436,6 @@ export const StudentDashboardPage: React.FC = () => {
           >
             <Search className="w-4 h-4" />
             <span>Explore All Courses</span>
-          </button>
-
-          <button
-            onClick={() => handleTabChange('curriculum')}
-            className={`py-3 px-3.5 border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              activeTab === 'curriculum'
-                ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>Curriculum &amp; Modules</span>
           </button>
 
           <button
@@ -874,129 +755,6 @@ export const StudentDashboardPage: React.FC = () => {
               )}
             </div>
 
-            {/* FLAGSHIP 5-DAY MANUAL QA PROGRAMME CARD */}
-            <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-indigo-900/40">
-              <div className="space-y-1.5 max-w-xl">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Flagship 5-Day Intensive Programme</span>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">
-                  Manual QA in 5 Days: Industry-Based Interview Preparation
-                </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Fast-track your software testing career with 5 daily practical units, deterministic rubrics, mid-course surprise gatekeeper, and verified course completion certificate.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-                <Link
-                  to={isCourseEnrolled('manual-qa-fundamentals') ? '/manual-qa' : '/courses/manual-qa-fundamentals'}
-                  className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs transition-colors shadow-sm"
-                >
-                  <Play className="w-4 h-4 fill-white" />
-                  <span>{isCourseEnrolled('manual-qa-fundamentals') ? 'Continue Roadmap' : 'Enroll & Start Course'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to="/courses/manual-qa-fundamentals"
-                  className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition-colors border border-slate-700"
-                >
-                  <span>Curriculum &amp; Details</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* 15-DAY PLAYWRIGHT AUTOMATION HIGHLIGHT CARD */}
-            <div className="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-purple-900/40">
-              <div className="space-y-1.5 max-w-xl">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                  <Code2 className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Featured Automation Track (20 Days)</span>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">
-                  Playwright Automation with JavaScript + AI
-                </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Bridge from manual testing to browser automation with pure JavaScript and AI engineering. 20 structured daily milestones, DevTools architecture, robust locators, and automated test suite creation.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-                <Link
-                  to={isCourseEnrolled('playwright-automation') ? '/courses/playwright-automation/day-1' : '/courses/playwright-automation'}
-                  className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold text-xs transition-colors shadow-sm"
-                >
-                  <Play className="w-4 h-4 fill-slate-950" />
-                  <span>{isCourseEnrolled('playwright-automation') ? 'Continue Playwright' : 'Enroll & Start Course'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to="/courses/playwright-automation"
-                  className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition-colors border border-slate-700"
-                >
-                  <span>Course Details</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* 36-DAY DEVOPS ACADEMY HIGHLIGHT CARD */}
-            <div className="bg-gradient-to-r from-sky-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-sky-900/40">
-              <div className="space-y-1.5 max-w-xl">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                  <Terminal className="w-3.5 h-3.5 text-sky-400" />
-                  <span>Cloud &amp; DevOps Engineering (36 Days)</span>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">
-                  DevOps Engineering: Fundamentals to Production Projects
-                </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Master the software delivery lifecycle, Linux internals, terminal commands, process management, and incident triage with interactive simulations, virtual sandboxes, and production challenges.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-                <Link
-                  to={devOpsState.enrolled || isCourseEnrolled('devops-engineering') ? (devopsStats.completedDaysCount > 0 ? `/courses/devops-engineering/day-${Math.min(3, devopsStats.completedDaysCount + 1)}` : '/courses/devops-engineering/day-1') : '/courses/devops-engineering'}
-                  className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition-colors shadow-sm"
-                >
-                  <Play className="w-4 h-4 fill-slate-950" />
-                  <span>{devOpsState.enrolled || isCourseEnrolled('devops-engineering') ? 'Continue DevOps' : 'Explore DevOps Course'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to="/courses/devops-engineering"
-                  className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition-colors border border-slate-700"
-                >
-                  <span>Curriculum &amp; Syllabus</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* INTERACTIVE DEFECT LAB HIGHLIGHT CARD */}
-            <div className="bg-gradient-to-r from-rose-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
-              <div className="space-y-1.5 max-w-xl">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                  <Bug className="w-3.5 h-3.5" />
-                  <span>Workplace Defect Simulation Lab</span>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">
-                  Live Checkout Defect Hunting &amp; Jira Bug Reporting
-                </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Put your testing skills to the test. Step into our interactive staging environment, uncover 4 real boundary bugs and calculation defects, and log Jira-standard defect tickets for senior QA lead evaluation.
-                </p>
-              </div>
-
-              <Link
-                to="/simulator"
-                className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-slate-950 font-bold text-xs hover:bg-slate-100 transition-colors shadow-sm"
-              >
-                <Bug className="w-4 h-4 text-rose-600" />
-                <span>Launch Defect Lab ({overallStats.bugsFoundCount}/4 Bugs)</span>
-              </Link>
-            </div>
-
             {/* DAILY INTERVIEW SCENARIO TEASER WIDGET */}
             <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 shadow-sm">
               <div className="flex items-center justify-between mb-4">
@@ -1255,95 +1013,7 @@ export const StudentDashboardPage: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 3: CURRICULUM */}
-        {activeTab === 'curriculum' && (
-          <div className="space-y-6 animate-fadeIn">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-slate-900">Curriculum &amp; Module Progression</h2>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                  Step-by-step roadmap for the QA &amp; Software Testing Engineer track.
-                </p>
-              </div>
-              <a
-                href="/RootAccess_QA_Curriculum_Syllabus.pdf"
-                download="RootAccess_QA_Curriculum_Syllabus.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-colors shadow-2xs shrink-0"
-              >
-                <Download className="w-4 h-4" />
-                <span>Download Syllabus (PDF)</span>
-              </a>
-            </div>
-
-            <div className="space-y-4">
-              {modules.map((m) => (
-                <div
-                  key={m.id}
-                  className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-4"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3.5">
-                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                        {m.icon}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600">
-                            {m.status}
-                          </span>
-                          <span className="text-slate-300">&bull;</span>
-                          <span className="text-xs text-slate-500">
-                            {m.completedLessons} of {m.totalLessons} completed
-                          </span>
-                        </div>
-                        <h3 className="text-base font-bold text-slate-900 mt-0.5">{m.title}</h3>
-                      </div>
-                    </div>
-
-                    <Link
-                      to={
-                        m.slug === 'manual-qa-fundamentals'
-                          ? '/manual-qa'
-                          : m.slug === 'devops-engineering'
-                          ? '/courses/devops-engineering'
-                          : `/courses/${m.slug}`
-                      }
-                      className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors shrink-0"
-                    >
-                      <span>Explore Module</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-
-                  <p className="text-xs text-slate-600 leading-relaxed">{m.description}</p>
-
-                  {/* Module Topics Checklist */}
-                  <div className="pt-2 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {m.topics.map((t, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-2 text-xs text-slate-700 p-2 rounded-lg bg-slate-50/60"
-                      >
-                        {t.completed ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                        ) : (
-                          <div className="w-4 h-4 rounded-full border border-slate-300 shrink-0" />
-                        )}
-                        <span className={t.completed ? 'line-through text-slate-400' : 'font-medium'}>
-                          {t.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 4: DAILY INTERVIEW SCENARIO & VAULT */}
+        {/* TAB 3: DAILY INTERVIEW SCENARIO & VAULT */}
         {activeTab === 'interview' && (
           <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
             <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-2xs space-y-6">
