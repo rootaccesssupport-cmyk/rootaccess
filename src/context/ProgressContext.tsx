@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { COURSES, SIMULATED_BUGS } from '../data/curriculumData';
 import type { ProgressState, QuizScoreRecord, BugReportSubmission } from '../types/curriculum';
 
@@ -44,7 +45,7 @@ const DEFAULT_INITIAL_STATE: ProgressState = {
 };
 
 export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const storageKey = useMemo(() => {
     return user?.id ? `rootaccess_progress_${user.id}` : 'rootaccess_progress_guest';
   }, [user?.id]);
@@ -69,27 +70,35 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return DEFAULT_INITIAL_STATE;
   });
 
-  // Reload when active user changes
+  // Reload when active user or profile changes
   useEffect(() => {
     try {
       const stored = localStorage.getItem(storageKey);
-      if (stored) {
-        const parsed = JSON.parse(stored);
+      const baseState = stored ? JSON.parse(stored) : null;
+
+      const profileCourses = Array.isArray(profile?.enrolled_courses) ? profile.enrolled_courses : [];
+      const storedCourses = baseState?.enrolledCourses || [];
+      const mergedCourses = Array.from(new Set([...storedCourses, ...profileCourses]));
+
+      if (baseState) {
         setState({
           ...DEFAULT_INITIAL_STATE,
-          ...parsed,
-          completedLessons: parsed.completedLessons || [],
-          quizScores: parsed.quizScores || {},
-          reportedBugs: parsed.reportedBugs || {},
-          enrolledCourses: parsed.enrolledCourses || [],
+          ...baseState,
+          completedLessons: baseState.completedLessons || [],
+          quizScores: baseState.quizScores || {},
+          reportedBugs: baseState.reportedBugs || {},
+          enrolledCourses: mergedCourses,
         });
       } else {
-        setState(DEFAULT_INITIAL_STATE);
+        setState({
+          ...DEFAULT_INITIAL_STATE,
+          enrolledCourses: profileCourses,
+        });
       }
     } catch (e) {
       console.warn('Failed to load stored progress for user:', e);
     }
-  }, [storageKey]);
+  }, [storageKey, profile?.enrolled_courses]);
 
   // Persist on state change
   useEffect(() => {
@@ -262,17 +271,38 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [state.enrolledCourses]
   );
 
-  const enrollInCourse = useCallback((courseSlug: string) => {
-    setState((prev) => {
-      const current = prev.enrolledCourses || [];
-      const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
-      if (current.includes(normalized)) return prev;
-      return {
-        ...prev,
-        enrolledCourses: [...current, normalized],
-      };
-    });
-  }, []);
+  const enrollInCourse = useCallback(
+    (courseSlug: string) => {
+      setState((prev) => {
+        const current = prev.enrolledCourses || [];
+        const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
+        if (current.includes(normalized)) return prev;
+        const updated = [...current, normalized];
+
+        // Sync to Supabase profiles if logged in
+        if (user && isSupabaseConfigured) {
+          supabase
+            .from('profiles')
+            .update({
+              enrolled_courses: updated,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', user.id)
+            .then(({ error }) => {
+              if (error) {
+                console.warn('Could not sync enrolled_courses to Supabase:', error.message);
+              }
+            });
+        }
+
+        return {
+          ...prev,
+          enrolledCourses: updated,
+        };
+      });
+    },
+    [user]
+  );
 
   const resetProgress = useCallback(() => {
     setState({

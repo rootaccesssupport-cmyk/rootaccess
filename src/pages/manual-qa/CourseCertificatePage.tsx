@@ -25,14 +25,16 @@ export const CourseCertificatePage: React.FC = () => {
     user?.user_metadata?.name ||
     (user?.email ? user.email.split('@')[0] : 'RootAccess Certified Learner');
 
-  // Format date
+  // Format date in Indian Standard Time (IST)
   const issueDate = state.completedAt
-    ? new Date(state.completedAt).toLocaleDateString('en-US', {
+    ? new Date(state.completedAt).toLocaleDateString('en-IN', {
+        timeZone: 'Asia/Kolkata',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       })
-    : new Date().toLocaleDateString('en-US', {
+    : new Date().toLocaleDateString('en-IN', {
+        timeZone: 'Asia/Kolkata',
         year: 'numeric',
         month: 'long',
         day: 'numeric',

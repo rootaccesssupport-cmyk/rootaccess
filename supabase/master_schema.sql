@@ -25,9 +25,9 @@ create table if not exists public.profiles (
   full_name text not null,
   email text not null,
   role text default 'student' not null check (role in ('student', 'instructor', 'admin')),
-  enrolled_courses text[] default array['manual-qa-fundamentals']::text[] not null,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+  enrolled_courses text[] default array[]::text[] not null,
+  created_at timestamp with time zone default timezone('Asia/Kolkata'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('Asia/Kolkata'::text, now()) not null
 );
 
 -- Row Level Security (RLS) for profiles
@@ -55,19 +55,21 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, email, role, enrolled_courses)
+  insert into public.profiles (id, full_name, email, role, enrolled_courses, created_at, updated_at)
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'full_name', 'RootAccess Student'),
     coalesce(new.email, ''),
     'student',
-    array['manual-qa-fundamentals']::text[]
+    '{}'::text[],
+    timezone('Asia/Kolkata'::text, now()),
+    timezone('Asia/Kolkata'::text, now())
   )
   on conflict (id) do update
   set
     full_name = coalesce(excluded.full_name, public.profiles.full_name),
     email = coalesce(excluded.email, public.profiles.email),
-    updated_at = timezone('utc'::text, now());
+    updated_at = timezone('Asia/Kolkata'::text, now());
   return new;
 end;
 $$;

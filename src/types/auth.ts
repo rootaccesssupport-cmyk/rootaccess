@@ -4,6 +4,8 @@ export interface UserProfile {
   id: string;
   full_name: string;
   email: string;
+  role?: 'student' | 'instructor' | 'admin';
+  enrolled_courses?: string[];
   created_at?: string;
   updated_at?: string;
 }
