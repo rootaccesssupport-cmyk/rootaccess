@@ -129,6 +129,39 @@ describe('Playwright Automation with JavaScript + AI — Day 4 Implementation', 
     expect(screen.getByText(/is the gold standard because it tests the button the way users and screen readers see it/i)).toBeInTheDocument();
   });
 
+  it('allows resetting the exercise after choosing a wrong answer to try again', () => {
+    renderPlaywrightDay4Page(true);
+
+    // Select wrong option (e.g. dynamic class)
+    const wrongOption = screen.getByRole('button', { name: /page\.locator\('\.dynamic-btn-88'\)/i });
+    fireEvent.click(wrongOption);
+
+    // Submit wrong answer
+    const checkBtn = screen.getByRole('button', { name: /Check Answer/i });
+    fireEvent.click(checkBtn);
+
+    // Shows review recommended and Reset & Try Again button
+    expect(screen.getByText(/Review Recommended/i)).toBeInTheDocument();
+    expect(screen.getByText(/Incorrect selection\. Reset this question to select another option\./i)).toBeInTheDocument();
+    const resetBtn = screen.getByRole('button', { name: /Reset & Try Again/i });
+    expect(resetBtn).toBeInTheDocument();
+
+    // Click Reset & Try Again
+    fireEvent.click(resetBtn);
+
+    // Check Answer is back and wrong selection is cleared
+    expect(screen.getByRole('button', { name: /Check Answer/i })).toBeDisabled();
+
+    // Now select the correct answer
+    const correctOption = screen.getByRole('button', { name: /page\.getByRole\('button', \{ name: 'Log In to Account' \}\)/i });
+    fireEvent.click(correctOption);
+    expect(screen.getByRole('button', { name: /Check Answer/i })).not.toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: /Check Answer/i }));
+
+    // Now correct answer is verified
+    expect(screen.getByText(/Correct Answer ✓/i)).toBeInTheDocument();
+  });
+
   it('evaluates Day 4 Practical Assignment with deterministic 10-point rubric', () => {
     // 1. Evaluate default starter code
     const initialResult = evaluateDay4Assignment(

@@ -125,6 +125,15 @@ export const PlaywrightDay8LessonPage: React.FC = () => {
     setExerciseSubmitted((prev) => ({ ...prev, [exerciseId]: true }));
   };
 
+  const handleResetExercise = (exerciseId: string) => {
+    setExerciseSubmitted((prev) => ({ ...prev, [exerciseId]: false }));
+    setExerciseSelections((prev) => {
+      const next = { ...prev };
+      delete next[exerciseId];
+      return next;
+    });
+  };
+
   // Practical Assignment Evaluation
   const handleEvaluateAssignment = () => {
     const evaluation = evaluateDay8Assignment(
@@ -693,22 +702,55 @@ export const PlaywrightDay8LessonPage: React.FC = () => {
 
                   <div className="pt-2">
                     {!exerciseSubmitted[currentTopic.exercise.id] ? (
-                      <button
-                        onClick={() => handleSubmitExercise(currentTopic.exercise!.id)}
-                        disabled={exerciseSelections[currentTopic.exercise.id] === undefined}
-                        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-sm cursor-pointer"
-                      >
-                        Check Answer
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => handleSubmitExercise(currentTopic.exercise!.id)}
+                          disabled={exerciseSelections[currentTopic.exercise.id] === undefined}
+                          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-sm cursor-pointer"
+                        >
+                          Check Answer
+                        </button>
+                        {exerciseSelections[currentTopic.exercise.id] !== undefined && (
+                          <button
+                            type="button"
+                            onClick={() => handleResetExercise(currentTopic.exercise!.id)}
+                            className="px-4 py-3 border border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                            <span>Reset</span>
+                          </button>
+                        )}
+                      </div>
                     ) : (
-                      <div className="w-full bg-slate-900 text-slate-100 p-5 rounded-xl border border-slate-800 shadow-md space-y-2">
-                        <div className="font-bold flex items-center gap-2 text-amber-300 text-xs sm:text-sm uppercase tracking-wider">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                          <span>Detailed Technical Explanation:</span>
+                      <div className="w-full bg-slate-900 text-slate-100 p-5 rounded-xl border border-slate-800 shadow-md space-y-4">
+                        <div className="space-y-2">
+                          <div className="font-bold flex items-center gap-2 text-amber-300 text-xs sm:text-sm uppercase tracking-wider">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                            <span>Detailed Technical Explanation:</span>
+                          </div>
+                          <p className="text-slate-200 text-xs sm:text-sm leading-relaxed">
+                            {currentTopic.exercise.explanation}
+                          </p>
                         </div>
-                        <p className="text-slate-200 text-xs sm:text-sm leading-relaxed">
-                          {currentTopic.exercise.explanation}
-                        </p>
+                        <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                          <span className="text-xs text-slate-400">
+                            {exerciseSelections[currentTopic.exercise.id] === currentTopic.exercise.correctAnswerIndex
+                              ? '✓ Correct answer selected! You can reset anytime to practice again.'
+                              : '✕ Incorrect selection. Reset this question to select another option.'}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleResetExercise(currentTopic.exercise!.id)}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-amber-300 rounded-lg text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                            <span>
+                              {exerciseSelections[currentTopic.exercise.id] === currentTopic.exercise.correctAnswerIndex
+                                ? 'Reset & Practice Again'
+                                : 'Reset & Try Again'}
+                            </span>
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>

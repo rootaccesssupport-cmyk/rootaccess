@@ -143,6 +143,11 @@ export const PlaywrightDay3LessonPage: React.FC = () => {
       ...prev,
       [exerciseId]: false,
     }));
+    setExerciseSelections((prev) => {
+      const next = { ...prev };
+      delete next[exerciseId];
+      return next;
+    });
   };
 
   // Assignment Handlers
@@ -896,19 +901,36 @@ export const PlaywrightDay3LessonPage: React.FC = () => {
                     </span>
 
                     {!exerciseSubmitted[currentExercise.id] ? (
-                      <button
-                        onClick={() => handleSubmitExercise(currentExercise.id)}
-                        disabled={exerciseSelections[currentExercise.id] === undefined}
-                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer"
-                      >
-                        Check Answer
-                      </button>
+                      <div className="flex items-center gap-2">
+                        {exerciseSelections[currentExercise.id] !== undefined && (
+                           <button
+                            type="button"
+                            onClick={() => handleRetryExercise(currentExercise.id)}
+                            className="px-3 py-2 text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                            <span>Reset</span>
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleSubmitExercise(currentExercise.id)}
+                          disabled={exerciseSelections[currentExercise.id] === undefined}
+                          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                        >
+                          Check Answer
+                        </button>
+                      </div>
                     ) : (
                       <button
                         onClick={() => handleRetryExercise(currentExercise.id)}
-                        className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                        className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
                       >
-                        Try Again
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>
+                          {exerciseSelections[currentExercise.id] === currentExercise.correctAnswerIndex
+                            ? 'Reset & Practice Again'
+                            : 'Reset & Try Again'}
+                        </span>
                       </button>
                     )}
                   </div>
