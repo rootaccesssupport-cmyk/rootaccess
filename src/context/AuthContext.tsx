@@ -38,12 +38,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .maybeSingle();
 
       if (error) {
-        console.warn('Could not fetch from profiles table, using auth metadata:', error.message);
-        return {
-          id: currentUser.id,
-          full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Student',
-          email: currentUser.email || '',
-        };
+        console.warn('Could not fetch from profiles table:', error.message);
+        return null;
       }
 
       if (data) {
@@ -86,18 +82,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return data as UserProfile;
       }
 
-      return {
-        id: currentUser.id,
-        full_name: currentUser.user_metadata?.full_name || 'RootAccess Student',
-        email: currentUser.email || '',
-      };
+      // If data is null (row was deleted or does not exist in profiles table):
+      // Return null so deleted accounts cannot log in
+      return null;
     } catch (err) {
       console.error('Error fetching user profile:', err);
-      return {
-        id: currentUser.id,
-        full_name: currentUser.user_metadata?.full_name || 'RootAccess Student',
-        email: currentUser.email || '',
-      };
+      return null;
     }
   }, []);
 
@@ -112,8 +102,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let isMounted = true;
 
     async function initializeAuth() {
-      // Clean up any legacy dummy student accounts stored previously
-      localStorage.removeItem('rootaccess_local_user');
+      // Clean up any legacy auth tokens and local users from localStorage
+      try {
+        localStorage.removeItem('rootaccess_local_user');
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && (key.startsWith('sb-') || key.includes('auth-token'))) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach((k) => localStorage.removeItem(k));
+      } catch {
+        // ignore storage access issues
+      }
 
       if (!isSupabaseConfigured) {
         if (isMounted) setLoading(false);
@@ -121,21 +123,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       try {
-        const { data: { session: initialSession }, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error('Error fetching initial auth session:', error.message);
-        }
+        // Verify session live with the Supabase Auth server using getUser()
+        // Unlike getSession() which only reads unverified tokens from local storage,
+        // getUser() validates the JWT against the server, rejecting deleted or invalid users
+        const { data: { user: verifiedUser }, error: userError } = await supabase.auth.getUser();
 
-        if (isMounted) {
-          setSession(initialSession);
-          setUser(initialSession?.user ?? null);
-          if (initialSession?.user) {
-            const userProfile = await fetchProfile(initialSession.user);
-            if (isMounted) setProfile(userProfile);
+        if (userError || !verifiedUser) {
+          await supabase.auth.signOut().catch(() => {});
+          if (isMounted) {
+            setSession(null);
+            setUser(null);
+            setProfile(null);
+          }
+        } else {
+          const userProfile = await fetchProfile(verifiedUser);
+          if (!userProfile) {
+            // Profile row was deleted from public.profiles
+            console.warn('Profile row missing or deleted for user:', verifiedUser.id);
+            await supabase.auth.signOut().catch(() => {});
+            if (isMounted) {
+              setSession(null);
+              setUser(null);
+              setProfile(null);
+            }
+          } else {
+            const { data: { session: activeSession } } = await supabase.auth.getSession();
+            if (isMounted) {
+              setUser(verifiedUser);
+              setSession(activeSession);
+              setProfile(userProfile);
+            }
           }
         }
       } catch (err) {
         console.error('Unexpected auth initialization error:', err);
+        if (isMounted) {
+          setUser(null);
+          setSession(null);
+          setProfile(null);
+        }
       } finally {
         if (isMounted) {
           setLoading(false);
@@ -151,21 +177,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         async (event, currentSession) => {
           if (!isMounted) return;
 
-          setSession(currentSession);
-          setUser(currentSession?.user ?? null);
-
           if (currentSession?.user) {
             const userProfile = await fetchProfile(currentSession.user);
-            if (isMounted) setProfile(userProfile);
+            if (!userProfile) {
+              // User has no valid profile row in database (e.g. deleted user)
+              console.warn('User has no valid profile row, signing out.');
+              await supabase.auth.signOut().catch(() => {});
+              if (isMounted) {
+                setSession(null);
+                setUser(null);
+                setProfile(null);
+                setLoading(false);
+              }
+              return;
+            }
+
+            if (isMounted) {
+              setSession(currentSession);
+              setUser(currentSession.user);
+              setProfile(userProfile);
+            }
           } else {
-            setProfile(null);
+            if (isMounted) {
+              setSession(null);
+              setUser(null);
+              setProfile(null);
+            }
           }
 
           if (event === 'PASSWORD_RECOVERY') {
             sessionStorage.setItem('rootaccess_in_password_recovery', 'true');
           }
 
-          setLoading(false);
+          if (isMounted) {
+            setLoading(false);
+          }
         }
       );
 
@@ -266,9 +312,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (data?.user) {
+        const userProfile = await fetchProfile(data.user);
+        if (!userProfile) {
+          // Account was deleted from public.profiles: reject login immediately
+          await supabase.auth.signOut().catch(() => {});
+          setUser(null);
+          setSession(null);
+          setProfile(null);
+          return {
+            success: false,
+            error: 'Account profile not found or has been deleted. Please register a new account.',
+          };
+        }
+
         setUser(data.user);
         setSession(data.session);
-        const userProfile = await fetchProfile(data.user);
         setProfile(userProfile);
       }
 
@@ -285,6 +343,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionStorage.setItem('rootaccess_explicit_logout', 'true');
     localStorage.removeItem('rootaccess_local_user');
     sessionStorage.removeItem('rootaccess_in_password_recovery');
+
+    // Purge any stored auth tokens from localStorage
+    try {
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('sb-') || key.includes('auth-token'))) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach((k) => localStorage.removeItem(k));
+    } catch {
+      // ignore
+    }
+
     setUser(null);
     setSession(null);
     setProfile(null);
