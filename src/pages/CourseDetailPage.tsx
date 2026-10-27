@@ -102,13 +102,15 @@ export const CourseDetailPage: React.FC = () => {
               <span className="hidden sm:inline">Syllabus PDF</span>
             </a>
 
-            <Link
-              to="/simulator"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
-            >
-              <Bug className="w-3.5 h-3.5 text-rose-600" />
-              <span>Defect Lab</span>
-            </Link>
+            {['manual-qa-fundamentals', 'playwright-automation', 'qa-interview-mastery', 'manual-testing'].includes(course.slug) && (
+              <Link
+                to="/simulator"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+              >
+                <Bug className="w-3.5 h-3.5 text-rose-600" />
+                <span>Defect Lab</span>
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -366,7 +368,7 @@ export const CourseDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Course Quiz & Defect Simulator Callout */}
+        {/* Course Quiz & Practical Callouts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Quiz Card */}
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
@@ -402,32 +404,60 @@ export const CourseDetailPage: React.FC = () => {
             </Link>
           </div>
 
-          {/* Hands-on Defect Simulator Card */}
-          <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-xs space-y-4 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-white/10 text-rose-400 flex items-center justify-center border border-white/10">
-                <Bug className="w-5 h-5" />
+          {/* Conditional Practical Lab: Workplace Defect Simulator (QA Courses Only) or Course Practice */}
+          {['manual-qa-fundamentals', 'playwright-automation', 'qa-interview-mastery', 'manual-testing'].includes(course.slug) ? (
+            <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-xs space-y-4 relative overflow-hidden">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-white/10 text-rose-400 flex items-center justify-center border border-white/10">
+                  <Bug className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded-full">
+                  QA Exclusive Lab
+                </span>
               </div>
-              <span className="text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded-full">
-                Interactive Lab
-              </span>
-            </div>
 
-            <div>
-              <h3 className="text-base font-bold text-white">Workplace Defect Simulation Lab</h3>
-              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                Step into a live QA environment. Hunt down 4 hidden defects in our interactive checkout simulator and submit Jira-grade bug reports.
-              </p>
-            </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Workplace Defect Simulation Lab</h3>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  Step into a live QA staging environment. Hunt down hidden defects in our interactive checkout simulator and submit Jira-grade bug reports.
+                </p>
+              </div>
 
-            <Link
-              to="/simulator"
-              className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-white text-slate-900 hover:bg-slate-100 text-xs font-bold rounded-xl transition-colors shadow-sm"
-            >
-              <Bug className="w-4 h-4 text-rose-600" />
-              <span>Launch Defect Simulator</span>
-            </Link>
-          </div>
+              <Link
+                to="/simulator"
+                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-white text-slate-900 hover:bg-slate-100 text-xs font-bold rounded-xl transition-colors shadow-sm"
+              >
+                <Bug className="w-4 h-4 text-rose-600" />
+                <span>Launch Defect Simulator</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 text-white shadow-xs space-y-4 relative overflow-hidden">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-white/10 text-indigo-400 flex items-center justify-center border border-white/10">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full">
+                  Interactive Practice
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-white">Hands-on Milestones &amp; Projects</h3>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  Every milestone in this track includes real-world production setups, downloadable cheatsheets, and project portfolio deliverables.
+                </p>
+              </div>
+
+              <Link
+                to="/app?tab=interview"
+                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-white text-slate-900 hover:bg-slate-100 text-xs font-bold rounded-xl transition-colors shadow-sm"
+              >
+                <Briefcase className="w-4 h-4 text-indigo-600" />
+                <span>Practice Technical Scenarios</span>
+              </Link>
+            </div>
+          )}
         </div>
       </main>
     </div>

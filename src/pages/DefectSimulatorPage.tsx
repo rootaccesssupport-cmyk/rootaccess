@@ -26,7 +26,12 @@ interface CartItem {
 
 export const DefectSimulatorPage: React.FC = () => {
   const { user, profile } = useAuth();
-  const { reportedBugs, submitBugReport } = useProgress();
+  const { reportedBugs, submitBugReport, isCourseEnrolled, enrollInCourse } = useProgress();
+
+  const isEnrolledInQA =
+    isCourseEnrolled('manual-qa-fundamentals') ||
+    isCourseEnrolled('playwright-automation') ||
+    isCourseEnrolled('qa-interview-mastery');
 
   const defaultCustomerName = profile?.full_name || user?.user_metadata?.full_name || (user?.email ? user.email.split('@')[0] : 'QA Student');
 
@@ -138,6 +143,74 @@ export const DefectSimulatorPage: React.FC = () => {
 
   const bugsFoundCount = Object.keys(reportedBugs).length;
   const allBugsFound = bugsFoundCount >= SIMULATED_BUGS.length;
+
+  if (!isEnrolledInQA) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
+        <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <Link
+              to="/app"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors p-1.5 rounded-lg hover:bg-slate-100"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Dashboard</span>
+            </Link>
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+              <Bug className="w-4 h-4 text-rose-500" />
+              <span>QA Staging Environment</span>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex items-center justify-center">
+          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-sm text-center max-w-xl space-y-6">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-100 shadow-2xs">
+              <Bug className="w-7 h-7" />
+            </div>
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                <ShieldAlert className="w-3.5 h-3.5" />
+                <span>QA Course Enrollment Required</span>
+              </span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+                Workplace Defect Simulation Lab
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                The Defect Simulation Lab is an interactive staging workbench available exclusively to students enrolled in our QA engineering tracks (Manual QA or Playwright Automation).
+              </p>
+            </div>
+
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-left text-xs text-slate-600 space-y-2">
+              <div className="font-bold text-slate-900">Available inside these QA tracks:</div>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Manual QA in 5 Days: Industry-Based Interview Preparation</li>
+                <li>Playwright Automation with JavaScript + AI</li>
+                <li>QA Technical Interview Prep &amp; Defect Portfolio</li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button
+                onClick={() => {
+                  enrollInCourse('manual-qa-fundamentals');
+                }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-colors shadow-xs cursor-pointer"
+              >
+                <span>Enroll in Manual QA Track</span>
+              </button>
+              <Link
+                to="/app?tab=catalog"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+              >
+                <span>Explore All Courses</span>
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">

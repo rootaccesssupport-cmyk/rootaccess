@@ -14,6 +14,7 @@ import {
   RefreshCw,
   FileCode2,
   ChevronRight,
+  Bug,
 } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -505,6 +506,31 @@ export const ManualQaCourseHubPage: React.FC = () => {
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* INCLUDED PRACTICAL LAB: DEFECT SIMULATOR */}
+              <div className="bg-gradient-to-r from-rose-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
+                <div className="space-y-1.5 max-w-xl">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                    <Bug className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Included Practical Lab</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white">
+                    Workplace Defect Simulation Lab
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Practice defect hunting on our live e-commerce staging application. Uncover 4 real boundary bugs, cart calculation defects, and silent form failures, and log Jira-standard defect tickets for senior QA evaluation.
+                  </p>
+                </div>
+
+                <Link
+                  to="/simulator"
+                  className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-slate-950 font-bold text-xs hover:bg-slate-100 transition-colors shadow-sm cursor-pointer"
+                >
+                  <Bug className="w-4 h-4 text-rose-600" />
+                  <span>Launch Defect Lab</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
 
               {/* OFFICIAL COMPLETION CERTIFICATE CARD */}

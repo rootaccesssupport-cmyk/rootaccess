@@ -29,6 +29,7 @@ import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { useProgress } from '../context/ProgressContext';
 import { useDevOps } from '../context/DevOpsContext';
+import { COURSE_INTERVIEW_SCENARIOS } from '../data/interviewScenariosData';
 
 interface CatalogCourse {
   id: string;
@@ -143,22 +144,6 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     iconName: 'Briefcase',
     colorTheme: 'rose',
   },
-  {
-    id: 'defect-sim',
-    slug: 'defect-simulator',
-    title: 'Workplace Defect Simulation Lab',
-    category: 'Manual QA & Testing',
-    badge: 'Interactive Lab',
-    duration: 'Practice Lab',
-    level: 'Hands-on',
-    description:
-      'Put your testing skills to the test in an interactive staging environment. Uncover 4 real boundary bugs and calculation defects, and log Jira-standard defect tickets for senior QA lead evaluation.',
-    tags: ['Interactive Lab', 'Boundary Bugs', 'Jira Defect Logging', 'Immediate Evaluation'],
-    courseUrl: '/simulator',
-    syllabusUrl: '/simulator',
-    iconName: 'Bug',
-    colorTheme: 'rose',
-  },
 ];
 
 const COURSE_CATEGORIES = [
@@ -227,9 +212,6 @@ export const StudentDashboardPage: React.FC = () => {
     if (slug === 'devops-engineering') {
       return devOpsState.enrolled || isCourseEnrolled('devops-engineering');
     }
-    if (slug === 'defect-simulator') {
-      return true; // Workplace simulation is open to all students
-    }
     return isCourseEnrolled(slug);
   };
 
@@ -247,6 +229,36 @@ export const StudentDashboardPage: React.FC = () => {
   const enrolledCoursesList = useMemo(() => {
     return ALL_CATALOG_COURSES.filter((course) => checkCourseEnrolled(course.slug));
   }, [devOpsState.enrolled, isCourseEnrolled]);
+
+  // Selected track for Daily Interview Scenarios
+  const [selectedInterviewCourseSlug, setSelectedInterviewCourseSlug] = useState<string>('');
+
+  useEffect(() => {
+    if (enrolledCoursesList.length > 0) {
+      const isCurrentValid = enrolledCoursesList.some((c) => c.slug === selectedInterviewCourseSlug);
+      if (!isCurrentValid) {
+        setSelectedInterviewCourseSlug(enrolledCoursesList[0].slug);
+      }
+    } else {
+      setSelectedInterviewCourseSlug('');
+    }
+  }, [enrolledCoursesList, selectedInterviewCourseSlug]);
+
+  const activeInterviewCourse = useMemo(() => {
+    if (enrolledCoursesList.length === 0) return null;
+    return (
+      enrolledCoursesList.find((c) => c.slug === selectedInterviewCourseSlug) ||
+      enrolledCoursesList[0]
+    );
+  }, [enrolledCoursesList, selectedInterviewCourseSlug]);
+
+  const activeInterviewScenario = useMemo(() => {
+    if (!activeInterviewCourse) return null;
+    return (
+      COURSE_INTERVIEW_SCENARIOS[activeInterviewCourse.slug] ||
+      COURSE_INTERVIEW_SCENARIOS['manual-qa-fundamentals']
+    );
+  }, [activeInterviewCourse]);
 
   const filteredCatalogCourses = useMemo(() => {
     return ALL_CATALOG_COURSES.filter((course) => {
@@ -715,12 +727,24 @@ export const StudentDashboardPage: React.FC = () => {
                         </div>
 
                         <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between gap-2">
-                          <Link
-                            to={course.syllabusUrl}
-                            className="text-xs font-semibold text-slate-600 hover:text-slate-900"
-                          >
-                            Syllabus
-                          </Link>
+                          <div className="flex items-center gap-2">
+                            <Link
+                              to={course.syllabusUrl}
+                              className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                            >
+                              Syllabus
+                            </Link>
+                            {['manual-qa-fundamentals', 'playwright-automation', 'qa-interview-mastery'].includes(course.slug) && (
+                              <Link
+                                to="/simulator"
+                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-2 py-0.5 rounded-lg border border-rose-200 transition-colors"
+                                title="Workplace Defect Simulation Lab"
+                              >
+                                <Bug className="w-3 h-3 text-rose-500" />
+                                <span>Defect Lab</span>
+                              </Link>
+                            )}
+                          </div>
                           <Link
                             to={course.courseUrl}
                             className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-xs"
@@ -755,52 +779,58 @@ export const StudentDashboardPage: React.FC = () => {
               )}
             </div>
 
-            {/* DAILY INTERVIEW SCENARIO TEASER WIDGET */}
-            <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-emerald-400 text-xs font-semibold">
-                  <Briefcase className="w-3.5 h-3.5" />
-                  <span>Daily Technical Interview Scenario</span>
-                </div>
-                <span className="text-xs text-slate-400">Updated Daily</span>
-              </div>
-
-              <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-snug">
-                &ldquo;A user&apos;s UPI payment succeeds in their banking app, but course enrollment is not unlocked. How do you troubleshoot this defect?&rdquo;
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
-                A common real-world QA engineering interview scenario. Tests whether you know how to isolate frontend status, payment gateway webhooks, server logs, and database consistency.
-              </p>
-
-              {scenarioRevealed ? (
-                <div className="p-5 bg-slate-800/90 border border-slate-700 rounded-2xl text-xs sm:text-sm space-y-3 animate-fadeIn">
-                  <div className="font-bold text-emerald-400 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Model Technical Answer Rubric:</span>
+            {/* DAILY INTERVIEW SCENARIO TEASER WIDGET (TAILORED TO ENROLLED COURSES) */}
+            {activeInterviewScenario && (
+              <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-emerald-400 text-xs font-semibold self-start sm:self-auto">
+                    <Briefcase className="w-3.5 h-3.5" />
+                    <span>Daily Technical Interview Scenario &bull; {activeInterviewScenario.category}</span>
                   </div>
-                  <ol className="list-decimal pl-5 space-y-1.5 text-slate-300">
-                    <li><strong>Verify Transaction ID:</strong> Check if the payment gateway (e.g., Razorpay/Stripe) logged the payment status as <em>Captured</em> or <em>Pending</em>.</li>
-                    <li><strong>Audit Webhook Logs:</strong> Inspect server logs to verify if the payment gateway&apos;s webhook HTTP POST request reached the RootAccess backend (`200 OK` vs `500 Server Error`).</li>
-                    <li><strong>Database Query:</strong> Query the database to check if a row was created in the transactions table and if the user&apos;s enrollment status was flagged.</li>
-                    <li><strong>Frontend Refresh:</strong> Check if the client application is polling or using WebSocket to detect completion, or if a manual page refresh is needed.</li>
-                  </ol>
                   <button
-                    onClick={() => setScenarioRevealed(false)}
-                    className="text-xs text-slate-400 hover:text-white underline pt-2 cursor-pointer"
+                    onClick={() => handleTabChange('interview')}
+                    className="text-xs text-indigo-300 hover:text-indigo-200 font-semibold underline self-start sm:self-auto cursor-pointer"
                   >
-                    Hide model answer
+                    View All Scenarios &rarr;
                   </button>
                 </div>
-              ) : (
-                <button
-                  onClick={() => setScenarioRevealed(true)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white transition-all cursor-pointer"
-                >
-                  <span>Reveal Model Answer &amp; Analysis</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              )}
-            </div>
+
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-snug">
+                  &ldquo;{activeInterviewScenario.featuredScenario.title}&rdquo;
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
+                  {activeInterviewScenario.featuredScenario.description}
+                </p>
+
+                {scenarioRevealed ? (
+                  <div className="p-5 bg-slate-800/90 border border-slate-700 rounded-2xl text-xs sm:text-sm space-y-3 animate-fadeIn">
+                    <div className="font-bold text-emerald-400 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>Model Technical Answer Rubric:</span>
+                    </div>
+                    <ol className="list-decimal pl-5 space-y-1.5 text-slate-300">
+                      {activeInterviewScenario.featuredScenario.rubricPoints.map((point, idx) => (
+                        <li key={idx}>{point}</li>
+                      ))}
+                    </ol>
+                    <button
+                      onClick={() => setScenarioRevealed(false)}
+                      className="text-xs text-slate-400 hover:text-white underline pt-2 cursor-pointer"
+                    >
+                      Hide model answer
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setScenarioRevealed(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white transition-all cursor-pointer"
+                  >
+                    <span>Reveal Model Answer &amp; Analysis</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -1013,101 +1043,157 @@ export const StudentDashboardPage: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 3: DAILY INTERVIEW SCENARIO & VAULT */}
+        {/* TAB 3: DAILY INTERVIEW SCENARIOS (TIED TO ENROLLED COURSES) */}
         {activeTab === 'interview' && (
           <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
-            <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-2xs space-y-6">
-              <div className="flex items-center justify-between">
+            {enrolledCoursesList.length === 0 ? (
+              <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 text-center max-w-xl mx-auto space-y-4 shadow-2xs">
+                <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-100">
+                  <Briefcase className="w-7 h-7" />
+                </div>
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200 mb-2">
-                    <Briefcase className="w-3.5 h-3.5" />
-                    <span>Technical &amp; Behavioral Interview Vault</span>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-                    Live QA Interview Scenarios &amp; Evaluation Rubrics
-                  </h2>
-                </div>
-              </div>
-
-              {/* DAILY FEATURED SCENARIO */}
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 text-white space-y-4">
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span className="font-semibold text-emerald-400 uppercase tracking-wider">Today&apos;s Featured Question</span>
-                  <span>Scenario #14</span>
-                </div>
-                <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
-                  &ldquo;A user&apos;s UPI payment succeeds in their banking app, but course enrollment is not unlocked. How do you troubleshoot this defect?&rdquo;
-                </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Evaluates your end-to-end root-cause analysis skills across client states, gateway webhooks, backend server logs, and transactional databases.
-                </p>
-
-                {scenarioRevealed ? (
-                  <div className="p-5 bg-slate-800/90 border border-slate-700 rounded-2xl text-xs sm:text-sm space-y-3 animate-fadeIn">
-                    <div className="font-bold text-emerald-400 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>Model Technical Answer Rubric:</span>
-                    </div>
-                    <ol className="list-decimal pl-5 space-y-1.5 text-slate-300">
-                      <li><strong>Verify Transaction ID:</strong> Check if the payment gateway (e.g., Razorpay/Stripe) logged the payment status as <em>Captured</em> or <em>Pending</em>.</li>
-                      <li><strong>Audit Webhook Logs:</strong> Inspect server logs to verify if the payment gateway&apos;s webhook HTTP POST request reached the RootAccess backend (`200 OK` vs `500 Server Error`).</li>
-                      <li><strong>Database Query:</strong> Query the database to check if a row was created in the transactions table and if the user&apos;s enrollment status was flagged.</li>
-                      <li><strong>Frontend Refresh:</strong> Check if the client application is polling or using WebSocket to detect completion, or if a manual page refresh is needed.</li>
-                    </ol>
-                    <button
-                      onClick={() => setScenarioRevealed(false)}
-                      className="text-xs text-slate-400 hover:text-white underline pt-2 cursor-pointer"
-                    >
-                      Hide model answer
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setScenarioRevealed(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white transition-all cursor-pointer"
-                  >
-                    <span>Reveal Model Answer &amp; Analysis</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              {/* PRACTICE DRILLS */}
-              <div className="space-y-4 pt-2">
-                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                  Technical Drill Scenarios
-                </h4>
-
-                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600">Scenario #1: Boundary Value Analysis</span>
-                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Live Drill</span>
-                  </div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    &ldquo;An input field accepts an integer age between 18 and 65 inclusive. What exact test input values do you choose for Boundary Value Analysis (BVA)?&rdquo;
+                  <h3 className="text-lg font-bold text-slate-900">
+                    No Active Enrolled Courses Found
                   </h3>
-                  <p className="text-xs text-slate-600">
-                    <strong>Model Response:</strong> Minimum boundary: 17 (just below min, invalid), 18 (min, valid), 19 (just above min, valid). Maximum boundary: 64 (just below max, valid), 65 (max, valid), 66 (just above max, invalid). Plus non-integer/null checks.
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1.5 max-w-md mx-auto leading-relaxed">
+                    Daily technical interview scenarios and evaluation rubrics are customized exclusively to your active enrolled tracks (Manual QA, Playwright Automation, DevOps, SQL, or API Testing).
                   </p>
                 </div>
-
-                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600">Scenario #2: Database Verification</span>
-                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Live SQL Test</span>
-                  </div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    &ldquo;Write a SQL query to verify whether any student exists in the system without an active course enrollment record.&rdquo;
-                  </h3>
-                  <div className="bg-slate-900 text-emerald-400 font-mono text-xs p-3 rounded-xl overflow-x-auto">
-                    SELECT u.id, u.email, e.course_id<br/>
-                    FROM users u<br/>
-                    LEFT JOIN enrollments e ON u.id = e.user_id<br/>
-                    WHERE e.id IS NULL;
+                <button
+                  onClick={() => handleTabChange('catalog')}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-xs cursor-pointer"
+                >
+                  <Search className="w-3.5 h-3.5" />
+                  <span>Browse Course Catalog &amp; Enroll</span>
+                </button>
+              </div>
+            ) : activeInterviewScenario ? (
+              <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-2xs space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200 mb-2">
+                      <Briefcase className="w-3.5 h-3.5" />
+                      <span>{activeInterviewScenario.category} Interview Vault</span>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                      Technical Scenarios &amp; Evaluation Rubrics
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                      Targeted for: <strong>{activeInterviewScenario.courseTitle}</strong>
+                    </p>
                   </div>
                 </div>
+
+                {/* TRACK SWITCHER PILLS (When enrolled in multiple courses) */}
+                {enrolledCoursesList.length > 1 && (
+                  <div className="pt-3 border-t border-slate-100">
+                    <span className="text-xs font-bold text-slate-500 block mb-2">
+                      Switch Active Enrolled Track:
+                    </span>
+                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                      {enrolledCoursesList.map((course) => {
+                        const isSelected =
+                          (selectedInterviewCourseSlug || enrolledCoursesList[0].slug) === course.slug;
+                        return (
+                          <button
+                            key={course.slug}
+                            onClick={() => {
+                              setSelectedInterviewCourseSlug(course.slug);
+                              setScenarioRevealed(false);
+                            }}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                              isSelected
+                                ? 'bg-slate-900 text-white shadow-xs'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                            }`}
+                          >
+                            {course.title.split(':')[0]}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* DAILY FEATURED SCENARIO */}
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 text-white space-y-4">
+                  <div className="flex items-center justify-between text-xs text-slate-400">
+                    <span className="font-semibold text-emerald-400 uppercase tracking-wider">
+                      Today&apos;s Featured Question
+                    </span>
+                    <span>Scenario #{activeInterviewScenario.featuredScenario.scenarioNumber}</span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                    &ldquo;{activeInterviewScenario.featuredScenario.title}&rdquo;
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {activeInterviewScenario.featuredScenario.description}
+                  </p>
+
+                  {scenarioRevealed ? (
+                    <div className="p-5 bg-slate-800/90 border border-slate-700 rounded-2xl text-xs sm:text-sm space-y-3 animate-fadeIn">
+                      <div className="font-bold text-emerald-400 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Model Technical Answer Rubric:</span>
+                      </div>
+                      <ol className="list-decimal pl-5 space-y-1.5 text-slate-300">
+                        {activeInterviewScenario.featuredScenario.rubricPoints.map((point, idx) => (
+                          <li key={idx}>{point}</li>
+                        ))}
+                      </ol>
+                      <button
+                        onClick={() => setScenarioRevealed(false)}
+                        className="text-xs text-slate-400 hover:text-white underline pt-2 cursor-pointer"
+                      >
+                        Hide model answer
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setScenarioRevealed(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white transition-all cursor-pointer"
+                    >
+                      <span>Reveal Model Answer &amp; Analysis</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* PRACTICE DRILLS (DYNAMICALLY MATCHED TO TRACK) */}
+                <div className="space-y-4 pt-2">
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                    Technical Drill Scenarios ({activeInterviewScenario.category})
+                  </h4>
+
+                  {activeInterviewScenario.drills.map((drill, idx) => (
+                    <div
+                      key={idx}
+                      className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600">
+                          {drill.title}
+                        </span>
+                        <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                          {drill.badge}
+                        </span>
+                      </div>
+                      <h3 className="text-sm font-bold text-slate-900 leading-snug">
+                        &ldquo;{drill.question}&rdquo;
+                      </h3>
+                      {drill.codeSnippet && (
+                        <div className="bg-slate-900 text-emerald-400 font-mono text-xs p-3 rounded-xl overflow-x-auto whitespace-pre-wrap">
+                          {drill.codeSnippet}
+                        </div>
+                      )}
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        <strong className="text-slate-800">Model Response:</strong> {drill.modelResponse}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         )}
       </main>

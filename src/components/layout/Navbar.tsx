@@ -102,11 +102,10 @@ export const Navbar: React.FC = () => {
   const classroomInfo = getCourseClassroomInfo();
   const ClassroomIcon = classroomInfo.icon;
 
-  // General application navigation links (shown when on Dashboard, Home, Simulator)
+  // General application navigation links (shown when on Dashboard, Home)
   const globalNavLinks = [
     { label: 'Dashboard', href: '/app', icon: LayoutDashboard },
     { label: 'Explore Courses', href: '/app?tab=catalog', icon: Compass },
-    { label: 'Defect Lab', href: '/simulator', icon: Bug },
   ];
 
   return (

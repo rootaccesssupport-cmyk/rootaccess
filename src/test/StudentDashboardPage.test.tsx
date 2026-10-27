@@ -1,8 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { StudentDashboardPage } from '../pages/StudentDashboardPage';
 import * as AuthContextModule from '../context/AuthContext';
+import { ProgressProvider } from '../context/ProgressContext';
 
 describe('StudentDashboardPage Component (Phase 3)', () => {
   const mockSignOut = vi.fn();
@@ -33,10 +34,26 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
 
     return render(
       <BrowserRouter>
-        <StudentDashboardPage />
+        <ProgressProvider>
+          <StudentDashboardPage />
+        </ProgressProvider>
       </BrowserRouter>
     );
   };
+
+  beforeEach(() => {
+    window.history.pushState({}, '', '/app');
+    localStorage.clear();
+    localStorage.setItem(
+      'rootaccess_progress_student-id-123',
+      JSON.stringify({
+        enrolledCourses: ['manual-qa-fundamentals'],
+        completedLessons: [],
+        quizScores: {},
+        reportedBugs: {},
+      })
+    );
+  });
 
   it('renders student welcome greeting and required text', () => {
     renderComponent();
@@ -80,7 +97,7 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     // Switch to Interview Vault tab
     const interviewTab = screen.getByRole('button', { name: /daily interview scenario/i });
     fireEvent.click(interviewTab);
-    expect(screen.getByText(/technical & behavioral interview vault/i)).toBeInTheDocument();
+    expect(screen.getByText(/interview vault/i)).toBeInTheDocument();
 
     // Switch to Explore All Courses (Catalog) tab
     const catalogTab = screen.getByRole('button', { name: /explore all courses/i });
@@ -161,5 +178,38 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
 
     expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
     expect(screen.queryByText('SQL & Backend Database Audits for QA')).not.toBeInTheDocument();
+  });
+
+  it('renders Defect Lab quick link on enrolled QA course cards', () => {
+    renderComponent();
+
+    const defectLabLink = screen.getByRole('link', { name: /defect lab/i });
+    expect(defectLabLink).toBeInTheDocument();
+    expect(defectLabLink).toHaveAttribute('href', '/simulator');
+  });
+
+  it('renders friendly empty state when student has no active enrollments', () => {
+    localStorage.clear();
+    localStorage.setItem(
+      'rootaccess_progress_student-id-123',
+      JSON.stringify({
+        enrolledCourses: [],
+        completedLessons: [],
+        quizScores: {},
+        reportedBugs: {},
+      })
+    );
+
+    renderComponent();
+
+    // Enrolled courses tab should show empty state
+    expect(screen.getByText('No Enrolled Courses Yet')).toBeInTheDocument();
+
+    // Switch to Interview Tab
+    const interviewTab = screen.getByRole('button', { name: /daily interview scenario/i });
+    fireEvent.click(interviewTab);
+
+    expect(screen.getByText('No Active Enrolled Courses Found')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /browse course catalog & enroll/i })).toBeInTheDocument();
   });
 });
