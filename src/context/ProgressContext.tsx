@@ -31,7 +31,6 @@ interface ProgressContextType {
   enrolledCourses: string[];
   isCourseEnrolled: (courseSlug: string) => boolean;
   enrollInCourse: (courseSlug: string) => void;
-  unenrollCourse: (courseSlug: string) => void;
   resetProgress: () => void;
 }
 
@@ -277,9 +276,24 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const enrollInCourse = useCallback(
     (courseSlug: string) => {
+      const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
+
+      // Persist to explicit enrollments registry so default filters never strip an intentional enrollment
+      const explicitKey = user?.id
+        ? `rootaccess_explicit_enrollments_${user.id}`
+        : 'rootaccess_explicit_enrollments_guest';
+      try {
+        const stored = localStorage.getItem(explicitKey);
+        const list: string[] = stored ? JSON.parse(stored) : [];
+        if (!list.includes(normalized)) {
+          localStorage.setItem(explicitKey, JSON.stringify([...list, normalized]));
+        }
+      } catch (e) {
+        console.warn('Failed to record explicit enrollment:', e);
+      }
+
       setState((prev) => {
         const current = prev.enrolledCourses || [];
-        const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
         if (current.includes(normalized)) return prev;
         const updated = [...current, normalized];
 
@@ -295,38 +309,6 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             .then(({ error }) => {
               if (error) {
                 console.warn('Could not sync enrolled_courses to Supabase:', error.message);
-              }
-            });
-        }
-
-        return {
-          ...prev,
-          enrolledCourses: updated,
-        };
-      });
-    },
-    [user]
-  );
-
-  const unenrollCourse = useCallback(
-    (courseSlug: string) => {
-      setState((prev) => {
-        const current = prev.enrolledCourses || [];
-        const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
-        const updated = current.filter((s) => s !== normalized && s !== courseSlug);
-
-        // Sync to Supabase profiles if logged in
-        if (user && isSupabaseConfigured) {
-          supabase
-            .from('profiles')
-            .update({
-              enrolled_courses: updated,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', user.id)
-            .then(({ error }) => {
-              if (error) {
-                console.warn('Could not sync enrolled_courses removal to Supabase:', error.message);
               }
             });
         }
@@ -358,7 +340,6 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         enrolledCourses: state.enrolledCourses || [],
         isCourseEnrolled,
         enrollInCourse,
-        unenrollCourse,
         isLessonCompleted,
         markLessonComplete,
         saveQuizResult,
@@ -381,7 +362,6 @@ export const useProgress = (): ProgressContextType => {
       enrolledCourses: [],
       isCourseEnrolled: () => false,
       enrollInCourse: () => {},
-      unenrollCourse: () => {},
       quizScores: {},
       reportedBugs: {
         'bug-negative-quantity': {
