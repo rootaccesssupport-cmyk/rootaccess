@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { COURSES } from '../data/curriculumData';
 import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
+import { useManualQa } from '../context/ManualQaContext';
 import {
   BookOpen,
   Database,
@@ -48,7 +49,28 @@ export const CourseDetailPage: React.FC = () => {
     );
   }
 
+  const { state: manualQaState } = useManualQa();
+  const isManualQa = course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing';
+
+  const manualQaCompletedDays = useMemo(() => {
+    return [1, 2, 3, 4, 5].filter(
+      (d) => manualQaState.days[d]?.status === 'completed'
+    ).length;
+  }, [manualQaState]);
+
+  const manualQaPercent = useMemo(() => {
+    return Math.round(
+      (manualQaCompletedDays / 5) * 60 +
+        (manualQaState.surpriseTest1Passed ? 15 : 0) +
+        (manualQaState.finalProjectPassed ? 15 : 0) +
+        (manualQaState.finalAssessmentPassed ? 10 : 0)
+    );
+  }, [manualQaCompletedDays, manualQaState]);
+
   const progress = getCourseProgress(course.slug);
+  const trackPercent = isManualQa ? manualQaPercent : (progress.percent || 0);
+  const trackCompletedCount = isManualQa ? manualQaCompletedDays : progress.completedCount;
+  const trackTotalCount = isManualQa ? 5 : progress.totalCount;
 
   // Find next uncompleted lesson, or first lesson
   const firstUnfinishedLesson =
@@ -165,16 +187,16 @@ export const CourseDetailPage: React.FC = () => {
               <div>
                 <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
                   <span>Track Completion</span>
-                  <span>{progress.percent}%</span>
+                  <span>{trackPercent}%</span>
                 </div>
                 <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-indigo-600 rounded-full transition-all duration-500"
-                    style={{ width: `${progress.percent}%` }}
+                    style={{ width: `${trackPercent}%` }}
                   />
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1.5">
-                  {progress.completedCount} of {progress.totalCount} lessons completed
+                  {trackCompletedCount} of {trackTotalCount} {isManualQa ? 'milestones' : 'lessons'} completed
                 </p>
               </div>
 

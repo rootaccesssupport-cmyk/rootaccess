@@ -29,6 +29,7 @@ import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { useProgress } from '../context/ProgressContext';
 import { useDevOps } from '../context/DevOpsContext';
+import { useManualQa } from '../context/ManualQaContext';
 import { COURSE_INTERVIEW_SCENARIOS } from '../data/interviewScenariosData';
 
 interface CatalogCourse {
@@ -161,6 +162,20 @@ export const StudentDashboardPage: React.FC = () => {
   const { overallStats, getCourseProgress, isCourseEnrolled, enrollInCourse, unenrollCourse } = useProgress();
   const { state: devOpsState, getOverallStats: getDevOpsStats, enrollInCourse: enrollInDevOpsCourse } = useDevOps();
   const devopsStats = getDevOpsStats();
+  const { state: manualQaState } = useManualQa();
+
+  const manualQaProgressPercent = useMemo(() => {
+    const completedDays = [1, 2, 3, 4, 5].filter(
+      (d) => manualQaState.days[d]?.status === 'completed'
+    ).length;
+    return Math.round(
+      (completedDays / 5) * 60 +
+        (manualQaState.surpriseTest1Passed ? 15 : 0) +
+        (manualQaState.finalProjectPassed ? 15 : 0) +
+        (manualQaState.finalAssessmentPassed ? 10 : 0)
+    );
+  }, [manualQaState]);
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -684,8 +699,8 @@ export const StudentDashboardPage: React.FC = () => {
                     let progressPercent = 0;
                     if (course.slug === 'devops-engineering') {
                       progressPercent = devopsStats.completionPercentage;
-                    } else if (course.slug === 'manual-qa-fundamentals') {
-                      progressPercent = getCourseProgress('manual-qa-fundamentals').percent || 0;
+                    } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
+                      progressPercent = manualQaProgressPercent;
                     } else if (course.slug === 'playwright-automation') {
                       progressPercent = getCourseProgress('playwright-automation').percent || 0;
                     } else {

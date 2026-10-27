@@ -232,7 +232,20 @@ export const ManualQaProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 export const useManualQa = (): ManualQaContextType => {
   const context = useContext(ManualQaContext);
   if (!context) {
-    throw new Error('useManualQa must be used within a ManualQaProvider');
+    const fallbackState = createInitialLearnerState();
+    return {
+      state: fallbackState,
+      loading: false,
+      error: null,
+      activeUserId: 'guest_learner',
+      refreshProgress: async () => {},
+      markContentRead: async () => {},
+      submitAssignment: async () => ({ score: 0, maxScore: 100, percentage: 0, passed: false, feedback: '', criteriaResults: [] }),
+      submitCheckpoint: async () => ({ passed: false, score: 0, percentage: 0, feedbackDetails: [] }),
+      takeSurpriseTest1: async () => ({ passed: false, score: 0, percentage: 0, feedbackDetails: [] }),
+      takeFinalAssessment: async () => ({ passed: false, score: 0, percentage: 0, feedbackDetails: [] }),
+      resetProgressForTesting: async () => {},
+    };
   }
   return context;
 };
