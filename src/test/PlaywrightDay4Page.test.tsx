@@ -268,13 +268,10 @@ describe('Playwright Automation with JavaScript + AI — Day 4 Implementation', 
     expect(screen.getByText(/Action Required: Please read all 7 topics in "Core Concepts & Walkthrough" before completing Day 4\./i)).toBeInTheDocument();
   });
 
-  it('opens Day 5 Preview modal indicating lock status', () => {
+  it('navigates directly to Day 5 via header link', () => {
     renderPlaywrightDay4Page(true);
 
-    const day5NavBtn = screen.getByRole('button', { name: /Day 5/i });
-    fireEvent.click(day5NavBtn);
-
-    expect(screen.getByRole('heading', { level: 3, name: /Day 5: Web-First Assertions & Actions/i })).toBeInTheDocument();
-    expect(screen.getByText(/Locked until Day 4 completion requirements are satisfied\./i)).toBeInTheDocument();
+    const day5NavBtn = screen.getByRole('link', { name: /Day 5/i });
+    expect(day5NavBtn).toHaveAttribute('href', '/courses/playwright-automation/day-5');
   });
 });

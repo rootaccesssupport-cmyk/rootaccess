@@ -344,14 +344,14 @@ export const PlaywrightDay4LessonPage: React.FC = () => {
                 <span>Day 3</span>
               </Link>
 
-              <button
-                onClick={() => setShowDay5Modal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition-colors shadow-2xs cursor-pointer"
-                title="Preview Day 5"
+              <Link
+                to="/courses/playwright-automation/day-5"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition-colors shadow-2xs"
+                title="Navigate to Day 5"
               >
                 <span>Day 5</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              </Link>
 
               <a
                 href="/playwright-js/day-4-locators-and-element-identification.pdf"
@@ -1194,13 +1194,13 @@ export const PlaywrightDay4LessonPage: React.FC = () => {
                 Master actions (clicking, typing, radio buttons, checkboxes, dropdowns) and auto-waiting assertions for complex forms.
               </p>
             </div>
-            <button
-              onClick={() => setShowDay5Modal(true)}
+            <Link
+              to="/courses/playwright-automation/day-5"
               className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shrink-0 shadow-xs flex items-center gap-1.5 cursor-pointer"
             >
-              <span>Preview Day 5</span>
+              <span>Continue to Day 5</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         )}
       </main>
@@ -1235,7 +1235,7 @@ export const PlaywrightDay4LessonPage: React.FC = () => {
               <div>
                 {isDay4Complete ? (
                   <span className="text-emerald-700 font-bold">
-                    ✓ Day 4 Complete. Day 5 curriculum is scheduled next.
+                    ✓ Day 4 Complete. Day 5 is unlocked and ready to start!
                   </span>
                 ) : (
                   <span className="text-amber-700 font-bold flex items-center gap-1">
@@ -1246,13 +1246,22 @@ export const PlaywrightDay4LessonPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-2 flex items-center justify-between gap-3">
               <button
                 onClick={() => setShowDay5Modal(false)}
-                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold cursor-pointer"
+                className="px-4 py-2 border border-slate-200 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold cursor-pointer"
               >
                 Close Preview
               </button>
+              {isDay4Complete && (
+                <Link
+                  to="/courses/playwright-automation/day-5"
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs"
+                >
+                  <span>Start Day 5</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              )}
             </div>
           </div>
         </div>
