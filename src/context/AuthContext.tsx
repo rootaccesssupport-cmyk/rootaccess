@@ -175,6 +175,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { success: false, requiresEmailConfirmation: false, error: error.message };
       }
 
+      // If registered with direct session, ensure profile starts strictly with 0 enrolled courses
+      if (data.session?.user) {
+        try {
+          await supabase
+            .from('profiles')
+            .update({ enrolled_courses: [] })
+            .eq('id', data.session.user.id);
+        } catch {
+          // ignore if table lock or background sync
+        }
+      }
+
       const requiresEmailConfirmation = Boolean(data.user && !data.session);
 
       return {

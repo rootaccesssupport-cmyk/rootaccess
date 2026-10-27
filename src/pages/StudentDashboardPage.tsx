@@ -158,7 +158,7 @@ const COURSE_CATEGORIES = [
 
 export const StudentDashboardPage: React.FC = () => {
   const { user, profile, signOut, refreshProfile } = useAuth();
-  const { overallStats, getCourseProgress, isCourseEnrolled, enrollInCourse } = useProgress();
+  const { overallStats, getCourseProgress, isCourseEnrolled, enrollInCourse, unenrollCourse } = useProgress();
   const { state: devOpsState, getOverallStats: getDevOpsStats, enrollInCourse: enrollInDevOpsCourse } = useDevOps();
   const devopsStats = getDevOpsStats();
   const navigate = useNavigate();
@@ -224,6 +224,14 @@ export const StudentDashboardPage: React.FC = () => {
     setTimeout(() => {
       setEnrollmentFeedback(null);
     }, 4500);
+  };
+
+  const handleUnenrollCourse = (courseSlug: string, courseTitle: string) => {
+    unenrollCourse(courseSlug);
+    setEnrollmentFeedback(`Unenrolled from "${courseTitle}".`);
+    setTimeout(() => {
+      setEnrollmentFeedback(null);
+    }, 3500);
   };
 
   const enrolledCoursesList = useMemo(() => {
@@ -677,7 +685,7 @@ export const StudentDashboardPage: React.FC = () => {
                     if (course.slug === 'devops-engineering') {
                       progressPercent = devopsStats.completionPercentage;
                     } else if (course.slug === 'manual-qa-fundamentals') {
-                      progressPercent = getCourseProgress('manual-qa-fundamentals').percent || 40;
+                      progressPercent = getCourseProgress('manual-qa-fundamentals').percent || 0;
                     } else if (course.slug === 'playwright-automation') {
                       progressPercent = getCourseProgress('playwright-automation').percent || 0;
                     } else {
@@ -694,10 +702,19 @@ export const StudentDashboardPage: React.FC = () => {
                             <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
                               {course.category}
                             </span>
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                              <Check className="w-3 h-3 text-emerald-600" />
-                              <span>Enrolled</span>
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                <Check className="w-3 h-3 text-emerald-600" />
+                                <span>Enrolled</span>
+                              </span>
+                              <button
+                                onClick={() => handleUnenrollCourse(course.slug, course.title)}
+                                className="text-[10px] font-medium text-slate-400 hover:text-rose-600 transition-colors cursor-pointer px-1.5 py-0.5 rounded hover:bg-rose-50"
+                                title="Unenroll from this course"
+                              >
+                                Leave
+                              </button>
+                            </div>
                           </div>
 
                           <div>

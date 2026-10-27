@@ -31,6 +31,7 @@ interface ProgressContextType {
   enrolledCourses: string[];
   isCourseEnrolled: (courseSlug: string) => boolean;
   enrollInCourse: (courseSlug: string) => void;
+  unenrollCourse: (courseSlug: string) => void;
   resetProgress: () => void;
 }
 
@@ -76,9 +77,12 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const stored = localStorage.getItem(storageKey);
       const baseState = stored ? JSON.parse(stored) : null;
 
-      const profileCourses = Array.isArray(profile?.enrolled_courses) ? profile.enrolled_courses : [];
-      const storedCourses = baseState?.enrolledCourses || [];
-      const mergedCourses = Array.from(new Set([...storedCourses, ...profileCourses]));
+      let activeCourses: string[];
+      if (profile && Array.isArray(profile.enrolled_courses)) {
+        activeCourses = profile.enrolled_courses;
+      } else {
+        activeCourses = baseState?.enrolledCourses || [];
+      }
 
       if (baseState) {
         setState({
@@ -87,18 +91,18 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           completedLessons: baseState.completedLessons || [],
           quizScores: baseState.quizScores || {},
           reportedBugs: baseState.reportedBugs || {},
-          enrolledCourses: mergedCourses,
+          enrolledCourses: activeCourses,
         });
       } else {
         setState({
           ...DEFAULT_INITIAL_STATE,
-          enrolledCourses: profileCourses,
+          enrolledCourses: activeCourses,
         });
       }
     } catch (e) {
       console.warn('Failed to load stored progress for user:', e);
     }
-  }, [storageKey, profile?.enrolled_courses]);
+  }, [storageKey, profile, profile?.enrolled_courses]);
 
   // Persist on state change
   useEffect(() => {
@@ -304,6 +308,38 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [user]
   );
 
+  const unenrollCourse = useCallback(
+    (courseSlug: string) => {
+      setState((prev) => {
+        const current = prev.enrolledCourses || [];
+        const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
+        const updated = current.filter((s) => s !== normalized && s !== courseSlug);
+
+        // Sync to Supabase profiles if logged in
+        if (user && isSupabaseConfigured) {
+          supabase
+            .from('profiles')
+            .update({
+              enrolled_courses: updated,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', user.id)
+            .then(({ error }) => {
+              if (error) {
+                console.warn('Could not sync enrolled_courses removal to Supabase:', error.message);
+              }
+            });
+        }
+
+        return {
+          ...prev,
+          enrolledCourses: updated,
+        };
+      });
+    },
+    [user]
+  );
+
   const resetProgress = useCallback(() => {
     setState({
       completedLessons: [],
@@ -322,6 +358,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         enrolledCourses: state.enrolledCourses || [],
         isCourseEnrolled,
         enrollInCourse,
+        unenrollCourse,
         isLessonCompleted,
         markLessonComplete,
         saveQuizResult,
@@ -344,6 +381,7 @@ export const useProgress = (): ProgressContextType => {
       enrolledCourses: [],
       isCourseEnrolled: () => false,
       enrollInCourse: () => {},
+      unenrollCourse: () => {},
       quizScores: {},
       reportedBugs: {
         'bug-negative-quantity': {
