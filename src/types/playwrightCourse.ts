@@ -94,6 +94,10 @@ export type PlaywrightDay1Unit = PlaywrightDayUnit;
 export type PlaywrightDay2Unit = PlaywrightDayUnit;
 export type PlaywrightDay3Unit = PlaywrightDayUnit;
 export type PlaywrightDay4Unit = PlaywrightDayUnit;
+export type PlaywrightDay5Unit = PlaywrightDayUnit;
+export type PlaywrightDay6Unit = PlaywrightDayUnit;
+export type PlaywrightDay7Unit = PlaywrightDayUnit;
+export type PlaywrightDay8Unit = PlaywrightDayUnit;
 
 export interface PlaywrightDay2AssignmentRubric {
   syntaxCorrect: boolean;
@@ -159,4 +163,104 @@ export interface PlaywrightDay4AssignmentRubric {
     passed: boolean;
     feedback: string;
   }>;
+}
+
+export interface PlaywrightDay5AssignmentRubric {
+  hasFormFillingActions: boolean;
+  usesClickAndCheck: boolean;
+  usesSelectOption: boolean;
+  hasWebFirstAssertions: boolean;
+  validatesFormSubmission: boolean;
+  testsPositiveScenario: boolean;
+  testsNegativeValidation: boolean;
+  usesArrangeActAssert: boolean;
+  hasMeaningfulTestNames: boolean;
+  syntacticallyValidJavaScript: boolean;
+  score: number;
+  feedback: string[];
+  passed: boolean;
+  criteria: Array<{
+    id: string;
+    title: string;
+    passed: boolean;
+    feedback: string;
+  }>;
+}
+
+export interface PlaywrightDay6AssignmentRubric {
+  eliminatesArbitraryWaits: boolean;
+  usesWebFirstAssertions: boolean;
+  implementsWaitForURL: boolean;
+  implementsResponseWaiting: boolean;
+  replacesBrittleSelectors: boolean;
+  configuresTimeoutsSensibly: boolean;
+  avoidsSharedTestState: boolean;
+  demonstratesDebuggingTechnique: boolean;
+  explainsFlakinessRootCause: boolean;
+  syntacticallyValidJavaScript: boolean;
+  score: number;
+  feedback: string[];
+  passed: boolean;
+  criteria: Array<{
+    id: string;
+    title: string;
+    passed: boolean;
+    feedback: string;
+  }>;
+}
+
+export interface PlaywrightDay7AssignmentRubric {
+  implementsNavigationValidation: boolean;
+  handlesMultipleTabsContext: boolean;
+  registersTabEventBeforeAction: boolean;
+  interactsWithIframeViaFrameLocator: boolean;
+  handlesDialogWithEventListener: boolean;
+  acceptsOrDismissesDialog: boolean;
+  uploadsFileUsingSetInputFiles: boolean;
+  handlesDownloadEventProperly: boolean;
+  verifiesDownloadedFile: boolean;
+  syntacticallyValidJavaScript: boolean;
+  score: number;
+  feedback: string[];
+  passed: boolean;
+  criteria: Array<{
+    id: string;
+    title: string;
+    passed: boolean;
+    feedback: string;
+  }>;
+}
+
+export interface PlaywrightDay8AssignmentRubric {
+  organizesWithDescribeBlocks: boolean;
+  implementsBeforeEachHook: boolean;
+  ensuresTestIndependence: boolean;
+  createsCustomFixtureWithExtend: boolean;
+  extractsReusableHelperFunction: boolean;
+  passesLocatorsToHelpers: boolean;
+  providesPlaywrightConfigFile: boolean;
+  demonstratesCliRunCommands: boolean;
+  maintainsCleanDirectoryStructure: boolean;
+  syntacticallyValidJavaScript: boolean;
+  score: number;
+  feedback: string[];
+  passed: boolean;
+  criteria: Array<{
+    id: string;
+    title: string;
+    passed: boolean;
+    feedback: string;
+  }>;
+}
+
+export interface PlaywrightSurpriseAssessmentQuestion {
+  id: string;
+  questionNumber: number;
+  question: string;
+  codeSnippet?: string;
+  scenario: string;
+  options: [string, string, string, string];
+  correctAnswerIndex: number;
+  explanation: string;
+  topicTag: 'Locators' | 'Actions & Assertions' | 'Auto-Waiting & Flakiness';
 }

@@ -743,6 +743,118 @@ pm.test("Save auth token for chained requests", function () {
           'Pass Day 4 Checkpoint Quiz with 80%+',
         ],
       },
+      {
+        id: 'lesson-playwright-day-5',
+        slug: 'day-5-actions-assertions-forms-test-design',
+        title: 'Day 5: Actions, Assertions, Forms and Test Design',
+        durationMinutes: 180,
+        difficulty: 'Intermediate',
+        summary: 'Master Playwright action methods (click, fill, selectOption, check), auto-retrying web-first assertions, positive/negative form testing, and Arrange-Act-Assert design.',
+        sections: [
+          {
+            title: '1. Core Actions & Actionability Checks',
+            content: 'Execute user interactions (fill, click, check, selectOption, setInputFiles) with automatic readiness verification.',
+          },
+          {
+            title: '2. Web-First Assertions & AAA Test Design',
+            content: 'Write auto-retrying assertions (toBeVisible, toHaveText, toHaveValue) structured cleanly with the Arrange-Act-Assert design pattern.',
+          },
+        ],
+        keyTakeaways: [
+          'Always use web-first assertions like await expect(locator).toBeVisible() rather than one-time reads.',
+          'Playwright automatically verifies actionability checks (visible, stable, enabled) before clicking or filling.',
+        ],
+        practicalChecklist: [
+          'Read all 5 core modules',
+          'Complete interactive registration form lab',
+          'Review 5 interview questions with explanations',
+          'Score 80%+ on Day 5 Checkpoint Quiz',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-6',
+        slug: 'day-6-auto-waiting-timeouts-flaky-test-prevention',
+        title: 'Day 6: Auto-Waiting, Timeouts and Flaky-Test Prevention',
+        durationMinutes: 180,
+        difficulty: 'Intermediate',
+        summary: 'Explore Playwright auto-waiting synchronization, timeout tiers, network response waiting, Trace Viewer debugging, and systematic flaky-test elimination.',
+        sections: [
+          {
+            title: '1. Auto-Waiting & Actionability Lifecycle',
+            content: 'Understand how Playwright smart-waits for elements and how timeout tiers (Test, Assertion, Action) prevent stalled builds.',
+          },
+          {
+            title: '2. Waiting Strategies & Debugging with Trace Viewer',
+            content: 'Eliminate arbitrary sleeps with page.waitForResponse and inspect full DOM snapshots and waterfalls in Trace Viewer.',
+          },
+        ],
+        keyTakeaways: [
+          'Never use arbitrary page.waitForTimeout() calls—they are the leading cause of flaky tests.',
+          'Use page.waitForResponse() before triggering network actions to avoid race conditions.',
+        ],
+        practicalChecklist: [
+          'Read all 6 core modules',
+          'Refactor flaky shopping cart test suite',
+          'Pass Day 6 Checkpoint Quiz (>= 80%)',
+          'Complete Mid-Course Surprise Assessment (Days 4-6)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-7',
+        slug: 'day-7-navigation-tabs-frames-dialogs-file-handling',
+        title: 'Day 7: Navigation, Tabs, Frames, Dialogs and File Handling',
+        durationMinutes: 180,
+        difficulty: 'Intermediate',
+        summary: 'Automate multi-tab workflows, browser contexts, nested iframes with frameLocator(), native JavaScript dialogs, and file upload/download pipelines.',
+        sections: [
+          {
+            title: '1. Multi-Tab & Frame Automation (frameLocator)',
+            content: 'Automate links opening in new tabs with context.waitForEvent("page") and navigate nested iframes using frameLocator().',
+          },
+          {
+            title: '2. Dialog Interception & File Pipelines',
+            content: 'Handle native JavaScript dialogs (alert/confirm/prompt) with page.once("dialog") and automate file upload/download flows.',
+          },
+        ],
+        keyTakeaways: [
+          'Register context.waitForEvent("page") before clicking links that open in new tabs.',
+          'Use frameLocator() to seamlessly target iframe elements without global context switching.',
+        ],
+        practicalChecklist: [
+          'Read all 6 core modules',
+          'Complete customer support multi-interaction lab',
+          'Review 5 interview questions with explanations',
+          'Pass Day 7 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-8',
+        slug: 'day-8-hooks-fixtures-test-organisation',
+        title: 'Day 8: Hooks, Fixtures and Test Organisation',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Structure scalable test suites using test.describe(), beforeEach lifecycle hooks, custom fixtures with test.extend(), reusable helper functions, and production configuration.',
+        sections: [
+          {
+            title: '1. Test Organisation & Lifecycle Hooks',
+            content: 'Group tests into logical describe blocks and execute clean per-test setup using test.beforeEach().',
+          },
+          {
+            title: '2. Fixtures Architecture & Helper Functions',
+            content: 'Author custom domain fixtures with test.extend() and extract modular helper functions that keep tests independent.',
+          },
+        ],
+        keyTakeaways: [
+          'Fixtures encapsulate setup and teardown into an on-demand dependency with test.extend().',
+          'Avoid shared mutable state to ensure tests run reliably in parallel.',
+        ],
+        practicalChecklist: [
+          'Read all 6 core modules',
+          'Refactor customer management test suite with custom fixtures',
+          'Review 5 interview questions with explanations',
+          'Pass Day 8 Checkpoint Quiz (>= 80%)',
+        ],
+      },
     ],
     quiz: {
       id: 'quiz-playwright',

@@ -43,42 +43,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (data) {
-        // Check if manual-qa-fundamentals was auto-inserted by database default rather than explicit enrollment
-        const explicitKey = `rootaccess_explicit_enrollments_${currentUser.id}`;
-        let explicitList: string[] = [];
-        try {
-          const stored = localStorage.getItem(explicitKey);
-          if (stored) explicitList = JSON.parse(stored);
-        } catch {
-          // ignore parsing error
-        }
-
-        // If enrolled_courses contains the default 'manual-qa-fundamentals', but user NEVER explicitly enrolled:
-        if (
-          Array.isArray(data.enrolled_courses) &&
-          data.enrolled_courses.includes('manual-qa-fundamentals') &&
-          !explicitList.includes('manual-qa-fundamentals')
-        ) {
-          const sanitized = data.enrolled_courses.filter(
-            (c: string) => c !== 'manual-qa-fundamentals' && c !== 'manual-testing'
-          );
-
-          // Update Supabase in background to clean the database row permanently
-          supabase
-            .from('profiles')
-            .update({
-              enrolled_courses: sanitized,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', currentUser.id)
-            .then(() => {});
-
-          return {
-            ...(data as UserProfile),
-            enrolled_courses: sanitized,
-          };
-        }
-
         return data as UserProfile;
       }
 
@@ -257,13 +221,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { success: false, requiresEmailConfirmation: false, error: error.message };
       }
 
-      // If registered with direct session, ensure profile starts strictly with 0 enrolled courses
-      if (data.session?.user) {
+      // Ensure newly registered profile starts strictly with 0 enrolled courses
+      const newUserId = data.session?.user?.id || data.user?.id;
+      if (newUserId) {
         try {
           await supabase
             .from('profiles')
             .update({ enrolled_courses: [] })
-            .eq('id', data.session.user.id);
+            .eq('id', newUserId);
         } catch {
           // ignore if table lock or background sync
         }

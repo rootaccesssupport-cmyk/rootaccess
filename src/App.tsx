@@ -27,6 +27,11 @@ import { PlaywrightDay1LessonPage } from './pages/playwright/PlaywrightDay1Lesso
 import { PlaywrightDay2LessonPage } from './pages/playwright/PlaywrightDay2LessonPage';
 import { PlaywrightDay3LessonPage } from './pages/playwright/PlaywrightDay3LessonPage';
 import { PlaywrightDay4LessonPage } from './pages/playwright/PlaywrightDay4LessonPage';
+import { PlaywrightDay5LessonPage } from './pages/playwright/PlaywrightDay5LessonPage';
+import { PlaywrightDay6LessonPage } from './pages/playwright/PlaywrightDay6LessonPage';
+import { PlaywrightSurpriseTest1Page } from './pages/playwright/PlaywrightSurpriseTest1Page';
+import { PlaywrightDay7LessonPage } from './pages/playwright/PlaywrightDay7LessonPage';
+import { PlaywrightDay8LessonPage } from './pages/playwright/PlaywrightDay8LessonPage';
 
 import { DevOpsCourseOverviewPage } from './pages/devops/DevOpsCourseOverviewPage';
 import { DevOpsDay1LessonPage } from './pages/devops/DevOpsDay1LessonPage';
@@ -211,6 +216,46 @@ export const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/courses/playwright-automation/day-5"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay5LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-6"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay6LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/surprise-test-1"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightSurpriseTest1Page />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-7"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay7LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-8"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay8LessonPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/playwright" element={<Navigate to="/courses/playwright-automation" replace />} />
             <Route
               path="/playwright/day/1"
@@ -241,6 +286,46 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <PlaywrightDay4LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/5"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay5LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/6"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay6LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/surprise-test-1"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightSurpriseTest1Page />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/7"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay7LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/8"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay8LessonPage />
                 </ProtectedRoute>
               }
             />

@@ -45,7 +45,7 @@ const DEFAULT_INITIAL_STATE: ProgressState = {
 };
 
 export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, profile } = useAuth();
+  const { user, profile, refreshProfile } = useAuth();
   const storageKey = useMemo(() => {
     return user?.id ? `rootaccess_progress_${user.id}` : 'rootaccess_progress_guest';
   }, [user?.id]);
@@ -278,20 +278,6 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     (courseSlug: string) => {
       const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
 
-      // Persist to explicit enrollments registry so default filters never strip an intentional enrollment
-      const explicitKey = user?.id
-        ? `rootaccess_explicit_enrollments_${user.id}`
-        : 'rootaccess_explicit_enrollments_guest';
-      try {
-        const stored = localStorage.getItem(explicitKey);
-        const list: string[] = stored ? JSON.parse(stored) : [];
-        if (!list.includes(normalized)) {
-          localStorage.setItem(explicitKey, JSON.stringify([...list, normalized]));
-        }
-      } catch (e) {
-        console.warn('Failed to record explicit enrollment:', e);
-      }
-
       setState((prev) => {
         const current = prev.enrolledCourses || [];
         if (current.includes(normalized)) return prev;
@@ -309,6 +295,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             .then(({ error }) => {
               if (error) {
                 console.warn('Could not sync enrolled_courses to Supabase:', error.message);
+              } else {
+                refreshProfile?.();
               }
             });
         }
@@ -319,7 +307,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         };
       });
     },
-    [user]
+    [user, refreshProfile]
   );
 
   const resetProgress = useCallback(() => {
