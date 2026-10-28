@@ -303,26 +303,24 @@ export const ManualQaCourseHubPage: React.FC = () => {
                 actionText="Start Day 1"
               />
 
-              {/* DAY 2 - Requires Enrollment */}
+              {/* DAY 2 */}
               <DayCard
                 day={MANUAL_QA_DAYS[1]}
-                status={!isEnrolled ? 'locked' : state.days[2]?.status || 'locked'}
+                status={state.days[2]?.status || 'available'}
                 checkpointScore={state.days[2]?.checkpointScore}
                 practicalPassed={state.days[2]?.practicalCompleted}
-                lockedReason={!isEnrolled ? 'Course enrollment required to unlock Day 2.' : 'Complete Day 1 (Theory + Practical + Checkpoint ≥80%) to unlock.'}
                 linkTo="/manual-qa/day/2"
-                onEnrollClick={!isEnrolled ? () => enrollInCourse('manual-qa-fundamentals') : undefined}
+                actionText="Start Day 2"
               />
 
-              {/* DAY 3 - Requires Enrollment */}
+              {/* DAY 3 */}
               <DayCard
                 day={MANUAL_QA_DAYS[2]}
-                status={!isEnrolled ? 'locked' : state.days[3]?.status || 'locked'}
+                status={state.days[3]?.status || 'available'}
                 checkpointScore={state.days[3]?.checkpointScore}
                 practicalPassed={state.days[3]?.practicalCompleted}
-                lockedReason={!isEnrolled ? 'Course enrollment required to unlock Day 3.' : 'Complete Day 2 (Theory + Practical + Checkpoint ≥80%) to unlock.'}
                 linkTo="/manual-qa/day/3"
-                onEnrollClick={!isEnrolled ? () => enrollInCourse('manual-qa-fundamentals') : undefined}
+                actionText="Start Day 3"
               />
 
               {/* SURPRISE TEST 1 GATEKEEPER */}
@@ -330,9 +328,7 @@ export const ManualQaCourseHubPage: React.FC = () => {
                 className={`p-6 rounded-2xl border transition-all ${
                   state.surpriseTest1Passed
                     ? 'bg-emerald-50/50 border-emerald-200'
-                    : state.days[3]?.status === 'completed' && isEnrolled
-                    ? 'bg-amber-50/60 border-amber-300 ring-1 ring-amber-200'
-                    : 'bg-white border-slate-200 opacity-75'
+                    : 'bg-amber-50/60 border-amber-300 ring-1 ring-amber-200'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -348,7 +344,7 @@ export const ManualQaCourseHubPage: React.FC = () => {
                       Surprise Test 1: Core Testing &amp; Defect Management Mastery
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-600">
-                      Mandatory 10-question randomized scenario assessment. You must score ≥ 80% to unlock Day 4.
+                      10-question randomized scenario assessment. Score ≥ 80% to demonstrate mid-programme mastery.
                     </p>
                   </div>
 
@@ -358,15 +354,7 @@ export const ManualQaCourseHubPage: React.FC = () => {
                         <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                         <span>Passed ({state.surpriseTest1Score}%)</span>
                       </div>
-                    ) : !isEnrolled ? (
-                      <button
-                        onClick={() => enrollInCourse('manual-qa-fundamentals')}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold rounded-xl transition-colors cursor-pointer"
-                      >
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>Enroll to Unlock</span>
-                      </button>
-                    ) : state.days[3]?.status === 'completed' ? (
+                    ) : (
                       <Link
                         to="/manual-qa/surprise-test-1"
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl transition-colors shadow-xs text-xs"
@@ -374,36 +362,29 @@ export const ManualQaCourseHubPage: React.FC = () => {
                         <span>Take Surprise Test 1</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
-                    ) : (
-                      <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-100 px-3 py-1.5 rounded-xl">
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>Unlocks after Day 3</span>
-                      </div>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* DAY 4 - Requires Enrollment */}
+              {/* DAY 4 */}
               <DayCard
                 day={MANUAL_QA_DAYS[3]}
-                status={!isEnrolled ? 'locked' : state.days[4]?.status || 'locked'}
+                status={state.days[4]?.status || 'available'}
                 checkpointScore={state.days[4]?.checkpointScore}
                 practicalPassed={state.days[4]?.practicalCompleted}
-                lockedReason={!isEnrolled ? 'Course enrollment required to unlock Day 4.' : 'Must pass Surprise Test 1 with ≥ 80% score to unlock Day 4.'}
                 linkTo="/manual-qa/day/4"
-                onEnrollClick={!isEnrolled ? () => enrollInCourse('manual-qa-fundamentals') : undefined}
+                actionText="Start Day 4"
               />
 
-              {/* DAY 5 - Requires Enrollment */}
+              {/* DAY 5 */}
               <DayCard
                 day={MANUAL_QA_DAYS[4]}
-                status={!isEnrolled ? 'locked' : state.days[5]?.status || 'locked'}
+                status={state.days[5]?.status || 'available'}
                 checkpointScore={state.days[5]?.checkpointScore}
                 practicalPassed={state.days[5]?.practicalCompleted}
-                lockedReason={!isEnrolled ? 'Course enrollment required to unlock Day 5.' : 'Complete Day 4 (Theory + Practical + Checkpoint ≥80%) to unlock.'}
                 linkTo="/manual-qa/day/5"
-                onEnrollClick={!isEnrolled ? () => enrollInCourse('manual-qa-fundamentals') : undefined}
+                actionText="Start Day 5"
               />
 
               {/* DAY 5 FINAL PORTFOLIO PROJECT */}
@@ -439,7 +420,7 @@ export const ManualQaCourseHubPage: React.FC = () => {
                         <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                         <span>Passed Rubric</span>
                       </div>
-                    ) : state.days[5]?.status !== 'locked' ? (
+                    ) : (
                       <Link
                         to="/manual-qa/final-project"
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors shadow-xs text-xs"
@@ -447,11 +428,6 @@ export const ManualQaCourseHubPage: React.FC = () => {
                         <span>Open Final Project</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
-                    ) : (
-                      <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-100 px-3 py-1.5 rounded-xl">
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>Unlocks on Day 5</span>
-                      </div>
                     )}
                   </div>
                 </div>
@@ -462,9 +438,7 @@ export const ManualQaCourseHubPage: React.FC = () => {
                 className={`p-6 rounded-2xl border transition-all ${
                   state.finalAssessmentPassed
                     ? 'bg-emerald-50/50 border-emerald-200'
-                    : state.days[5]?.status !== 'locked'
-                    ? 'bg-rose-50/50 border-rose-200 ring-1 ring-rose-200'
-                    : 'bg-white border-slate-200 opacity-75'
+                    : 'bg-rose-50/50 border-rose-200 ring-1 ring-rose-200'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -490,7 +464,7 @@ export const ManualQaCourseHubPage: React.FC = () => {
                         <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                         <span>Passed ({state.finalAssessmentScore}%)</span>
                       </div>
-                    ) : state.days[5]?.status !== 'locked' ? (
+                    ) : (
                       <Link
                         to="/manual-qa/final-assessment"
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition-colors shadow-xs text-xs"
@@ -498,11 +472,6 @@ export const ManualQaCourseHubPage: React.FC = () => {
                         <span>Start Final Assessment</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
-                    ) : (
-                      <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-100 px-3 py-1.5 rounded-xl">
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>Unlocks on Day 5</span>
-                      </div>
                     )}
                   </div>
                 </div>

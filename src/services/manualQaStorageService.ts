@@ -30,7 +30,7 @@ export function createInitialLearnerState(): ManualQaOverallState {
     },
     2: {
       dayNumber: 2,
-      status: 'locked',
+      status: 'available',
       contentCompleted: false,
       practicalCompleted: false,
       checkpointScore: 0,
@@ -38,7 +38,7 @@ export function createInitialLearnerState(): ManualQaOverallState {
     },
     3: {
       dayNumber: 3,
-      status: 'locked',
+      status: 'available',
       contentCompleted: false,
       practicalCompleted: false,
       checkpointScore: 0,
@@ -46,7 +46,7 @@ export function createInitialLearnerState(): ManualQaOverallState {
     },
     4: {
       dayNumber: 4,
-      status: 'locked',
+      status: 'available',
       contentCompleted: false,
       practicalCompleted: false,
       checkpointScore: 0,
@@ -54,7 +54,7 @@ export function createInitialLearnerState(): ManualQaOverallState {
     },
     5: {
       dayNumber: 5,
-      status: 'locked',
+      status: 'available',
       contentCompleted: false,
       practicalCompleted: false,
       checkpointScore: 0,
@@ -137,6 +137,13 @@ export async function loadLearnerProgress(userId: string): Promise<ManualQaOvera
           state.completedAt = completions.completed_at;
         }
 
+        // Ensure all days are unlocked/available
+        for (const d of [1, 2, 3, 4, 5]) {
+          if (state.days[d] && state.days[d].status === 'locked') {
+            state.days[d].status = 'available';
+          }
+        }
+
         return state;
       }
     } catch (err) {
@@ -153,6 +160,12 @@ export async function loadLearnerProgress(userId: string): Promise<ManualQaOvera
       parsed.cloudMissingReason = isSupabaseConfigured
         ? undefined
         : 'Cloud database (Supabase) not configured in .env. Progress is persisting to authenticated local storage.';
+      // Ensure all days in stored state are unlocked
+      for (const d of [1, 2, 3, 4, 5]) {
+        if (parsed.days && parsed.days[d] && parsed.days[d].status === 'locked') {
+          parsed.days[d].status = 'available';
+        }
+      }
       return parsed;
     }
   } catch (e) {
@@ -229,14 +242,14 @@ export async function recordContentRead(
   currentState: ManualQaOverallState
 ): Promise<ManualQaOverallState> {
   const day = currentState.days[dayNumber];
-  if (!day || day.status === 'locked') {
-    throw new Error(`Day ${dayNumber} is currently locked.`);
+  if (!day) {
+    throw new Error(`Day ${dayNumber} not found.`);
   }
 
   const updatedDay: DayProgress = {
     ...day,
     contentCompleted: true,
-    status: day.status === 'available' ? 'in_progress' : day.status,
+    status: day.status === 'completed' ? 'completed' : 'in_progress',
   };
 
   const nextState: ManualQaOverallState = {
@@ -265,8 +278,8 @@ export async function submitPracticalAssignment(
   evaluation: PracticalEvaluationResult;
 }> {
   const day = currentState.days[dayNumber];
-  if (!day || day.status === 'locked') {
-    throw new Error(`Day ${dayNumber} is currently locked.`);
+  if (!day) {
+    throw new Error(`Day ${dayNumber} not found.`);
   }
 
   let result: PracticalEvaluationResult;
@@ -355,8 +368,8 @@ export async function submitDailyCheckpoint(
   feedbackDetails: any[];
 }> {
   const day = currentState.days[dayNumber];
-  if (!day || day.status === 'locked') {
-    throw new Error(`Day ${dayNumber} is currently locked.`);
+  if (!day) {
+    throw new Error(`Day ${dayNumber} not found.`);
   }
 
   const assessmentType = `day_${dayNumber}_checkpoint` as AssessmentAttempt['assessmentType'];
@@ -490,13 +503,6 @@ export async function submitFinalSurpriseAssessment(
   attempt: AssessmentAttempt;
   feedbackDetails: any[];
 }> {
-  // Prerequisite: Days 1-4 must be completed
-  for (const dayNum of [1, 2, 3, 4]) {
-    if (currentState.days[dayNum]?.status !== 'completed') {
-      throw new Error(`Day ${dayNum} must be fully completed before taking the Final Assessment.`);
-    }
-  }
-
   const { attempt, feedbackDetails } = gradeAssessmentAttempt(
     userId,
     'final_surprise_assessment',

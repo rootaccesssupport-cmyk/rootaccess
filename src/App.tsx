@@ -32,6 +32,19 @@ import { PlaywrightDay6LessonPage } from './pages/playwright/PlaywrightDay6Lesso
 import { PlaywrightSurpriseTest1Page } from './pages/playwright/PlaywrightSurpriseTest1Page';
 import { PlaywrightDay7LessonPage } from './pages/playwright/PlaywrightDay7LessonPage';
 import { PlaywrightDay8LessonPage } from './pages/playwright/PlaywrightDay8LessonPage';
+import { PlaywrightDay9LessonPage } from './pages/playwright/PlaywrightDay9LessonPage';
+import { PlaywrightDay10LessonPage } from './pages/playwright/PlaywrightDay10LessonPage';
+import { PlaywrightDay11LessonPage } from './pages/playwright/PlaywrightDay11LessonPage';
+import { PlaywrightDay12LessonPage } from './pages/playwright/PlaywrightDay12LessonPage';
+import { PlaywrightDay13LessonPage } from './pages/playwright/PlaywrightDay13LessonPage';
+import { PlaywrightDay14LessonPage } from './pages/playwright/PlaywrightDay14LessonPage';
+import { PlaywrightDay15LessonPage } from './pages/playwright/PlaywrightDay15LessonPage';
+import { PlaywrightDay16LessonPage } from './pages/playwright/PlaywrightDay16LessonPage';
+import { PlaywrightDay17LessonPage } from './pages/playwright/PlaywrightDay17LessonPage';
+import { PlaywrightDay18LessonPage } from './pages/playwright/PlaywrightDay18LessonPage';
+import { PlaywrightDay19LessonPage } from './pages/playwright/PlaywrightDay19LessonPage';
+import { PlaywrightDay20LessonPage } from './pages/playwright/PlaywrightDay20LessonPage';
+import { PlaywrightLocatorLabPage } from './pages/playwright/PlaywrightLocatorLabPage';
 
 import { DevOpsCourseOverviewPage } from './pages/devops/DevOpsCourseOverviewPage';
 import { DevOpsDay1LessonPage } from './pages/devops/DevOpsDay1LessonPage';
@@ -217,6 +230,22 @@ export const App: React.FC = () => {
               }
             />
             <Route
+              path="/courses/playwright-automation/locator-lab"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightLocatorLabPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/locator-lab"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightLocatorLabPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/courses/playwright-automation/day-5"
               element={
                 <ProtectedRoute>
@@ -253,6 +282,102 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <PlaywrightDay8LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-9"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay9LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-10"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay10LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-11"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay11LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-12"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay12LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-13"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay13LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-14"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay14LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-15"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay15LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-16"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay16LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-17"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay17LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-18"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay18LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-19"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay19LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/playwright-automation/day-20"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay20LessonPage />
                 </ProtectedRoute>
               }
             />
@@ -326,6 +451,102 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <PlaywrightDay8LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/9"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay9LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/10"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay10LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/11"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay11LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/12"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay12LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/13"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay13LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/14"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay14LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/15"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay15LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/16"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay16LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/17"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay17LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/18"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay18LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/19"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay19LessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playwright/day/20"
+              element={
+                <ProtectedRoute>
+                  <PlaywrightDay20LessonPage />
                 </ProtectedRoute>
               }
             />

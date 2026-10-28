@@ -23,6 +23,7 @@ import {
   Download,
   Lock,
   Sparkles,
+  Target,
 } from 'lucide-react';
 
 export const CourseDetailPage: React.FC = () => {
@@ -123,6 +124,16 @@ export const CourseDetailPage: React.FC = () => {
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Syllabus PDF</span>
             </a>
+
+            {course.slug === 'playwright-automation' && (
+              <Link
+                to="/courses/playwright-automation/locator-lab"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200/60 rounded-lg transition-colors"
+              >
+                <Target className="w-3.5 h-3.5 text-rose-600" />
+                <span>Live Locator Lab</span>
+              </Link>
+            )}
 
             {['manual-qa-fundamentals', 'playwright-automation', 'qa-interview-mastery', 'manual-testing'].includes(course.slug) && (
               <Link
@@ -348,42 +359,25 @@ export const CourseDetailPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Syllabus Action: Enrolled vs Unlocked */}
-                  {!isCourseEnrolled(course.slug) ? (
-                    <button
-                      onClick={() => {
-                        if (!user) navigate('/signup');
-                        else {
-                          enrollInCourse(course.slug);
-                          if (course.slug === 'playwright-automation') {
-                            navigate(`/courses/playwright-automation/day-${idx + 1}`);
-                          } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
-                            navigate(`/manual-qa/day/${idx + 1}`);
-                          } else {
-                            navigate(`/courses/${course.slug}/lessons/${lesson.slug}`);
-                          }
-                        }
-                      }}
-                      className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-purple-100 hover:text-purple-700 text-slate-500 transition-all cursor-pointer"
-                    >
-                      <Lock className="w-3.5 h-3.5" />
-                      <span>Enroll to Unlock</span>
-                    </button>
-                  ) : (
-                    <Link
-                      to={
-                        course.slug === 'playwright-automation'
-                          ? `/courses/playwright-automation/day-${idx + 1}`
-                          : course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing'
-                          ? `/manual-qa/day/${idx + 1}`
-                          : `/courses/${course.slug}/lessons/${lesson.slug}`
+                  {/* Syllabus Action: All Lessons Unlocked */}
+                  <Link
+                    to={
+                      course.slug === 'playwright-automation'
+                        ? `/courses/playwright-automation/day-${idx + 1}`
+                        : course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing'
+                        ? `/manual-qa/day/${idx + 1}`
+                        : `/courses/${course.slug}/lessons/${lesson.slug}`
+                    }
+                    onClick={() => {
+                      if (!isCourseEnrolled(course.slug)) {
+                        enrollInCourse(course.slug);
                       }
-                      className="shrink-0 inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 transition-all shadow-2xs"
-                    >
-                      <span>{isCompleted ? 'Review' : 'Open'}</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                  )}
+                    }}
+                    className="shrink-0 inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 transition-all shadow-2xs"
+                  >
+                    <span>{isCompleted ? 'Review' : 'Open'}</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               );
             })}

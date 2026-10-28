@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -220,6 +220,16 @@ export const StudentDashboardPage: React.FC = () => {
   const [profileSaveSuccess, setProfileSaveSuccess] = useState<string | null>(null);
   const [profileSaveError, setProfileSaveError] = useState<string | null>(null);
 
+  const saveTimeoutRef = useRef<any>(null);
+  const enrollmentTimeoutRef = useRef<any>(null);
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      if (enrollmentTimeoutRef.current) clearTimeout(enrollmentTimeoutRef.current);
+    };
+  }, []);
+
   const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Student';
   const email = user?.email || '';
 
@@ -236,7 +246,8 @@ export const StudentDashboardPage: React.FC = () => {
       enrollInDevOpsCourse();
     }
     setEnrollmentFeedback(`Successfully enrolled in "${courseTitle}"! You can now start learning.`);
-    setTimeout(() => {
+    if (enrollmentTimeoutRef.current) clearTimeout(enrollmentTimeoutRef.current);
+    enrollmentTimeoutRef.current = setTimeout(() => {
       setEnrollmentFeedback(null);
     }, 4500);
   };
@@ -352,7 +363,8 @@ export const StudentDashboardPage: React.FC = () => {
       }
 
       setProfileSaveSuccess('Profile name updated successfully.');
-      setTimeout(() => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = setTimeout(() => {
         setIsEditingProfile(false);
         setProfileSaveSuccess(null);
       }, 1500);

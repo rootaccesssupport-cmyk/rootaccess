@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   ArrowRight,
-  ArrowLeft,
   Clock,
   RotateCcw,
   ShieldCheck,
@@ -84,41 +83,10 @@ export const SurpriseTestPage: React.FC = () => {
     );
   }
 
-  // Check prerequisites & locking
-  const isLocked = isFinalAssessment
-    ? state.days[5]?.status === 'locked'
-    : state.days[3]?.status !== 'completed';
-
-  if (isLocked) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
-        <Navbar />
-        <div className="flex-1 max-w-lg mx-auto px-4 py-16 flex items-center justify-center text-center">
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-xs space-y-4">
-            <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto border border-amber-100 shadow-2xs">
-              <Lock className="w-7 h-7" />
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Assessment Locked</h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              {isFinalAssessment
-                ? 'Complete Days 1 through 5 and pass the Final Project to unlock this final certification assessment.'
-                : 'You must complete Day 1, Day 2, and Day 3 (theory, practical rubrics, and checkpoints) before taking Surprise Test 1.'}
-            </p>
-            <div className="pt-2">
-              <Link
-                to="/manual-qa"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-colors text-xs"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Return to Course Roadmap</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  // Non-blocking prerequisite advisory check
+  const isPrerequisiteMet = isFinalAssessment
+    ? state.days[5]?.status === 'completed'
+    : state.days[3]?.status === 'completed';
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -165,6 +133,24 @@ export const SurpriseTestPage: React.FC = () => {
               {isFinalAssessment ? 'Final Assessment' : 'Surprise Test 1'}
             </span>
           </nav>
+
+          {/* Advisory Prerequisite Banner */}
+          {!isPrerequisiteMet && (
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-amber-900 shadow-2xs">
+              <div className="flex items-center gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>
+                  <strong>Advisory:</strong> All course assessments are unlocked for flexible learning. For best results, we recommend completing prior lesson modules and practical exercises first.
+                </span>
+              </div>
+              <Link
+                to="/manual-qa"
+                className="font-bold underline text-amber-800 hover:text-amber-950 shrink-0 cursor-pointer"
+              >
+                View Roadmap →
+              </Link>
+            </div>
+          )}
 
           {/* Hero Header Card */}
           <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-4">

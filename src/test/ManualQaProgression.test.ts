@@ -11,13 +11,13 @@ import {
 describe('Manual QA 5-Day Progression & Locking Engine', () => {
   const userId = 'test_learner_456';
 
-  it('initializes with Day 1 available and Days 2 to 5 strictly locked with 0 fake progress', () => {
+  it('initializes with all Days (1 to 5) available and unlocked with 0 fake progress', () => {
     const initialState = createInitialLearnerState();
     expect(initialState.days[1].status).toBe('available');
-    expect(initialState.days[2].status).toBe('locked');
-    expect(initialState.days[3].status).toBe('locked');
-    expect(initialState.days[4].status).toBe('locked');
-    expect(initialState.days[5].status).toBe('locked');
+    expect(initialState.days[2].status).toBe('available');
+    expect(initialState.days[3].status).toBe('available');
+    expect(initialState.days[4].status).toBe('available');
+    expect(initialState.days[5].status).toBe('available');
 
     expect(initialState.surpriseTest1Passed).toBe(false);
     expect(initialState.finalProjectPassed).toBe(false);
@@ -26,15 +26,14 @@ describe('Manual QA 5-Day Progression & Locking Engine', () => {
     expect(initialState.certificateId).toBeUndefined();
   });
 
-  it('keeps Day 2 locked until Day 1 passes content, practical rubric, AND checkpoint score >= 80%', async () => {
+  it('marks Day 1 completed when passing content, practical rubric, AND checkpoint score >= 80%', async () => {
     let state = createInitialLearnerState();
 
-    // 1. Mark theory read only -> Day 2 still locked
+    // 1. Mark theory read only -> Day 1 in_progress
     state = await recordContentRead(userId, 1, state);
     expect(state.days[1].contentCompleted).toBe(true);
-    expect(state.days[2].status).toBe('locked');
 
-    // 2. Submit practical assignment that fails rubric -> Day 2 still locked
+    // 2. Submit practical assignment that fails rubric -> practicalCompleted false
     const failingSubmission = {
       scenarios: [
         { title: 'Only one scenario', type: 'positive', expectedResult: 'Login works' },
@@ -47,7 +46,6 @@ describe('Manual QA 5-Day Progression & Locking Engine', () => {
       state
     );
     expect(stateAfterFailPractical.days[1].practicalCompleted).toBe(false);
-    expect(stateAfterFailPractical.days[2].status).toBe('locked');
 
     // 3. Submit practical assignment that passes rubric (>= 6 scenarios, positive + negative)
     const passingSubmission = {
@@ -68,10 +66,8 @@ describe('Manual QA 5-Day Progression & Locking Engine', () => {
     );
     expect(evaluation.passed).toBe(true);
     expect(stateAfterPassPractical.days[1].practicalCompleted).toBe(true);
-    // Still locked because checkpoint quiz is not yet passed!
-    expect(stateAfterPassPractical.days[2].status).toBe('locked');
 
-    // 4. Submit checkpoint with failing score (< 80%) -> Day 2 still locked
+    // 4. Submit checkpoint with failing score (< 80%) -> Day 1 not completed
     const { updatedState: stateAfterFailQuiz } = await submitDailyCheckpoint(
       userId,
       1,
@@ -80,9 +76,8 @@ describe('Manual QA 5-Day Progression & Locking Engine', () => {
       stateAfterPassPractical
     );
     expect(stateAfterFailQuiz.days[1].checkpointPassed).toBe(false);
-    expect(stateAfterFailQuiz.days[2].status).toBe('locked');
 
-    // 5. Submit checkpoint with passing score (>= 80%) -> Day 1 completes and Day 2 UNLOCKS!
+    // 5. Submit checkpoint with passing score (>= 80%) -> Day 1 completes!
     const { updatedState: stateAfterPassQuiz, attempt } = await submitDailyCheckpoint(
       userId,
       1,
@@ -95,7 +90,7 @@ describe('Manual QA 5-Day Progression & Locking Engine', () => {
     expect(stateAfterPassQuiz.days[2].status).toBe('available');
   });
 
-  it('strictly locks Day 4 after Day 3 until Surprise Test 1 is PASSED with score >= 80%', async () => {
+  it('allows taking Surprise Test 1 and records mastery score >= 80%', async () => {
     let state = createInitialLearnerState();
 
     // Simulate completion of Day 1, Day 2, and Day 3
@@ -124,11 +119,9 @@ describe('Manual QA 5-Day Progression & Locking Engine', () => {
       checkpointPassed: true,
     };
 
-    // Day 4 MUST be locked before Surprise Test 1!
-    expect(state.days[4].status).toBe('locked');
     expect(state.surpriseTest1Passed).toBe(false);
 
-    // Fail Surprise Test 1 (score < 80%) -> Day 4 remains locked
+    // Fail Surprise Test 1 (score < 80%) -> surpriseTest1Passed is false
     const { updatedState: stateAfterFailedTest } = await submitSurpriseTest1(
       userId,
       ['d1-q1', 'd2-q1'],
@@ -136,9 +129,8 @@ describe('Manual QA 5-Day Progression & Locking Engine', () => {
       state
     );
     expect(stateAfterFailedTest.surpriseTest1Passed).toBe(false);
-    expect(stateAfterFailedTest.days[4].status).toBe('locked');
 
-    // Pass Surprise Test 1 (score >= 80%) -> Day 4 UNLOCKS!
+    // Pass Surprise Test 1 (score >= 80%) -> surpriseTest1Passed is true!
     const { updatedState: stateAfterPassedTest, attempt } = await submitSurpriseTest1(
       userId,
       ['d1-q1', 'd2-q1', 'd3-q1', 'd3-q2'],

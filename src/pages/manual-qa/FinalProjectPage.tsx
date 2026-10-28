@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   ArrowRight,
-  ArrowLeft,
   Plus,
   Trash2,
   Lock,
@@ -23,8 +22,12 @@ export const FinalProjectPage: React.FC = () => {
   const { isCourseEnrolled, enrollInCourse } = useProgress();
   const isEnrolled = isCourseEnrolled('manual-qa-fundamentals');
 
-  // Check locking
-  const isLocked = state.days[5]?.status === 'locked';
+  // Check prerequisite recommendation
+  const isPrerequisiteMet =
+    state.days[1]?.status === 'completed' &&
+    state.days[2]?.status === 'completed' &&
+    state.days[3]?.status === 'completed' &&
+    state.days[4]?.status === 'completed';
 
   if (!isEnrolled) {
     return (
@@ -132,35 +135,6 @@ export const FinalProjectPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<any>(null);
 
-  if (isLocked) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
-        <Navbar />
-        <div className="flex-1 max-w-lg mx-auto px-4 py-16 flex items-center justify-center text-center">
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-xs space-y-4">
-            <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto border border-amber-100 shadow-2xs">
-              <Lock className="w-7 h-7" />
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Final Project Locked</h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              You must complete Days 1 to 4 and pass Surprise Test 1 to unlock the Day 5 Final Project.
-            </p>
-            <div className="pt-2">
-              <Link
-                to="/manual-qa"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-colors text-xs"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Return to Course Roadmap</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   const handleAddTestCase = () => {
     setTestCases([
       ...testCases,
@@ -225,6 +199,24 @@ export const FinalProjectPage: React.FC = () => {
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
             <span className="text-indigo-600 font-bold">Final Portfolio Project</span>
           </nav>
+
+          {/* Advisory Prerequisite Banner */}
+          {!isPrerequisiteMet && (
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-amber-900 shadow-2xs">
+              <div className="flex items-center gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>
+                  <strong>Advisory:</strong> All course projects are unlocked for open and flexible learning. For optimal hands-on preparation, we recommend completing Days 1 to 4 and Surprise Test 1 before authoring your Capstone Project.
+                </span>
+              </div>
+              <Link
+                to="/manual-qa"
+                className="font-bold underline text-amber-800 hover:text-amber-950 shrink-0 cursor-pointer"
+              >
+                View Roadmap →
+              </Link>
+            </div>
+          )}
 
           {/* Hero Header Card */}
           <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-4">

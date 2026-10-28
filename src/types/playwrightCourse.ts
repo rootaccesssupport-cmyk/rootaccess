@@ -26,7 +26,7 @@ export interface PlaywrightInterviewQuestion {
   id: string;
   questionNumber: number;
   question: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Scenario-Based';
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced' | 'Scenario-Based';
   assessmentFocus: string;
   modelAnswer: string;
   followUpQuestion?: string;
@@ -58,6 +58,18 @@ export interface PlaywrightInteractiveExercise {
   explanation: string;
 }
 
+export interface PlaywrightDayTopic {
+  id: string;
+  topicNumber: number;
+  title: string;
+  durationMinutes: number;
+  explanation: string;
+  keyTakeaways: string[];
+  terminology: Array<{ term: string; definition: string }>;
+  examples: PlaywrightTopicExample[];
+  exercise?: PlaywrightInteractiveExercise;
+}
+
 export interface PlaywrightDayUnit {
   courseTitle: string;
   dayNumber: number;
@@ -68,17 +80,7 @@ export interface PlaywrightDayUnit {
   estimatedHours: string;
   prerequisites: string;
   learningObjectives: string[];
-  topics: Array<{
-    id: string;
-    topicNumber: number;
-    title: string;
-    durationMinutes: number;
-    explanation: string;
-    keyTakeaways: string[];
-    terminology: Array<{ term: string; definition: string }>;
-    examples: PlaywrightTopicExample[];
-    exercise?: PlaywrightInteractiveExercise;
-  }>;
+  topics: PlaywrightDayTopic[];
   roadmap: Array<{
     day: number;
     title: string;
@@ -88,6 +90,11 @@ export interface PlaywrightDayUnit {
   }>;
   interviewQuestions: PlaywrightInterviewQuestion[];
   quizQuestions: PlaywrightQuizQuestion[];
+  starterCode?: string;
+  starterExplanation?: string;
+  starterOutput?: string;
+  evaluateAssignment?: (code: string, output: string, explanation: string) => any;
+  finalAssessment?: PlaywrightFinalAssessmentQuestion[];
 }
 
 export type PlaywrightDay1Unit = PlaywrightDayUnit;
@@ -98,6 +105,18 @@ export type PlaywrightDay5Unit = PlaywrightDayUnit;
 export type PlaywrightDay6Unit = PlaywrightDayUnit;
 export type PlaywrightDay7Unit = PlaywrightDayUnit;
 export type PlaywrightDay8Unit = PlaywrightDayUnit;
+export type PlaywrightDay9Unit = PlaywrightDayUnit;
+export type PlaywrightDay10Unit = PlaywrightDayUnit;
+export type PlaywrightDay11Unit = PlaywrightDayUnit;
+export type PlaywrightDay12Unit = PlaywrightDayUnit;
+export type PlaywrightDay13Unit = PlaywrightDayUnit;
+export type PlaywrightDay14Unit = PlaywrightDayUnit;
+export type PlaywrightDay15Unit = PlaywrightDayUnit;
+export type PlaywrightDay16Unit = PlaywrightDayUnit;
+export type PlaywrightDay17Unit = PlaywrightDayUnit;
+export type PlaywrightDay18Unit = PlaywrightDayUnit;
+export type PlaywrightDay19Unit = PlaywrightDayUnit;
+export type PlaywrightDay20Unit = PlaywrightDayUnit;
 
 export interface PlaywrightDay2AssignmentRubric {
   syntaxCorrect: boolean;
@@ -264,3 +283,195 @@ export interface PlaywrightSurpriseAssessmentQuestion {
   explanation: string;
   topicTag: 'Locators' | 'Actions & Assertions' | 'Auto-Waiting & Flakiness';
 }
+
+export interface PlaywrightAssignmentRubricBase {
+  score: number;
+  feedback: string[];
+  passed: boolean;
+  criteria: Array<{
+    id: string;
+    title: string;
+    passed: boolean;
+    feedback: string;
+  }>;
+}
+
+export interface PlaywrightDay9AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  hasParameterizedSuite: boolean;
+  hasEightOrMoreDatasets: boolean;
+  testsValidRegistration: boolean;
+  testsMissingFields: boolean;
+  testsInvalidEmail: boolean;
+  testsBoundaryLength: boolean;
+  testsInvalidFormats: boolean;
+  ensuresTestIndependence: boolean;
+  usesDescriptiveTestTitles: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay10AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  diagnosesLocatorFailure: boolean;
+  fixesAssertionMismatch: boolean;
+  replacesArbitrarySleepWithCondition: boolean;
+  fixesIncorrectUrlExpectation: boolean;
+  resolvesTestDataDependency: boolean;
+  correctsFormInputValues: boolean;
+  explainsRootCauseAnalysis: boolean;
+  demonstratesTraceOrInspectorUsage: boolean;
+  configuresHtmlReporter: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay11AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  implementsStorageState: boolean;
+  testsSuccessfulLogin: boolean;
+  testsInvalidCredentials: boolean;
+  testsProtectedRoutes: boolean;
+  testsUnauthorizedRedirect: boolean;
+  testsLogoutFlow: boolean;
+  ensuresTestIsolation: boolean;
+  usesEnvironmentVariables: boolean;
+  avoidsHardcodedPasswords: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay12AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  createsPageObjectClass: boolean;
+  locatorsAsProperties: boolean;
+  encapsulatesPageInteractions: boolean;
+  keepsAssertionsInTests: boolean;
+  refactorsDuplicatedActions: boolean;
+  demonstratesMultiplePages: boolean;
+  maintainsCleanProjectStructure: boolean;
+  avoidsOversizedGodObjects: boolean;
+  usesModernClassSyntax: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay13AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  usesRequestFixture: boolean;
+  testsGetEndpoint: boolean;
+  testsPostEndpoint: boolean;
+  testsPutOrPatchEndpoint: boolean;
+  testsDeleteEndpoint: boolean;
+  assertsStatusCodes: boolean;
+  validatesResponseBodySchema: boolean;
+  testsNegativeErrorScenario: boolean;
+  integratesUiWithApiVerification: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay14AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  configuresPlaywrightConfigFile: boolean;
+  definesBaseUrl: boolean;
+  configuresMultiBrowserProjects: boolean;
+  setsSensibleTimeoutsAndRetries: boolean;
+  removesCommittedSecrets: boolean;
+  configuresWorkersAndParallelism: boolean;
+  demonstratesTargetedCliExecution: boolean;
+  includesGitignoreBestPractices: boolean;
+  explainsCrossBrowserDifferences: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay15AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  createsGitHubActionsWorkflow: boolean;
+  configuresPushAndPrTriggers: boolean;
+  installsNodeAndDependencies: boolean;
+  installsPlaywrightBrowsers: boolean;
+  executesPlaywrightTests: boolean;
+  uploadsReportArtifacts: boolean;
+  diagnosesThreeCiBugs: boolean;
+  avoidsUnconditionalRetries: boolean;
+  exposesTestFailuresClearly: boolean;
+  validYamlSyntax: boolean;
+}
+
+export interface PlaywrightDay16AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  appliesStructuredPromptPattern: boolean;
+  reviewsAiGeneratedLocators: boolean;
+  prioritizesAccessibleRoles: boolean;
+  identifiesFiveFlawsInAiCode: boolean;
+  eliminatesHardcodedSleeps: boolean;
+  strengthensWeakAssertions: boolean;
+  avoidsHallucinatedMethods: boolean;
+  documentsAcceptedAndRejectedSuggestions: boolean;
+  verifiesAgainstRealDom: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay17AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  gathersSystematicFailureEvidence: boolean;
+  sanitizesSensitiveDataForAi: boolean;
+  evaluatesRankedAiHypotheses: boolean;
+  distinguishesAppVsAutomationDefects: boolean;
+  rejectsDeceptiveAiFixes: boolean;
+  fixesTimingAndRaceConditions: boolean;
+  resolvesAmbiguousLocators: boolean;
+  appliesMinimalSurgicalFix: boolean;
+  verifiesNoRegressions: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay18AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  extractsRequirementsToScenarioMatrix: boolean;
+  discoversEdgeCasesAndBoundaries: boolean;
+  createsSyntheticTestDataSets: boolean;
+  avoidsProductionPiiInAiPrompts: boolean;
+  prioritizesHighRiskWorkflows: boolean;
+  mapsRequirementsToTests: boolean;
+  authorsPlaywrightTestSkeletons: boolean;
+  validatesErrorHandlingExpectations: boolean;
+  demonstratesCoverageTraceability: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay19AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  evaluatesFrameworkOnSixPillars: boolean;
+  auditsLocatorResilience: boolean;
+  evaluatesAiModernizationPlan: boolean;
+  refactorsSharedHelpersAndFixtures: boolean;
+  understandsPlaywrightMcpProtocol: boolean;
+  explainsAiAgentToolInterfaces: boolean;
+  definesSecurityBoundariesForMcp: boolean;
+  avoidsUncontrolledBrowserActions: boolean;
+  verifiesZeroBehavioralRegressions: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightDay20AssignmentRubric extends PlaywrightAssignmentRubricBase {
+  implementsEcommerceWorkflows: boolean;
+  usesSemanticLocators: boolean;
+  implementsPageObjectModel: boolean;
+  incorporatesApiVerification: boolean;
+  maintainsStorageStateAuth: boolean;
+  ensuresTestIndependence: boolean;
+  configuresCiPipelineAndReports: boolean;
+  documentsAiAuditDecisions: boolean;
+  satisfiesTwelveMilestones: boolean;
+  syntacticallyValidJavaScript: boolean;
+}
+
+export interface PlaywrightFinalAssessmentQuestion {
+  id: string;
+  questionNumber: number;
+  question: string;
+  codeSnippet?: string;
+  options: [string, string, string, string];
+  correctAnswerIndex: number;
+  explanation: string;
+  category:
+    | 'Fundamentals & Architecture'
+    | 'Locators & Selectors'
+    | 'Actions, Assertions & Auto-Waiting'
+    | 'Test Organization, Hooks & Fixtures'
+    | 'Data-Driven Testing'
+    | 'Debugging & Trace Viewer'
+    | 'Authentication & Isolation'
+    | 'Page Object Model'
+    | 'API Testing & Integration'
+    | 'Configuration & Cross-Browser'
+    | 'CI/CD Pipelines'
+    | 'AI Testing, Flakiness & MCP';
+}
+

@@ -103,11 +103,11 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
     expect(screen.getByRole('link', { name: /view full curriculum/i })).toBeInTheDocument();
   });
 
-  it('renders polite prerequisite locked screen when navigating to Day 2 while enrolled but Day 1 incomplete', async () => {
+  it('renders Day 2 lesson directly with advisory recommendation when enrolled but Day 1 incomplete', async () => {
     renderAppAt('/manual-qa/day/2', true);
 
-    expect(await screen.findByText('Day 2 is Locked')).toBeInTheDocument();
-    expect(screen.getByText(/complete the prior daily units/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Prerequisite Recommendation:/i)).toBeInTheDocument();
+    expect(screen.getByText(/You have not completed Day 1 yet/i)).toBeInTheDocument();
   });
 
   it('renders Course Enrollment Required for Surprise Test 1 when unenrolled', async () => {
@@ -117,11 +117,11 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
     expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
   });
 
-  it('renders polite locked screen for Surprise Test 1 when enrolled but Day 3 is incomplete', async () => {
+  it('renders Surprise Test 1 directly with advisory banner when enrolled but Day 3 is incomplete', async () => {
     renderAppAt('/manual-qa/surprise-test-1', true);
 
-    expect(await screen.findByText('Assessment Locked')).toBeInTheDocument();
-    expect(screen.getByText(/complete Day 1, Day 2, and Day 3/i)).toBeInTheDocument();
+    expect(await screen.findByText(/All course assessments are unlocked for flexible learning/i)).toBeInTheDocument();
+    expect(screen.getAllByText('Surprise Test 1').length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders Course Enrollment Required for Final Project when unenrolled', async () => {
@@ -131,11 +131,11 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
     expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
   });
 
-  it('renders polite locked screen for Final Project when enrolled but Day 5 is locked', async () => {
+  it('renders Final Project directly with advisory banner when enrolled but prior days incomplete', async () => {
     renderAppAt('/manual-qa/final-project', true);
 
-    expect(await screen.findByText('Final Project Locked')).toBeInTheDocument();
-    expect(screen.getByText(/complete Days 1 to 4/i)).toBeInTheDocument();
+    expect(await screen.findByText(/All course projects are unlocked for open and flexible learning/i)).toBeInTheDocument();
+    expect(screen.getByText(/Final Portfolio Project: E-Commerce Checkout Test Suite/i)).toBeInTheDocument();
   });
 
   it('renders Certificate locked screen with missing requirements on fresh state', async () => {

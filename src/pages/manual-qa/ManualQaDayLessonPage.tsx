@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   Lock,
   ArrowRight,
-  ArrowLeft,
   Clock,
   FileText,
   AlertTriangle,
@@ -306,32 +305,8 @@ export const ManualQaDayLessonPage: React.FC = () => {
     );
   }
 
-  // Check locking for other days
-  const isLocked = dayProgress?.status === 'locked' && dayNumber > 1;
-  if (isLocked) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-        <Navbar />
-        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-lg mx-auto">
-          <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-4 border border-amber-200">
-            <Lock className="w-8 h-8 text-amber-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Day {dayNumber} is Locked</h2>
-          <p className="text-slate-600 mb-6 leading-relaxed">
-            To unlock Day {dayNumber}, you must complete the prior daily units, pass the practical workplace assignment, and score ≥ 80% on the checkpoint.
-          </p>
-          <Link
-            to="/manual-qa/day/1"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg transition-colors text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Go to Day 1
-          </Link>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  // Advisory recommendation check (non-blocking)
+  const isPrevDayCompleted = dayNumber === 1 || state.days[dayNumber - 1]?.status === 'completed';
 
   // Progress Calculation
   const topicsReadCount = Math.min(5, Math.max(readTopics.length, dayProgress?.contentCompleted ? 5 : 0));
@@ -367,12 +342,31 @@ export const ManualQaDayLessonPage: React.FC = () => {
               Manual Testing
             </Link>
             <span className="text-slate-400">/</span>
-            <span className="text-slate-900 font-semibold">Day 1</span>
+            <span className="text-slate-900 font-semibold">Day {dayNumber}</span>
           </nav>
         </div>
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+        {/* Advisory Prerequisite Recommendation (Non-blocking) */}
+        {!isPrevDayCompleted && dayNumber > 1 && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-amber-900 shadow-2xs">
+            <div className="flex items-center gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>
+                <strong>Prerequisite Recommendation:</strong> You have not completed Day {dayNumber - 1} yet. While all course days are unlocked and accessible, we recommend completing Day {dayNumber - 1} for optimal sequential learning.
+              </span>
+            </div>
+            <Link
+              to={`/manual-qa/day/${dayNumber - 1}`}
+              className="inline-flex items-center gap-1 font-bold text-amber-800 hover:text-amber-950 underline shrink-0 cursor-pointer"
+            >
+              <span>Review Day {dayNumber - 1}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        )}
+
         {/* 3 & 4. Page Title, Introduction & Estimated Learning Time */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">

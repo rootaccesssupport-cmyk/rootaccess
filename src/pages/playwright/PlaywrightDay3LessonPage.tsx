@@ -22,6 +22,7 @@ import {
   Terminal,
   X,
   Award,
+  Target,
 } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -426,6 +427,15 @@ export const PlaywrightDay3LessonPage: React.FC = () => {
               >
                 <span>Day 4</span>
                 <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+
+              <Link
+                to="/courses/playwright-automation/locator-lab"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 transition-colors shadow-2xs"
+                title="Interactive Locator Sandbox"
+              >
+                <Target className="w-3.5 h-3.5 text-rose-600" />
+                <span>Locator Lab</span>
               </Link>
 
               <a

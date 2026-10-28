@@ -855,6 +855,342 @@ pm.test("Save auth token for chained requests", function () {
           'Pass Day 8 Checkpoint Quiz (>= 80%)',
         ],
       },
+      {
+        id: 'lesson-playwright-day-9',
+        slug: 'day-9-data-driven-testing',
+        title: 'Day 9: Data-Driven Testing and Test Parameterisation',
+        durationMinutes: 180,
+        difficulty: 'Intermediate',
+        summary: 'Parameterize suites across positive, negative, and boundary datasets using JavaScript arrays and objects without duplicating test logic.',
+        sections: [
+          {
+            title: '1. Test Parameterisation',
+            content: 'Execute dynamic data-driven suites using for...of loops and template literals.',
+          },
+          {
+            title: '2. Boundary & Negative Partitioning',
+            content: 'Design structured datasets covering edge cases, length boundaries, and invalid formats.',
+          },
+        ],
+        keyTakeaways: [
+          'Iterate over dataset arrays with for...of to dynamically generate isolated test instances.',
+          'Use descriptive template literals in test titles for clear CI reports.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete registration data-driven lab',
+          'Review 5 interview questions',
+          'Pass Day 9 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-10',
+        slug: 'day-10-debugging-reporting-failure-analysis',
+        title: 'Day 10: Debugging, Reporting and Failure Analysis',
+        durationMinutes: 180,
+        difficulty: 'Intermediate',
+        summary: 'Diagnose failures using Playwright Inspector, time-travel debugging in Trace Viewer, and configure rich HTML reports in CI.',
+        sections: [
+          {
+            title: '1. Root Cause Analysis',
+            content: 'Categorize failure signatures and inspect actionability call logs.',
+          },
+          {
+            title: '2. Trace Viewer & Reporters',
+            content: 'Analyze DOM snapshots, network waterfalls, and generate HTML reports.',
+          },
+        ],
+        keyTakeaways: [
+          'Trace Viewer provides complete time-travel debugging with DOM snapshots before and after every action.',
+          'Never use arbitrary sleeps to mask timing failures.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete 6-defect diagnostic lab',
+          'Review 5 interview questions',
+          'Pass Day 10 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-11',
+        slug: 'day-11-authentication-sessions-test-isolation',
+        title: 'Day 11: Authentication, Sessions and Test Isolation',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Master storageState session caching, secure credential injection via environment variables, and zero test-to-test state bleed.',
+        sections: [
+          {
+            title: '1. Session Caching with storageState',
+            content: 'Authenticate once in a setup project and reuse cookies across tests.',
+          },
+          {
+            title: '2. Security & Test Isolation',
+            content: 'Keep credentials in environment variables and prevent test state leakage.',
+          },
+        ],
+        keyTakeaways: [
+          'storageState saves pre-authenticated sessions to JSON, saving hundreds of seconds in CI.',
+          'Never commit real passwords to git repositories.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete customer portal auth lab',
+          'Review 5 interview questions',
+          'Pass Day 11 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-12',
+        slug: 'day-12-page-object-model-pom-design',
+        title: 'Day 12: Page Object Model and Reusable Framework Design',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Design clean, scalable Page Object classes where locators are constructor properties and assertions stay in test specifications.',
+        sections: [
+          {
+            title: '1. Page Object Model Design',
+            content: 'Encapsulate page interactions into ES6 classes following Single Responsibility.',
+          },
+          {
+            title: '2. Avoiding Anti-Patterns',
+            content: 'Prevent oversized God Objects and keep test assertions declarative in specs.',
+          },
+        ],
+        keyTakeaways: [
+          'Define locators as constructor properties for lazy evaluation and centralization.',
+          'Keep assertions inside test files so tests remain declarative and self-documenting.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Refactor e-commerce suite into POM classes',
+          'Review 5 interview questions',
+          'Pass Day 12 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-13',
+        slug: 'day-13-api-testing-with-playwright',
+        title: 'Day 13: API Testing with Playwright',
+        durationMinutes: 180,
+        difficulty: 'Intermediate',
+        summary: 'Utilize native request fixtures for REST API requests, schema validation, and combine UI with API verification in hybrid workflows.',
+        sections: [
+          {
+            title: '1. Native request Fixture',
+            content: 'Dispatch GET, POST, PUT, DELETE requests with built-in APIRequestContext.',
+          },
+          {
+            title: '2. Hybrid UI + API Testing',
+            content: 'Seed preconditions via API and verify backend database persistence.',
+          },
+        ],
+        keyTakeaways: [
+          'Playwright provides first-class HTTP testing via the request fixture.',
+          'Hybrid testing accelerates test execution by skipping slow UI setup flows.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete task management API lab',
+          'Review 5 interview questions',
+          'Pass Day 13 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-14',
+        slug: 'day-14-git-test-configuration-cross-browser',
+        title: 'Day 14: Git, Test Configuration and Cross-Browser Testing',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Configure playwright.config.js for multi-browser projects (Chromium, Firefox, WebKit), timeouts, parallel workers, and targeted CLI execution.',
+        sections: [
+          {
+            title: '1. Configuration & Projects',
+            content: 'Define browser projects, base URLs, and retry rules in playwright.config.js.',
+          },
+          {
+            title: '2. Cross-Browser & Targeted Runs',
+            content: 'Execute tests across engines and use --grep filters for targeted execution.',
+          },
+        ],
+        keyTakeaways: [
+          'Projects allow running the same tests across desktop and mobile browser viewports.',
+          'Use --grep to run specific feature suites from the command line.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete multi-browser config lab',
+          'Review 5 interview questions',
+          'Pass Day 14 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-15',
+        slug: 'day-15-ci-cd-integration-github-actions',
+        title: 'Day 15: CI/CD Integration with GitHub Actions',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Build production GitHub Actions pipelines with headless execution, browser caching, failure artifact uploading, and CI troubleshooting.',
+        sections: [
+          {
+            title: '1. GitHub Actions Pipeline',
+            content: 'Create automated CI workflows triggered on push and pull_request.',
+          },
+          {
+            title: '2. Headless Linux & Artifacts',
+            content: 'Install Linux system dependencies with --with-deps and upload reports using if: always().',
+          },
+        ],
+        keyTakeaways: [
+          'Always install browser dependencies on Linux runners using npx playwright install --with-deps.',
+          'Upload HTML reports with if: always() to ensure triage artifacts are preserved.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete CI/CD workflow YAML lab',
+          'Review 5 interview questions',
+          'Pass Day 15 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-16',
+        slug: 'day-16-ai-assisted-test-generation-locators',
+        title: 'Day 16: AI-Assisted Test Generation and Locator Suggestions',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Leverage generative AI for prompt-based test scaffolding, critique AI locator suggestions, eliminate hallucinations, and perform rigorous code reviews.',
+        sections: [
+          {
+            title: '1. Structured Prompting',
+            content: 'Feed clean context, DOM snippets, and constraints into LLMs.',
+          },
+          {
+            title: '2. AI Code Review',
+            content: 'Identify anti-patterns: arbitrary sleeps, weak assertions, and hallucinated APIs.',
+          },
+        ],
+        keyTakeaways: [
+          'Prioritize getByRole and getByLabel over brittle AI-suggested XPaths.',
+          'Always verify AI-generated tests against the real running application.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete AI code audit & refactor lab',
+          'Review 5 interview questions',
+          'Pass Day 16 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-17',
+        slug: 'day-17-ai-debugging-flaky-test-analysis',
+        title: 'Day 17: AI-Assisted Debugging and Flaky-Test Analysis',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Diagnose intermittent failures, sanitize failure logs, eliminate deceptive AI workarounds, and apply surgical event-driven synchronization.',
+        sections: [
+          {
+            title: '1. Failure Evidence & Sanitization',
+            content: 'Scrub Bearer tokens and PII before feeding context to AI models.',
+          },
+          {
+            title: '2. Flakiness & Deceptive Fixes',
+            content: 'Reject arbitrary sleeps and weakened assertions in favor of web-first sync.',
+          },
+        ],
+        keyTakeaways: [
+          'Never paste raw production credentials or customer PII into public AI tools.',
+          'Flakiness is almost always caused by asynchronous timing gaps or state leakage.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete 4-scenario flakiness refactoring lab',
+          'Review 5 interview questions',
+          'Pass Day 17 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-18',
+        slug: 'day-18-ai-assisted-test-planning-synthetic-data',
+        title: 'Day 18: AI-Assisted Test Planning, Edge Cases and Test Data',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Deconstruct complex user stories, discover hidden edge cases with adversarial AI prompting, and engineer safe synthetic data factories.',
+        sections: [
+          {
+            title: '1. Requirements to Test Matrix',
+            content: 'Deconstruct user stories into P0/P1/P2 risk-weighted scenario matrices.',
+          },
+          {
+            title: '2. Safe Synthetic Test Data',
+            content: 'Build data factories using unique timestamps and the reserved @example.com domain.',
+          },
+        ],
+        keyTakeaways: [
+          'Use adversarial prompts to probe for edge cases, concurrency conflicts, and boundary extremes.',
+          'Tag tests with requirement IDs for living requirements traceability.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete hotel booking test planning lab',
+          'Review 5 interview questions',
+          'Pass Day 18 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-19',
+        slug: 'day-19-framework-quality-playwright-mcp',
+        title: 'Day 19: AI-Assisted Framework Improvement and Playwright MCP',
+        durationMinutes: 180,
+        difficulty: 'Advanced',
+        summary: 'Modernize legacy suites against the 6 Pillars, eliminate wrapper bloat, and engineer secure Model Context Protocol (MCP) agent guardrails.',
+        sections: [
+          {
+            title: '1. The 6 Pillars of Architecture',
+            content: 'Evaluate modularity, reliability, maintainability, observability, isolation, and parallelism.',
+          },
+          {
+            title: '2. Playwright MCP & Guardrails',
+            content: 'Implement domain whitelisting and human approval gates for autonomous browser agents.',
+          },
+        ],
+        keyTakeaways: [
+          'Model Context Protocol (MCP) allows AI agents to interact with browsers via standardized tools.',
+          'Enforce strict domain whitelists to prevent autonomous agents from navigating unapproved origins.',
+        ],
+        practicalChecklist: [
+          'Read all 4 core topics',
+          'Complete framework modernization & MCP guardrail lab',
+          'Review 5 interview questions',
+          'Pass Day 19 Checkpoint Quiz (>= 80%)',
+        ],
+      },
+      {
+        id: 'lesson-playwright-day-20',
+        slug: 'day-20-final-project-assessment-certification',
+        title: 'Day 20: Final Project, Comprehensive Assessment & Certification',
+        durationMinutes: 210,
+        difficulty: 'Advanced',
+        summary: 'Engineer the RootCart Enterprise Framework, defend your architecture, complete the 25-question Final Assessment, and achieve certification.',
+        sections: [
+          {
+            title: '1. Capstone E-Commerce Framework',
+            content: 'Satisfy all 12 engineering milestones combining POM, API, and auth state.',
+          },
+          {
+            title: '2. Final Assessment & Defense',
+            content: 'Pass the 25-question comprehensive exam and master 20 senior interview scenarios.',
+          },
+        ],
+        keyTakeaways: [
+          'The Capstone synthesizes all 19 preceding days into a single production-grade framework.',
+          'Passing the 25-question Final Assessment awards the official course certificate.',
+        ],
+        practicalChecklist: [
+          'Read all 4 capstone architecture topics',
+          'Complete RootCart Capstone E-commerce Framework',
+          'Review 20 senior interview questions',
+          'Pass 25-Question Final Assessment (>= 80%)',
+        ],
+      },
     ],
     quiz: {
       id: 'quiz-playwright',
