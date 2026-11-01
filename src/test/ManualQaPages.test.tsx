@@ -75,12 +75,12 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
     expect(screen.getByRole('link', { name: /view full curriculum/i })).toBeInTheDocument();
   });
 
-  it('renders Course Enrollment Required gate when navigating to Day 1 while unenrolled', async () => {
+  it('renders Day 1 Free Preview when navigating to Day 1 while unenrolled', async () => {
     renderAppAt('/manual-qa/day/1', false);
 
-    expect(await screen.findByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /view full curriculum/i })).toBeInTheDocument();
+    expect(await screen.findByText('Day 1: Software Testing Fundamentals')).toBeInTheDocument();
+    expect(screen.getByText('1. Day Learning Objectives')).toBeInTheDocument();
+    expect(screen.getByText(/Core Concepts & Walkthrough/i)).toBeInTheDocument();
   });
 
   it('renders Day 1 Lesson page when enrolled', async () => {
@@ -97,10 +97,9 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
   it('renders Course Enrollment Required gate when navigating to Day 2 while unenrolled', async () => {
     renderAppAt('/manual-qa/day/2', false);
 
-    expect(await screen.findByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByText(/Free students can explore the course curriculum/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /view full curriculum/i })).toBeInTheDocument();
+    expect(await screen.findByText(/Enrollment & Payment Required/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Back to Course Roadmap/i })).toBeInTheDocument();
   });
 
   it('renders Day 2 lesson directly with advisory recommendation when enrolled but Day 1 incomplete', async () => {

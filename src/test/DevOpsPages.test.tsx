@@ -86,16 +86,10 @@ describe('DevOpsCourseOverviewPage', () => {
 });
 
 describe('DevOpsDay1LessonPage', () => {
-  it('renders enrollment gate when unenrolled and unlocks upon enrolling', () => {
+  it('renders Day 1 free preview lesson content for students', () => {
     mockUseAuth();
     renderWithProviders(<DevOpsDay1LessonPage />, false);
 
-    // Shows enrollment gate
-    expect(screen.getByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
-
-    // Clicking enroll in course unlocks the lesson
-    fireEvent.click(screen.getByRole('button', { name: /enroll in course/i }));
     expect(screen.getByText('Understanding DevOps and the Software Delivery Lifecycle')).toBeInTheDocument();
   });
 

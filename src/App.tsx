@@ -50,6 +50,7 @@ import { DevOpsCourseOverviewPage } from './pages/devops/DevOpsCourseOverviewPag
 import { DevOpsDay1LessonPage } from './pages/devops/DevOpsDay1LessonPage';
 import { DevOpsDay2LessonPage } from './pages/devops/DevOpsDay2LessonPage';
 import { DevOpsDay3LessonPage } from './pages/devops/DevOpsDay3LessonPage';
+import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
 
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { PageTransitionWrapper } from './components/common/PageTransitionWrapper';
@@ -106,6 +107,16 @@ export const App: React.FC = () => {
               }
             />
             <Route path="/dashboard" element={<Navigate to="/app" replace />} />
+
+            {/* Protected Route: Admin Enrollment & Payment Approvals */}
+            <Route
+              path="/admin/enrollments"
+              element={
+                <ProtectedRoute>
+                  <AdminEnrollmentPortalPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Course Curriculum & Syllabus Routes (Accessible to all students to inspect curriculum) */}
             <Route path="/courses/:courseSlug" element={<CourseDetailPage />} />

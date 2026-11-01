@@ -16,7 +16,6 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
-  Lock,
   Code,
   Copy,
   X,
@@ -29,6 +28,7 @@ import { Footer } from '../../components/layout/Footer';
 import { LessonContentRenderer } from '../../components/common/LessonContentRenderer';
 import { PlaywrightRealLifeLocatorLab } from '../../components/playwright/PlaywrightRealLifeLocatorLab';
 import { useProgress } from '../../context/ProgressContext';
+import { CourseEnrollmentGate } from '../../components/common/CourseEnrollmentGate';
 import type { PlaywrightDayUnit } from '../../types/playwrightCourse';
 
 export interface PlaywrightGenericLessonPageProps {
@@ -58,7 +58,7 @@ export const PlaywrightGenericLessonPage: React.FC<PlaywrightGenericLessonPagePr
   nextLessonUrl,
   pdfFileName,
 }) => {
-  const { isCourseEnrolled, enrollInCourse, markLessonComplete, isLessonCompleted } = useProgress();
+  const { isCourseEnrolled, markLessonComplete, isLessonCompleted } = useProgress();
   const isEnrolled = isCourseEnrolled('playwright-automation');
   const isPrevCompleted = isLessonCompleted(prevLessonId);
 
@@ -306,42 +306,20 @@ export const PlaywrightGenericLessonPage: React.FC<PlaywrightGenericLessonPagePr
 
   if (!isEnrolled) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center p-6">
-          <div className="max-w-md w-full bg-white rounded-2xl p-8 border border-slate-200 shadow-xl text-center">
-            <div className="w-14 h-14 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600">
-              <Lock className="w-7 h-7" />
-            </div>
-            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700">
-              Enrollment Required
-            </span>
-            <h1 className="text-xl font-extrabold text-slate-900 mt-3">
-              Playwright Automation with JavaScript + AI
-            </h1>
-            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-              Enroll in this comprehensive 20-day course to access Day {dayNumber}: {data.lessonTitle}.
-            </p>
-            <div className="mt-6 flex flex-col gap-3">
-              <button
-                onClick={() => {
-                  enrollInCourse('playwright-automation');
-                }}
-                className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-xs cursor-pointer"
-              >
-                Enroll in Course for Free
-              </button>
-              <Link
-                to="/courses/playwright-automation"
-                className="text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors"
-              >
-                View Full 20-Day Curriculum
-              </Link>
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
+      <CourseEnrollmentGate
+        courseTitle="Playwright Automation with JavaScript + AI"
+        courseSlug="playwright-automation"
+        description={`Day 1 is available as a free preview. To access Day ${dayNumber}: ${data.lessonTitle}, interactive labs, and certification, please enroll.`}
+        bulletPoints={[
+          '20 comprehensive daily engineering modules (pure modern JavaScript, zero TypeScript overhead)',
+          '5-Mode Real-Life Playwright Automation Simulator (Locators, Test Runner, Network Mocking, storageState, Auto-wait)',
+          'Interactive coding sandboxes, code evaluations, and interview questions',
+          'RootAccess Official Automation Certificate of Completion with unique ID',
+        ]}
+        backLink="/courses/playwright-automation"
+        backLinkText="Back to 20-Day Curriculum"
+        accentColor="purple"
+      />
     );
   }
 

@@ -24,6 +24,8 @@ import {
   Search,
   Compass,
   Check,
+  ShieldCheck,
+  MessageCircle,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -31,6 +33,8 @@ import { useProgress } from '../context/ProgressContext';
 import { useDevOps } from '../context/DevOpsContext';
 import { useManualQa } from '../context/ManualQaContext';
 import { COURSE_INTERVIEW_SCENARIOS } from '../data/interviewScenariosData';
+import { ENROLLMENT_PAYMENT_CONFIG } from '../data/enrollmentPaymentConfig';
+import { CourseEnrollmentModal } from '../components/enrollment/CourseEnrollmentModal';
 
 interface CatalogCourse {
   id: string;
@@ -159,8 +163,8 @@ const COURSE_CATEGORIES = [
 
 export const StudentDashboardPage: React.FC = () => {
   const { user, profile, signOut, refreshProfile } = useAuth();
-  const { overallStats, getCourseProgress, isCourseEnrolled, enrollInCourse } = useProgress();
-  const { state: devOpsState, getOverallStats: getDevOpsStats, enrollInCourse: enrollInDevOpsCourse } = useDevOps();
+  const { overallStats, getCourseProgress, isCourseEnrolled } = useProgress();
+  const { state: devOpsState, getOverallStats: getDevOpsStats } = useDevOps();
   const devopsStats = getDevOpsStats();
   const { state: manualQaState } = useManualQa();
 
@@ -230,8 +234,16 @@ export const StudentDashboardPage: React.FC = () => {
     };
   }, []);
 
+  // Enrollment payment modal state
+  const [selectedCourseModal, setSelectedCourseModal] = useState<{ slug: string; title: string } | null>(null);
+
   const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Student';
   const email = user?.email || '';
+
+  const isAdmin =
+    ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user?.email) ||
+    profile?.role === 'admin' ||
+    user?.email === 'pavankalyan.d@gmail.com';
 
   const checkCourseEnrolled = (slug: string) => {
     if (slug === 'devops-engineering') {
@@ -241,15 +253,7 @@ export const StudentDashboardPage: React.FC = () => {
   };
 
   const handleEnrollCourse = (courseSlug: string, courseTitle: string) => {
-    enrollInCourse(courseSlug);
-    if (courseSlug === 'devops-engineering') {
-      enrollInDevOpsCourse();
-    }
-    setEnrollmentFeedback(`Successfully enrolled in "${courseTitle}"! You can now start learning.`);
-    if (enrollmentTimeoutRef.current) clearTimeout(enrollmentTimeoutRef.current);
-    enrollmentTimeoutRef.current = setTimeout(() => {
-      setEnrollmentFeedback(null);
-    }, 4500);
+    setSelectedCourseModal({ slug: courseSlug, title: courseTitle });
   };
 
   const enrolledCoursesList = useMemo(() => {
@@ -419,6 +423,17 @@ export const StudentDashboardPage: React.FC = () => {
 
             {/* Profile & Logout Action */}
             <div className="flex items-center gap-3">
+              {isAdmin && (
+                <Link
+                  to="/admin/enrollments"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-400 hover:bg-amber-300 transition-colors shadow-2xs"
+                  title="Admin Approval Center"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Admin Portal</span>
+                </Link>
+              )}
+
               <button
                 onClick={() => setIsEditingProfile(true)}
                 className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
@@ -1033,10 +1048,10 @@ export const StudentDashboardPage: React.FC = () => {
                           ) : (
                             <button
                               onClick={() => handleEnrollCourse(course.slug, course.title)}
-                              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-xs cursor-pointer"
+                              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-all shadow-xs cursor-pointer"
                             >
-                              <Sparkles className="w-3.5 h-3.5" />
-                              <span>Enroll in Course</span>
+                              <MessageCircle className="w-3.5 h-3.5 fill-white" />
+                              <span>Enroll (UPI)</span>
                             </button>
                           )}
                         </div>
@@ -1229,6 +1244,21 @@ export const StudentDashboardPage: React.FC = () => {
       <footer className="w-full text-center py-6 text-xs text-slate-400 border-t border-slate-200 bg-white">
         RootAccess &copy; {new Date().getFullYear()} &mdash; Career Learning &amp; Job Discovery Platform
       </footer>
+
+      {/* Course Enrollment & WhatsApp UPI Payment Modal */}
+      {selectedCourseModal && (
+        <CourseEnrollmentModal
+          isOpen={Boolean(selectedCourseModal)}
+          onClose={() => setSelectedCourseModal(null)}
+          courseSlug={selectedCourseModal.slug}
+          courseTitle={selectedCourseModal.title}
+          onSuccess={() => {
+            setEnrollmentFeedback(
+              `Enrollment request logged for "${selectedCourseModal.title}"! Admin will activate after verifying your WhatsApp / UPI payment.`
+            );
+          }}
+        />
+      )}
     </div>
   );
 };

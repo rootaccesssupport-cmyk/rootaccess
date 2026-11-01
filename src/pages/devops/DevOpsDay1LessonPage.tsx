@@ -29,7 +29,6 @@ import { Footer } from '../../components/layout/Footer';
 import { LessonContentRenderer } from '../../components/common/LessonContentRenderer';
 import { useDevOps } from '../../context/DevOpsContext';
 import { useProgress } from '../../context/ProgressContext';
-import { CourseEnrollmentGate } from '../../components/common/CourseEnrollmentGate';
 import { DEVOPS_DAY_1_DATA } from '../../data/devopsDay1Data';
 import {
   RELEASE_ROOM_SCENARIOS,
@@ -40,8 +39,7 @@ import { InteractiveScenarioMissionStudio } from '../../components/devops/Intera
 
 export const DevOpsDay1LessonPage: React.FC = () => {
   const {
-    state: devopsState,
-    enrollInCourse: enrollDevOps,
+    state: _devopsState,
     getDayProgress,
     markTopicRead,
     markActivityCompleted,
@@ -50,14 +48,7 @@ export const DevOpsDay1LessonPage: React.FC = () => {
     markInterviewReviewed,
     submitQuiz,
   } = useDevOps();
-  const { isCourseEnrolled, enrollInCourse } = useProgress();
-
-  const isEnrolled = isCourseEnrolled('devops-engineering') || devopsState.enrolled;
-
-  const handleEnroll = () => {
-    enrollDevOps();
-    enrollInCourse('devops-engineering');
-  };
+  const { isCourseEnrolled: _isCourseEnrolled } = useProgress();
 
   const progress = getDayProgress(1);
 
@@ -195,25 +186,7 @@ export const DevOpsDay1LessonPage: React.FC = () => {
   const currentTopic = DEVOPS_DAY_1_DATA.topics[currentTopicIdx];
   const selectedStage = LIFECYCLE_STAGES.find((s) => s.id === selectedStageId) || LIFECYCLE_STAGES[0];
 
-  if (!isEnrolled) {
-    return (
-      <CourseEnrollmentGate
-        courseTitle="DevOps Engineering Academy"
-        courseSlug="devops-engineering"
-        description="Course enrollment is required to access interactive lessons, simulated Linux terminals, scenario missions, and interview prep. Enrollment is 100% free during early access—click below to enroll instantly."
-        bulletPoints={[
-          "36-Day structured DevOps roadmap with Days 1–3 interactive modules live",
-          "Simulated Linux Terminal Sandbox with Ubuntu 24.04 FHS navigation",
-          "Production CI/CD Release Room and Incident Diagnostic Studios",
-          "Real-world DevOps interview preparation and senior-engineer model answers",
-        ]}
-        onEnroll={handleEnroll}
-        backLink="/courses/devops-engineering"
-        backLinkText="View DevOps Roadmap"
-        accentColor="indigo"
-      />
-    );
-  }
+  // Note: Day 1 is a 100% Free Preview for all registered learners. Days 2+ require enrollment & UPI payment approval.
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 selection:bg-indigo-500 selection:text-white">

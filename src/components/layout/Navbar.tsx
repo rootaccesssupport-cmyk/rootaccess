@@ -16,7 +16,9 @@ import {
   Database,
   Send,
   BookOpen,
+  ShieldCheck,
 } from 'lucide-react';
+import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 
 export const Navbar: React.FC = () => {
   const { user, profile, signOut } = useAuth();
@@ -219,6 +221,17 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-2">
+                {(ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user.email) || profile?.role === 'admin') && (
+                  <Link
+                    to="/admin/enrollments"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-400 hover:bg-amber-300 transition-colors shadow-2xs"
+                    title="Admin Enrollment & Payment Approvals"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>Admin</span>
+                  </Link>
+                )}
+
                 {/* Student Profile Chip */}
                 <Link
                   to="/app"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   BookOpen,
   CheckCircle2,
@@ -26,8 +26,8 @@ import {
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import { LessonContentRenderer } from '../../components/common/LessonContentRenderer';
-import { useAuth } from '../../context/AuthContext';
 import { useProgress } from '../../context/ProgressContext';
+import { CourseEnrollmentGate } from '../../components/common/CourseEnrollmentGate';
 import {
   PLAYWRIGHT_DAY_2_DATA,
   PLAYWRIGHT_DAY_2_STARTER_CODE,
@@ -38,9 +38,7 @@ import {
 import type { PlaywrightDay2AssignmentRubric } from '../../types/playwrightCourse';
 
 export const PlaywrightDay2LessonPage: React.FC = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const { isCourseEnrolled, enrollInCourse, markLessonComplete, isLessonCompleted } = useProgress();
+  const { isCourseEnrolled, markLessonComplete, isLessonCompleted } = useProgress();
   const isEnrolled = isCourseEnrolled('playwright-automation');
   const isDay1Completed = isLessonCompleted('lesson-playwright-day-1');
 
@@ -297,52 +295,20 @@ export const PlaywrightDay2LessonPage: React.FC = () => {
   // Course Enrollment Gate
   if (!isEnrolled) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-        <Navbar />
-        <main className="flex-1 flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center space-y-6">
-            <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-              <Lock className="w-8 h-8" />
-            </div>
-
-            <div className="space-y-2">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200">
-                Enrollment Required
-              </span>
-              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-                Playwright Automation with JavaScript + AI
-              </h1>
-              <p className="text-sm text-slate-600">
-                Enroll in the free 20-day course to access Day 2: JavaScript Essentials for Test Automation, interactive exercises, code utilities, and quizzes.
-              </p>
-            </div>
-
-            <button
-              onClick={() => {
-                if (!user) {
-                  navigate('/signup');
-                } else {
-                  enrollInCourse('playwright-automation');
-                }
-              }}
-              className="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>{user ? 'Enroll in Course for Free' : 'Create Account to Enroll'}</span>
-            </button>
-
-            <div className="pt-2">
-              <Link
-                to="/courses/playwright-automation"
-                className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
-              >
-                ← View Full 20-Day Course Curriculum
-              </Link>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
+      <CourseEnrollmentGate
+        courseTitle="Playwright Automation with JavaScript + AI"
+        courseSlug="playwright-automation"
+        description="Day 1 is open for free exploration. To access Day 2: JavaScript Essentials for Test Automation, interactive exercises, code utilities, and quizzes, please enroll."
+        bulletPoints={[
+          'Complete 20-day browser automation curriculum in pure JavaScript',
+          'Interactive coding exercises with instant browser feedback',
+          'Page Object Model architecture, CI/CD pipelines, and AI-assisted automation',
+          'Verified Playwright Automation Certificate of Completion',
+        ]}
+        backLink="/courses/playwright-automation"
+        backLinkText="View Full 20-Day Course Curriculum"
+        accentColor="purple"
+      />
     );
   }
 

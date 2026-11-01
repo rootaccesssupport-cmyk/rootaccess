@@ -142,7 +142,7 @@ describe('Playwright Real-Life Locator Lab & Unlocked Course Experience', () => 
     expect(screen.getByText(/Label Locator \(Form Inputs\)/i)).toBeInTheDocument();
   });
 
-  it('renders CourseDetailPage with all syllabus lessons unlocked with Open actions', () => {
+  it('renders CourseDetailPage with Day 1 Free Preview and Locator Lab link', () => {
     render(
       <MemoryRouter initialEntries={['/courses/playwright-automation']}>
         <AuthProvider>
@@ -160,9 +160,7 @@ describe('Playwright Real-Life Locator Lab & Unlocked Course Experience', () => 
     // In playwright course, check that "Live Locator Lab" is in the header
     expect(screen.getByRole('link', { name: /Live Locator Lab/i })).toBeInTheDocument();
 
-    // Check that syllabus buttons say "Open" and NOT "Enroll to Unlock"
-    const openButtons = screen.getAllByRole('link', { name: /Open/i });
-    expect(openButtons.length).toBeGreaterThan(0);
-    expect(screen.queryByText(/Enroll to Unlock/i)).not.toBeInTheDocument();
+    // Check that Day 1 is marked as Free Preview
+    expect(screen.getByRole('link', { name: /Free Preview/i })).toBeInTheDocument();
   });
 });

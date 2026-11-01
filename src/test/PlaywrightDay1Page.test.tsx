@@ -277,15 +277,11 @@ describe('Playwright Automation with JavaScript — Day 1 Implementation', () =>
     expect(screen.getByText(/Action Required: You must pass the Day 1 Checkpoint Quiz/i)).toBeInTheDocument();
   });
 
-  it('renders enrollment required access gate if user is not enrolled in course', () => {
+  it('renders Day 1 Free Preview for unenrolled students', () => {
     renderPlaywrightDay1Page(false);
 
-    expect(screen.getByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /view full curriculum/i })).toHaveAttribute(
-      'href',
-      '/courses/playwright-automation'
-    );
+    expect(screen.getByRole('heading', { level: 1, name: /Automation Testing and Playwright Fundamentals/i })).toBeInTheDocument();
+    expect(screen.getByText(/Day 1 of 20/i)).toBeInTheDocument();
   });
 });
 

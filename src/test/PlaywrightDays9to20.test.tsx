@@ -241,8 +241,8 @@ describe('Playwright Automation with JavaScript + AI — Days 9 to 20 Curriculum
         </MemoryRouter>
       );
 
-      expect(screen.getByText(/Enrollment Required/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Enroll in Course for Free/i })).toBeInTheDocument();
+      expect(screen.getByText(/Enrollment & Payment Required|Enrollment Required/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
     });
 
     it('renders Day 9 page with PDF link and pure JavaScript badge when enrolled', () => {

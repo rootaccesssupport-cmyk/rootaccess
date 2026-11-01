@@ -19,7 +19,6 @@ import {
   ChevronDown,
   ChevronUp,
   Cpu,
-  Lock,
 } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -34,8 +33,7 @@ import type { PlaywrightScenarioRow } from '../../types/playwrightCourse';
 
 export const PlaywrightDay1LessonPage: React.FC = () => {
   const { user } = useAuth();
-  const { isCourseEnrolled, enrollInCourse, markLessonComplete } = useProgress();
-  const isEnrolled = isCourseEnrolled('playwright-automation');
+  const { markLessonComplete } = useProgress();
 
   // Navigation tab states
   const [activeTab, setActiveTab] = useState<'topics' | 'assignment' | 'interview' | 'quiz'>('topics');
@@ -240,58 +238,7 @@ export const PlaywrightDay1LessonPage: React.FC = () => {
 
   const currentTopic = PLAYWRIGHT_DAY_1_DATA.topics[currentTopicIndex];
 
-  if (!isEnrolled) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
-        <Navbar />
-        <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex items-center justify-center">
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-sm text-center max-w-xl space-y-6">
-            <div className="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto border border-purple-100 shadow-2xs">
-              <Lock className="w-7 h-7" />
-            </div>
-            <div className="space-y-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Course Enrollment Required</span>
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                Playwright Automation with JavaScript + AI
-              </h1>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Free students can explore the course curriculum and syllabus. To access Day 1 interactive lessons, code execution, practical assignments, and the interview question bank, please enroll in this course.
-              </p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-left space-y-2 text-slate-700">
-              <div className="font-bold text-slate-900">What full course enrollment unlocks:</div>
-              <ul className="space-y-1.5 list-disc pl-4 text-slate-600">
-                <li>Complete 20-day hands-on browser automation curriculum</li>
-                <li>Pure JavaScript code exercises and DevTools WebSocket architecture</li>
-                <li>Interactive scenario assessment tables and instant rubric validation</li>
-                <li>Comprehensive QA interview question bank with model answers</li>
-              </ul>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <button
-                onClick={() => enrollInCourse('playwright-automation')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Enroll in Course</span>
-              </button>
-              <Link
-                to="/courses/playwright-automation"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-colors"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>View Full Curriculum</span>
-              </Link>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  // Note: Day 1 is a 100% Free Preview for all registered learners. Days 2+ require enrollment & UPI payment approval.
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">

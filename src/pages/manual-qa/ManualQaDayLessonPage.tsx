@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   CheckCircle2,
-  Lock,
   ArrowRight,
   Clock,
   FileText,
@@ -27,6 +26,8 @@ import { useManualQa } from '../../context/ManualQaContext';
 import { useProgress } from '../../context/ProgressContext';
 import { MANUAL_QA_DAYS } from '../../data/manualQaCurriculum';
 import { QUESTION_BANK } from '../../data/manualQaQuestionBank';
+import { CourseEnrollmentGate } from '../../components/common/CourseEnrollmentGate';
+import { CourseEnrollmentModal } from '../../components/enrollment/CourseEnrollmentModal';
 
 interface Day1ScenarioRow {
   id: string;
@@ -41,8 +42,9 @@ export const ManualQaDayLessonPage: React.FC = () => {
   const { dayNumber: dayParam } = useParams<{ dayNumber: string }>();
   const dayNumber = parseInt(dayParam || '1', 10);
 
-  const { isCourseEnrolled, enrollInCourse } = useProgress();
+  const { isCourseEnrolled } = useProgress();
   const isEnrolled = isCourseEnrolled('manual-qa-fundamentals');
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
   const {
     state,
@@ -251,57 +253,23 @@ export const ManualQaDayLessonPage: React.FC = () => {
     );
   }
 
-  // Gate all days if user has not enrolled in the course
-  if (!isEnrolled) {
+  // Gate Days 2+ if user has not enrolled in the course (Day 1 is Free Preview)
+  if (!isEnrolled && dayNumber > 1) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
-        <Navbar />
-        <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex items-center justify-center">
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-sm text-center max-w-xl space-y-6">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-100 shadow-2xs">
-              <Lock className="w-7 h-7" />
-            </div>
-            <div className="space-y-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Course Enrollment Required</span>
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                Manual QA in 5 Days: Interview Preparation
-              </h1>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Free students can explore the course curriculum and syllabus. To access Day {dayNumber} interactive lessons, scenario design tables, Jira defect simulator, and verified certification, please enroll in this course.
-              </p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-left space-y-2 text-slate-700">
-              <div className="font-bold text-slate-900">What full course enrollment unlocks:</div>
-              <ul className="space-y-1.5 list-disc pl-4 text-slate-600">
-                <li>Complete 5-day daily lessons (Theory, Practical Scenarios, Interview Prep, Checkpoint Quizzes)</li>
-                <li>Interactive Jira defect simulator and deterministic rubric evaluations</li>
-                <li>Surprise Test 1 and Final Comprehensive Certification Assessment</li>
-                <li>RootAccess Official Manual QA Certificate of Completion with unique ID</li>
-              </ul>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <button
-                onClick={() => enrollInCourse('manual-qa-fundamentals')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Enroll in Course</span>
-              </button>
-              <Link
-                to="/courses/manual-qa-fundamentals"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-colors"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>View Full Curriculum</span>
-              </Link>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
+      <CourseEnrollmentGate
+        courseTitle="Manual QA in 5 Days: Interview Preparation"
+        courseSlug="manual-qa-fundamentals"
+        description={`Day 1 is open for free exploration. To access Day ${dayNumber} interactive lessons, practical scenarios, Jira defect simulator, and verified certification, please enroll.`}
+        bulletPoints={[
+          'Complete 5-day daily lessons (Theory, Practical Scenarios, Interview Prep, Checkpoint Quizzes)',
+          'Interactive Jira defect simulator and deterministic rubric evaluations',
+          'Surprise Test 1 and Final Comprehensive Certification Assessment',
+          'RootAccess Official Manual QA Certificate of Completion with unique ID',
+        ]}
+        backLink="/manual-qa"
+        backLinkText="Back to Course Roadmap"
+        accentColor="indigo"
+      />
     );
   }
 
@@ -1749,7 +1717,7 @@ export const ManualQaDayLessonPage: React.FC = () => {
             <div className="flex items-center gap-2 shrink-0">
               {!isEnrolled ? (
                 <button
-                  onClick={() => enrollInCourse('manual-qa-fundamentals')}
+                  onClick={() => setIsEnrollModalOpen(true)}
                   className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4" />
@@ -1775,6 +1743,13 @@ export const ManualQaDayLessonPage: React.FC = () => {
           </div>
         </div>
       </main>
+
+      <CourseEnrollmentModal
+        isOpen={isEnrollModalOpen}
+        onClose={() => setIsEnrollModalOpen(false)}
+        courseSlug="manual-qa-fundamentals"
+        courseTitle="Manual QA & Enterprise Testing"
+      />
 
       {/* 11. Simple RootAccess Footer */}
       <Footer />

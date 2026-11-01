@@ -52,9 +52,9 @@ describe('Playwright Automation with JavaScript — Day 3 Implementation', () =>
   it('renders Enrollment Gate when student is not enrolled in the course', () => {
     renderPlaywrightDay3Page(false);
 
-    expect(screen.getByText(/Enrollment Required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Enrollment & Payment Required|Enrollment Required/i)).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: /Playwright Automation (Testing with JavaScript|with JavaScript \+ AI)/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Enroll in Course for Free|Create Account to Enroll/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
   });
 
   it('renders Day 3 metadata, pure JavaScript badge, breadcrumbs, and real PDF download button', () => {

@@ -29,3 +29,10 @@ dist-ssr
 .env.production
 .env.staging
 !.env.example
+
+# Playwright Test Artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.auth/

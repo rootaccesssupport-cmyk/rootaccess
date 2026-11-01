@@ -34,18 +34,12 @@ describe('LessonViewerPage Component (Phase 4)', () => {
     );
   };
 
-  it('renders Course Enrollment Required gate when unenrolled and unlocks upon enrolling', () => {
-    renderLesson('manual-qa-fundamentals', 'stlc-fundamentals', false);
+  it('renders Course Enrollment Required gate for later lessons when unenrolled', () => {
+    renderLesson('manual-qa-fundamentals', 'test-case-design-bva-ep', false);
 
-    expect(screen.getByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /view full curriculum/i })).toBeInTheDocument();
-
-    // Click enroll
-    fireEvent.click(screen.getByRole('button', { name: /enroll in course/i }));
-    expect(
-      screen.getByText('Software Testing Life Cycle (STLC) & Modern QA Workflows')
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Enrollment & Payment Required/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Back to Course Syllabus/i })).toBeInTheDocument();
   });
 
   it('renders lesson title, content sections, takeaways, and practical checklist when enrolled', () => {
