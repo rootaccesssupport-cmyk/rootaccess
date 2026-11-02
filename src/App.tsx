@@ -53,6 +53,7 @@ import { DevOpsDay3LessonPage } from './pages/devops/DevOpsDay3LessonPage';
 import { SqlDayLessonPage } from './pages/sql/SqlDayLessonPage';
 import { ApiDayLessonPage } from './pages/api/ApiDayLessonPage';
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
+import { AdminInstagramCreatorPage } from './pages/admin/AdminInstagramCreatorPage';
 import { CareersPage } from './pages/CareersPage';
 
 import { ScrollToTop } from './components/common/ScrollToTop';
@@ -120,6 +121,16 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <AdminEnrollmentPortalPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Protected Route: Admin Instagram Creator */}
+            <Route
+              path="/admin/instagram-creator"
+              element={
+                <ProtectedRoute>
+                  <AdminInstagramCreatorPage />
                 </ProtectedRoute>
               }
             />

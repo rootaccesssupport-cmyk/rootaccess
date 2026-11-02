@@ -18,6 +18,7 @@ import {
   BookOpen,
   ShieldCheck,
   Briefcase,
+  Camera,
 } from 'lucide-react';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 
@@ -251,14 +252,24 @@ export const Navbar: React.FC = () => {
             {user ? (
               <div className="flex items-center gap-2">
                 {(ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user.email) || profile?.role === 'admin') && (
-                  <Link
-                    to="/admin/enrollments"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-400 hover:bg-amber-300 transition-colors shadow-2xs"
-                    title="Admin Enrollment & Payment Approvals"
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Admin</span>
-                  </Link>
+                  <div className="flex items-center gap-1.5">
+                    <Link
+                      to="/admin/enrollments"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-400 hover:bg-amber-300 transition-colors shadow-2xs"
+                      title="Admin Enrollment & Payment Approvals"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <span>Approvals</span>
+                    </Link>
+                    <Link
+                      to="/admin/instagram-creator"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 transition-colors shadow-2xs"
+                      title="Instagram Creator & Content Engine"
+                    >
+                      <Camera className="w-3.5 h-3.5 text-rose-200" />
+                      <span>Instagram Creator</span>
+                    </Link>
+                  </div>
                 )}
 
                 {/* Student Profile Chip */}
@@ -404,6 +415,32 @@ export const Navbar: React.FC = () => {
                   })
                 )}
               </div>
+
+              {(ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user.email) || profile?.role === 'admin') && (
+                <div className="p-2.5 bg-rose-50/60 rounded-2xl border border-rose-100 space-y-1.5">
+                  <div className="text-[10px] font-bold text-rose-800 uppercase tracking-wider px-1">
+                    Admin Tools
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      to="/admin/enrollments"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2 p-2 rounded-xl text-xs font-bold text-amber-950 bg-amber-200 hover:bg-amber-300 transition-colors"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5 text-amber-800" />
+                      <span>Approvals</span>
+                    </Link>
+                    <Link
+                      to="/admin/instagram-creator"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2 p-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 transition-colors"
+                    >
+                      <Camera className="w-3.5 h-3.5 text-rose-200" />
+                      <span>Instagram</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
 
               <div className="pt-2 border-t border-slate-100">
                 <button
