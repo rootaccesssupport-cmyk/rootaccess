@@ -285,4 +285,36 @@ describe('RootAccess Instagram Creator — Unit & Integration Tests', () => {
       expect(updatedSettings.isConfigured).toBe(true);
     });
   });
+
+  describe('8. Instagram Image Generator & Visual Post Engine', () => {
+    it('automatically generates an InstagramImagePostPackage on draft creation', () => {
+      const topic = INSTAGRAM_TOPIC_BANK[0];
+      const draft = instagramCreatorService.createDraftFromTemplate(topic);
+
+      expect(draft.imagePost).toBeDefined();
+      expect(draft.imagePost?.headline).toBe(topic.topicTitle);
+      expect(draft.imagePost?.categoryTag).toBe(topic.category);
+      expect(['code_terminal', 'mistake_vs_fix', 'cheat_sheet', 'interview_quiz', 'bold_hook']).toContain(
+        draft.imagePost?.templateStyle
+      );
+      expect(['1:1', '4:5', '9:16']).toContain(draft.imagePost?.aspectRatio);
+      expect(['rootaccess_dark', 'obsidian', 'cyber_terminal', 'clean_light']).toContain(
+        draft.imagePost?.theme
+      );
+      expect(draft.imagePost?.callToAction).toContain('RootAccess');
+      expect(draft.imagePost?.aiImagePrompt).toContain('studio');
+      expect(draft.imagePost?.bulletPoints?.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('cycles through template styles when regenerating image section', () => {
+      const topic = INSTAGRAM_TOPIC_BANK[0];
+      const draft = instagramCreatorService.createDraftFromTemplate(topic);
+      const initialStyle = draft.imagePost?.templateStyle;
+
+      const regenerated = instagramCreatorService.regenerateSection(draft, 'image');
+      expect(regenerated.imagePost?.templateStyle).not.toBe(initialStyle);
+      expect(regenerated.topicTitle).toBe(draft.topicTitle); // Preserves rest of draft
+      expect(regenerated.reel.hook).toBe(draft.reel.hook); // Preserves reel hook
+    });
+  });
 });

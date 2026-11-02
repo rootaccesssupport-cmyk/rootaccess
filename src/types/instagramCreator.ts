@@ -64,6 +64,35 @@ export interface TechnicalResearchMetadata {
   isEvergreen: boolean;
 }
 
+export type ImageTemplateStyle =
+  | 'code_terminal'
+  | 'mistake_vs_fix'
+  | 'cheat_sheet'
+  | 'interview_quiz'
+  | 'bold_hook';
+
+export type ImageAspectRatio = '1:1' | '4:5' | '9:16';
+
+export type ImageTheme = 'rootaccess_dark' | 'obsidian' | 'cyber_terminal' | 'clean_light';
+
+export interface InstagramImagePostPackage {
+  headline: string;
+  subtitle: string;
+  categoryTag: string;
+  templateStyle: ImageTemplateStyle;
+  aspectRatio: ImageAspectRatio;
+  theme: ImageTheme;
+  codeSnippet?: string;
+  badSnippet?: string;
+  goodSnippet?: string;
+  bulletPoints?: string[];
+  explanation?: string;
+  quizQuestion?: string;
+  quizOptions?: { label: string; text: string; isCorrect?: boolean }[];
+  callToAction: string;
+  aiImagePrompt?: string;
+}
+
 export interface InstagramPostDraft {
   id: string;
   topicTitle: string;
@@ -79,6 +108,7 @@ export interface InstagramPostDraft {
   postUrl?: string; // e.g. https://instagram.com/p/...
 
   // Complete Content Package
+  imagePost?: InstagramImagePostPackage;
   reel: InstagramReelPackage;
   carousel: InstagramCarouselPackage;
   caption: InstagramCaptionPackage;

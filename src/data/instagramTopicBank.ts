@@ -1,5 +1,6 @@
 import {
   InstagramCategory,
+  InstagramImagePostPackage,
 } from '../types/instagramCreator';
 
 export interface PreCuratedTopicTemplate {
@@ -12,6 +13,8 @@ export interface PreCuratedTopicTemplate {
   whyUseful: string;
   recommendedFormat: 'Reel' | 'Carousel' | 'Single-image post' | 'Story';
   relevantCourseSlug?: string;
+
+  imagePost?: InstagramImagePostPackage;
 
   reel: {
     hook: string;

@@ -2,6 +2,8 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import {
   InstagramCategory,
   InstagramPostDraft,
+  InstagramImagePostPackage,
+  ImageTemplateStyle,
   PlannerDay,
   PostStatus,
   SevenDayPlan,
@@ -14,10 +16,89 @@ import {
 const LOCAL_STORAGE_KEY = 'rootaccess_instagram_drafts_v1';
 const LOCAL_STORAGE_PLANS_KEY = 'rootaccess_instagram_7day_plans_v1';
 
+export function buildDefaultImagePost(template: {
+  topicTitle: string;
+  category: InstagramCategory;
+  learningObjective: string;
+  whyUseful: string;
+  reel?: { codeSnippet?: string };
+  carousel?: { slides?: { codeSnippet?: string }[] };
+  research?: { verifiedFacts?: string[] };
+  imagePost?: InstagramImagePostPackage;
+}): InstagramImagePostPackage {
+  if (template.imagePost) {
+    return { ...template.imagePost };
+  }
+
+  let templateStyle: ImageTemplateStyle = 'code_terminal';
+  if (template.category.includes('mistakes')) {
+    templateStyle = 'mistake_vs_fix';
+  } else if (template.category.includes('interview')) {
+    templateStyle = 'interview_quiz';
+  } else if (template.category.includes('Manual Testing') || template.category.includes('best practices')) {
+    templateStyle = 'cheat_sheet';
+  } else if (!template.reel?.codeSnippet) {
+    templateStyle = 'bold_hook';
+  }
+
+  const codeSnippet =
+    template.reel?.codeSnippet ||
+    template.carousel?.slides?.find((s) => s.codeSnippet)?.codeSnippet ||
+    '';
+
+  const facts = template.research?.verifiedFacts || [];
+  const bulletPoints =
+    facts.length > 0
+      ? facts.slice(0, 3)
+      : [
+          'Verify core edge cases before shipping to staging',
+          'Avoid silent regressions and assertion false-positives',
+          'Practice hands-on test engineering on RootAccess',
+        ];
+
+  return {
+    headline: template.topicTitle,
+    subtitle: template.learningObjective,
+    categoryTag: template.category,
+    templateStyle,
+    aspectRatio: '1:1',
+    theme: 'rootaccess_dark',
+    codeSnippet,
+    badSnippet:
+      templateStyle === 'mistake_vs_fix'
+        ? '// ❌ Common Pitfall\nSELECT * FROM orders WHERE status = NULL;'
+        : undefined,
+    goodSnippet:
+      templateStyle === 'mistake_vs_fix'
+        ? '// ✅ RootAccess Best Practice\nSELECT * FROM orders WHERE status IS NULL;'
+        : undefined,
+    bulletPoints,
+    explanation: template.whyUseful,
+    quizQuestion: template.category.includes('interview') ? template.topicTitle : undefined,
+    quizOptions: template.category.includes('interview')
+      ? [
+          { label: 'A', text: 'Option A: Ignores null checks' },
+          { label: 'B', text: 'Option B: Correct verified solution', isCorrect: true },
+          { label: 'C', text: 'Option C: Timeout failure on CI' },
+          { label: 'D', text: 'Option D: Deprecated API call' },
+        ]
+      : undefined,
+    callToAction: 'Follow @RootAccess.tech • Learn by Doing',
+    aiImagePrompt: `Ultra-clean minimalist tech background, obsidian black metallic textures, subtle crimson neon laser accent line (#e11d48), dark glass-morphism terminal card, sharp typography focus, cinematic rim lighting, 8k resolution studio product photography, clean and approachable.`,
+  };
+}
+
 function getLocalDrafts(): InstagramPostDraft[] {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const parsed: InstagramPostDraft[] = JSON.parse(raw);
+    return parsed.map((d) => {
+      if (!d.imagePost) {
+        d.imagePost = buildDefaultImagePost(d);
+      }
+      return d;
+    });
   } catch {
     return [];
   }
@@ -323,6 +404,7 @@ export const instagramCreatorService = {
       recommendedFormat: template.recommendedFormat,
       status: 'draft',
       plannedDate: plannedDate || now.split('T')[0],
+      imagePost: buildDefaultImagePost(template),
       reel: { ...template.reel },
       carousel: { ...template.carousel },
       caption: { ...template.caption },
@@ -339,7 +421,7 @@ export const instagramCreatorService = {
    */
   regenerateSection(
     draft: InstagramPostDraft,
-    section: 'hook' | 'script' | 'carousel' | 'caption' | 'engagement'
+    section: 'hook' | 'script' | 'carousel' | 'caption' | 'engagement' | 'image'
   ): InstagramPostDraft {
     const updated: InstagramPostDraft = JSON.parse(JSON.stringify(draft));
 
@@ -373,6 +455,21 @@ export const instagramCreatorService = {
         'What is your #1 rule of thumb when testing this scenario? Share below! 🚀',
       ];
       updated.caption.engagementQuestion = questions[Math.floor(Math.random() * questions.length)];
+    } else if (section === 'image') {
+      const current = updated.imagePost || buildDefaultImagePost(updated);
+      const styles: ImageTemplateStyle[] = [
+        'code_terminal',
+        'mistake_vs_fix',
+        'cheat_sheet',
+        'interview_quiz',
+        'bold_hook',
+      ];
+      const currentIndex = styles.indexOf(current.templateStyle);
+      const nextStyle = styles[(currentIndex + 1) % styles.length];
+      updated.imagePost = {
+        ...current,
+        templateStyle: nextStyle,
+      };
     }
 
     updated.updatedAt = new Date().toISOString();

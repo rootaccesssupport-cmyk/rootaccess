@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Video,
+  Image as ImageIcon,
   Layers,
   FileText,
   ShieldCheck,
@@ -19,6 +19,7 @@ import {
   InstagramPostDraft,
   PostStatus,
 } from '../../../types/instagramCreator';
+import { InstagramImageGenerator } from './InstagramImageGenerator';
 
 interface ContentPackageViewerProps {
   draft: InstagramPostDraft;
@@ -27,7 +28,7 @@ interface ContentPackageViewerProps {
   onDuplicateDraft?: (id: string) => Promise<void>;
   onRegenerateSection: (
     draft: InstagramPostDraft,
-    section: 'hook' | 'script' | 'carousel' | 'caption' | 'engagement'
+    section: 'image' | 'hook' | 'script' | 'carousel' | 'caption' | 'engagement'
   ) => void;
 }
 
@@ -38,7 +39,7 @@ export const ContentPackageViewer: React.FC<ContentPackageViewerProps> = ({
   onDuplicateDraft,
   onRegenerateSection,
 }) => {
-  const [activeTab, setActiveTab] = useState<'reel' | 'carousel' | 'caption' | 'research' | 'settings'>('reel');
+  const [activeTab, setActiveTab] = useState<'image' | 'carousel' | 'caption' | 'research' | 'settings'>('image');
   const [copiedItem, setCopiedItem] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveFeedback, setSaveFeedback] = useState<string | null>(null);
@@ -80,31 +81,31 @@ Difficulty: ${draft.difficultyLevel}
 Learning Objective: ${draft.learningObjective}
 
 ----------------------------------------
-1. INSTAGRAM REEL SCRIPT & DIRECTIONS
+1. POST IMAGE GENERATOR SPECIFICATIONS
 ----------------------------------------
-Hook:
-${draft.reel.hook}
+Headline:
+${draft.imagePost?.headline || draft.topicTitle}
 
-Cover Title:
-${draft.reel.coverTitle}
+Subtitle / Learning Objective:
+${draft.imagePost?.subtitle || draft.learningObjective}
 
-Spoken Script (${draft.reel.durationSeconds}s):
-${draft.reel.script}
+Card Template:
+${draft.imagePost?.templateStyle || 'code_terminal'}
 
-Visual Directions:
-${draft.reel.visualDirections}
+Aspect Ratio:
+${draft.imagePost?.aspectRatio || '1:1'}
 
-On-Screen Text:
-${draft.reel.onScreenText}
+Theme:
+${draft.imagePost?.theme || 'rootaccess_dark'}
 
-Code Snippet:
-${draft.reel.codeSnippet || 'N/A'}
+Code Snippet / Core Takeaway:
+${draft.imagePost?.codeSnippet || draft.reel.codeSnippet || 'N/A'}
 
-Transitions:
-${draft.reel.transitions}
+AI Background Prompt:
+${draft.imagePost?.aiImagePrompt || 'N/A'}
 
-Closing CTA:
-${draft.reel.closingCta}
+Call to Action:
+${draft.imagePost?.callToAction || 'Follow @RootAccess.tech • Learn by Doing'}
 
 ----------------------------------------
 2. CAROUSEL SLIDES
@@ -224,15 +225,15 @@ ${draft.research.officialDocSources.map((s) => `• ${s.title}: ${s.url} (Checke
       {/* Tabs Navigation */}
       <div className="flex items-center gap-1 p-2 bg-slate-950/60 border-b border-slate-800 overflow-x-auto text-xs font-semibold">
         <button
-          onClick={() => setActiveTab('reel')}
+          onClick={() => setActiveTab('image')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all whitespace-nowrap cursor-pointer ${
-            activeTab === 'reel'
+            activeTab === 'image'
               ? 'bg-rose-600 text-white shadow-sm font-bold'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <Video className="w-3.5 h-3.5" />
-          <span>Instagram Reel</span>
+          <ImageIcon className="w-3.5 h-3.5" />
+          <span>Post Image Generator</span>
         </button>
 
         <button
@@ -284,184 +285,14 @@ ${draft.research.officialDocSources.map((s) => `• ${s.title}: ${s.url} (Checke
         </button>
       </div>
 
-      {/* TAB 1: INSTAGRAM REEL */}
-      {activeTab === 'reel' && (
-        <div className="p-6 space-y-6">
-          {/* Reel Top Bar with Copy Button */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-950/80 rounded-2xl border border-slate-800">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">
-                Reel Format Guide
-              </span>
-              <span className="text-slate-600">•</span>
-              <span className="text-xs text-slate-300">
-                Target Duration: <strong>{draft.reel.durationSeconds} seconds</strong> (Optimal 20–40s)
-              </span>
-            </div>
-
-            <button
-              onClick={() => copyToClipboard(draft.reel.script, 'reel_script')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer"
-            >
-              {copiedItem === 'reel_script' ? (
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-              ) : (
-                <Copy className="w-3.5 h-3.5 text-slate-400" />
-              )}
-              <span>{copiedItem === 'reel_script' ? 'Copied Script!' : 'Copy Script'}</span>
-            </button>
-          </div>
-
-          {/* Section 1: Opening Hook */}
-          <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-rose-500" />
-                <span>1. Opening Hook (First 1–3 Seconds)</span>
-              </div>
-              <button
-                onClick={() => onRegenerateSection(draft, 'hook')}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
-              >
-                <RefreshCw className="w-3 h-3" />
-                <span>Regenerate Hook</span>
-              </button>
-            </div>
-
-            <textarea
-              value={draft.reel.hook}
-              onChange={(e) =>
-                onUpdateDraft({
-                  ...draft,
-                  reel: { ...draft.reel, hook: e.target.value },
-                })
-              }
-              rows={2}
-              className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-sm font-semibold text-white focus:outline-none focus:border-rose-500 transition-colors"
-            />
-            <p className="text-[11px] text-slate-400 italic">
-              Hook Rationale: {draft.reel.hookRationale}
-            </p>
-          </div>
-
-          {/* Section 2: Spoken Script */}
-          <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                <span>2. Complete Spoken Script (Timestamped)</span>
-              </div>
-              <button
-                onClick={() => onRegenerateSection(draft, 'script')}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
-              >
-                <RefreshCw className="w-3 h-3" />
-                <span>Regenerate Script</span>
-              </button>
-            </div>
-
-            <textarea
-              value={draft.reel.script}
-              onChange={(e) =>
-                onUpdateDraft({
-                  ...draft,
-                  reel: { ...draft.reel, script: e.target.value },
-                })
-              }
-              rows={6}
-              className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs sm:text-sm font-mono text-slate-200 focus:outline-none focus:border-rose-500 transition-colors leading-relaxed"
-            />
-          </div>
-
-          {/* Section 3: Visual & Camera Directions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 space-y-3">
-              <div className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>Scene-by-Scene Visual Directions</span>
-              </div>
-              <textarea
-                value={draft.reel.visualDirections}
-                onChange={(e) =>
-                  onUpdateDraft({
-                    ...draft,
-                    reel: { ...draft.reel, visualDirections: e.target.value },
-                  })
-                }
-                rows={5}
-                className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-rose-500 transition-colors leading-relaxed"
-              />
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 space-y-3">
-              <div className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
-                <span>On-Screen Text Overlays &amp; Transitions</span>
-              </div>
-              <textarea
-                value={draft.reel.onScreenText}
-                onChange={(e) =>
-                  onUpdateDraft({
-                    ...draft,
-                    reel: { ...draft.reel, onScreenText: e.target.value },
-                  })
-                }
-                rows={2}
-                placeholder="Text overlays appearing during video..."
-                className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-rose-500 transition-colors"
-              />
-              <div className="pt-2 text-[11px] text-slate-400">
-                <span className="font-semibold text-slate-300">Transitions:</span>{' '}
-                {draft.reel.transitions}
-              </div>
-              <div className="text-[11px] text-slate-400">
-                <span className="font-semibold text-slate-300">Cover Title:</span>{' '}
-                {draft.reel.coverTitle}
-              </div>
-            </div>
-          </div>
-
-          {/* Section 4: Code Snippet (if applicable) */}
-          {draft.reel.codeSnippet && (
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span>Technical Code Example</span>
-                </div>
-                <button
-                  onClick={() => copyToClipboard(draft.reel.codeSnippet || '', 'code_snippet')}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer"
-                >
-                  <Copy className="w-3 h-3" />
-                  <span>{copiedItem === 'code_snippet' ? 'Copied Code!' : 'Copy Code'}</span>
-                </button>
-              </div>
-
-              <textarea
-                value={draft.reel.codeSnippet}
-                onChange={(e) =>
-                  onUpdateDraft({
-                    ...draft,
-                    reel: { ...draft.reel, codeSnippet: e.target.value },
-                  })
-                }
-                rows={5}
-                className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs font-mono text-emerald-300 focus:outline-none focus:border-rose-500 transition-colors"
-              />
-            </div>
-          )}
-
-          {/* Closing Brand CTA */}
-          <div className="p-4 bg-slate-950 rounded-2xl border border-rose-500/20 flex items-center justify-between gap-4">
-            <div className="text-xs text-slate-300">
-              <span className="font-bold text-rose-400">RootAccess Closing CTA:</span>{' '}
-              {draft.reel.closingCta}
-            </div>
-            <span className="px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-rose-500/10 text-rose-400 border border-rose-500/30 shrink-0">
-              Learn by Doing
-            </span>
-          </div>
+      {/* TAB 1: POST IMAGE GENERATOR */}
+      {activeTab === 'image' && (
+        <div className="p-6">
+          <InstagramImageGenerator
+            draft={draft}
+            onUpdateDraft={onUpdateDraft}
+            onRegenerateSection={onRegenerateSection}
+          />
         </div>
       )}
 

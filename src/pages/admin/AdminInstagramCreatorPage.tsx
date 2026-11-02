@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Camera,
   Sparkles,
   Calendar,
   Layers,
-  Video,
+  Image as ImageIcon,
   Search,
   Clock,
   ShieldCheck,
@@ -253,7 +252,7 @@ export const AdminInstagramCreatorPage: React.FC = () => {
   // Section-level regeneration
   const handleRegenerateSection = (
     draft: InstagramPostDraft,
-    section: 'hook' | 'script' | 'carousel' | 'caption' | 'engagement'
+    section: 'image' | 'hook' | 'script' | 'carousel' | 'caption' | 'engagement'
   ) => {
     const updated = instagramCreatorService.regenerateSection(draft, section);
     setActiveDraft(updated);
@@ -298,16 +297,16 @@ export const AdminInstagramCreatorPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-900">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 text-xs font-bold mb-2 border border-rose-500/20">
-              <Camera className="w-3.5 h-3.5" />
-              <span>Instagram Creator Hub</span>
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>Instagram Image Creator</span>
               <span className="text-slate-600">•</span>
               <span className="text-slate-300">RootAccess — Learn by Doing</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Technical Content &amp; Instagram Growth Engine
+              Post Image Generator &amp; Growth Engine
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
-              Generate 100% verified, beginner-friendly Instagram Reels, Carousels, Captions &amp; Hooks grounded in RootAccess's actual engineering courses.
+              Generate 100% verified, beginner-friendly Instagram Post Images, Code Terminal Cards, Carousels &amp; Captions grounded in RootAccess's actual engineering courses.
             </p>
           </div>
 
@@ -619,12 +618,12 @@ export const AdminInstagramCreatorPage: React.FC = () => {
                           </span>
 
                           <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                            {d.recommendedFormat === 'Reel' ? (
-                              <Video className="w-3 h-3 text-rose-400" />
+                            {d.recommendedFormat === 'Reel' || d.recommendedFormat === 'Single-image post' ? (
+                              <ImageIcon className="w-3 h-3 text-rose-400" />
                             ) : (
                               <Layers className="w-3 h-3 text-indigo-400" />
                             )}
-                            <span>{d.recommendedFormat}</span>
+                            <span>{d.recommendedFormat === 'Reel' ? 'Image Post' : d.recommendedFormat}</span>
                           </span>
                         </div>
 

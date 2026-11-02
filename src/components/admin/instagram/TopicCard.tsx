@@ -6,7 +6,7 @@ import {
   Layers,
   BookOpen,
   Target,
-  Video,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { PreCuratedTopicTemplate } from '../../../data/instagramTopicBank';
 
@@ -59,12 +59,12 @@ export const TopicCard: React.FC<TopicCardProps> = ({
             </span>
 
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
-              {topic.recommendedFormat === 'Reel' ? (
-                <Video className="w-3 h-3 text-rose-400" />
+              {topic.recommendedFormat === 'Reel' || topic.recommendedFormat === 'Single-image post' ? (
+                <ImageIcon className="w-3 h-3 text-rose-400" />
               ) : (
                 <Layers className="w-3 h-3 text-indigo-400" />
               )}
-              <span>{topic.recommendedFormat}</span>
+              <span>{topic.recommendedFormat === 'Reel' ? 'Image Post' : topic.recommendedFormat}</span>
             </span>
 
             <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-400">
@@ -108,7 +108,7 @@ export const TopicCard: React.FC<TopicCardProps> = ({
             onClick={onGenerate}
             disabled={isGenerating}
             className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-sm font-bold text-white transition-all shadow-lg shadow-rose-600/30 cursor-pointer disabled:opacity-60"
-            title="Generate complete Reel, Carousel, Caption & Research package"
+            title="Generate complete Image Post, Carousel, Caption & Research package"
           >
             {isGenerating ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
