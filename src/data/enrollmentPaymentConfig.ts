@@ -17,7 +17,7 @@ export const ENROLLMENT_PAYMENT_CONFIG = {
   adminEmail: 'pavankalyan.d@gmail.com',
   whatsappNumber: '+919741243048',
   whatsappNumberRaw: '919741243048',
-  supportEmail: 'pavankalyan.d@gmail.com',
+  supportEmail: 'rootaccess.support@gmail.com',
 
   // Standard course pricing (INR)
   pricing: {

@@ -37,7 +37,7 @@ export const HomePage: React.FC = () => {
       title: 'Automation Testing Foundations',
       courseName: 'Playwright Automation with JavaScript + AI',
       tag: 'Code & Automation',
-      badge: '20-Day Course • Days 1–4 Live Now',
+      badge: '20-Day Masterclass • Live Now',
       icon: <Code2 className="w-5 h-5 text-purple-600" />,
       description: 'Master browser automation from scratch with pure JavaScript and AI tools. Zero TypeScript overhead. DevTools architecture, robust locators, and Page Object Model frameworks.',
       skills: ['Playwright Test Runner', 'Locators & Auto-Waiting', 'Web-First Assertions', 'AI Locator Selection', 'Page Object Model', 'CI/CD & Headless'],
@@ -105,8 +105,8 @@ export const HomePage: React.FC = () => {
       answer: 'RootAccess is built for everyone in tech! Whether you are an aspiring software tester, QA engineer, test automation developer, student, or career switcher, our platform covers core practical engineering: browser test automation with JavaScript & AI, manual testing fundamentals, database querying with SQL, API testing with Postman, and workplace defect workflows.',
     },
     {
-      question: 'What is the Early Access / Partial Launch model?',
-      answer: 'RootAccess is launching in structured, production-tested milestones. Implemented days (such as Playwright Automation and Manual QA Days 1–5) are 100% interactive, fully playable, and available to enrolled accounts today. As subsequent modules are finalized and tested, they unlock automatically on your student dashboard.',
+      question: 'How are the courses structured?',
+      answer: 'RootAccess courses are structured into daily hands-on modules. Every day includes practical concepts, interactive coding or simulation labs, checkpoint quizzes, real interview questions, and graded assignments that build verifiable skills step-by-step.',
     },
     {
       question: 'How does course enrollment work?',

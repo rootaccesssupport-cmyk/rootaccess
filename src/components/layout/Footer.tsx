@@ -22,7 +22,7 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
               <Mail className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Enrollment & Support: <span className="text-slate-200 font-mono">support@rootaccess.org</span></span>
+              <span>Enrollment &amp; Support: <a href="mailto:rootaccess.support@gmail.com" className="text-slate-200 font-mono hover:text-white transition-colors">rootaccess.support@gmail.com</a></span>
             </div>
           </div>
 
@@ -34,29 +34,28 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2 text-xs">
               <li>
                 <Link to="/courses/playwright-automation" className="hover:text-white transition-colors text-purple-400 font-medium">
-                  Playwright JS Automation
+                  Playwright Automation (JS + AI)
                 </Link>
               </li>
               <li>
-                <Link to="/courses/manual-qa" className="hover:text-white transition-colors">
-                  Manual QA &amp; Test Design
+                <Link to="/courses/manual-qa-fundamentals" className="hover:text-white transition-colors">
+                  Manual QA in 5 Days
                 </Link>
               </li>
               <li>
-                <a href="#tracks" className="hover:text-white transition-colors">
-                  SQL for Data &amp; Engineering
-                </a>
+                <Link to="/courses/sql-for-qa-engineers" className="hover:text-white transition-colors">
+                  SQL &amp; Database Audits
+                </Link>
               </li>
               <li>
-                <a href="#tracks" className="hover:text-white transition-colors">
-                  API Engineering with Postman
-                </a>
+                <Link to="/courses/api-testing-postman" className="hover:text-white transition-colors">
+                  API Testing with Postman
+                </Link>
               </li>
               <li>
-                <span className="inline-flex items-center gap-1.5 text-slate-400">
-                  <span>Cloud Architecture</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-indigo-400 font-mono">Upcoming</span>
-                </span>
+                <Link to="/courses/qa-interview-mastery" className="hover:text-white transition-colors">
+                  QA Technical Interview Prep
+                </Link>
               </li>
             </ul>
           </div>
@@ -105,7 +104,7 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5 text-slate-400">
               <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Phase 2: Homepage Ready</span>
+              <span>Practical QA &amp; Test Engineering</span>
             </span>
           </div>
         </div>
