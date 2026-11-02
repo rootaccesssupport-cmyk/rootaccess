@@ -108,7 +108,7 @@ describe('RootAccess — AI Fundamentals & Prompt Engineering Track', () => {
       // Ratings check
       const ratings = COURSE_RATINGS_DATA['ai-prompt-engineering'];
       expect(ratings).toBeDefined();
-      expect(ratings.reviews).toHaveLength(20);
+      expect(ratings.reviews).toHaveLength(33);
       const allRatingsAbove3 = ratings.reviews.every((r) => r.rating >= 3);
       expect(allRatingsAbove3).toBe(true);
       expect(ratings.averageRating).toBeGreaterThanOrEqual(4.2);

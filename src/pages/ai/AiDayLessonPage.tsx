@@ -25,6 +25,7 @@ import {
   AiDayData,
 } from '../../data/aiPromptCurriculumData';
 import { PromptPlayground } from '../../components/ai/PromptPlayground';
+import { FormattedContent } from '../../components/ai/FormattedContent';
 
 export const AiDayLessonPage: React.FC = () => {
   const { dayNumber: dayParam } = useParams<{ dayNumber?: string }>();
@@ -66,7 +67,7 @@ export const AiDayLessonPage: React.FC = () => {
     improvedPrompt:
       'ROLE: Principal QA Architect\nTASK: Transform raw user bug reports into a structured Jira ticket and executive status alert.\nCONTEXT: E-commerce checkout OTP failure during Diwali flash sale.\nCONSTRAINTS: Under 250 words, non-defensive tone, zero customer PII.\nOUTPUT FORMAT: Markdown table with Jira fields followed by a 3-bullet executive summary.\nSUCCESS CRITERIA: Clear root-cause hypothesis and immediate remediation timeline.',
     sampleOutput:
-      '### Jira Ticket Specification\n| Field | Value |\n| :--- | :--- |\n| Issue Type | Incident - Blocker |\n| Component | Checkout & Payment Gateway |\n| Severity | Critical (Revenue Impacting) |\n\n### Executive Summary\n• **Incident:** 35-minute checkout timeout impacting 120 orders; SSL cert renewed.\n• **Financial Safety:** 0 duplicate charges; all customer payment data intact.\n• **Action:** Priority recovery discount code issued to affected patrons.',
+      'Jira Ticket Specification:\n| Field | Value |\n| :--- | :--- |\n| Issue Type | Incident - Blocker |\n| Component | Checkout & Payment Gateway |\n| Severity | Critical (Revenue Impacting) |\n\nExecutive Summary:\n• Incident: 35-minute checkout timeout impacting 120 orders; SSL cert renewed.\n• Financial Safety: 0 duplicate charges; all customer payment data intact.\n• Action: Priority recovery discount code issued to affected patrons.',
     improvementNotes:
       'Applied the 6-Part Framework. Added explicit constraints forbidding customer PII exposure. Imposed a tabular Jira format followed by an executive briefing for non-technical leadership.',
     verificationChecklist:
@@ -428,9 +429,7 @@ export const AiDayLessonPage: React.FC = () => {
                     </div>
 
                     {/* Deep Explanation */}
-                    <div className="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-3 whitespace-pre-line">
-                      {topic.explanation}
-                    </div>
+                    <FormattedContent content={topic.explanation} />
 
                     {/* Real-World Analogy */}
                     <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
@@ -479,8 +478,8 @@ export const AiDayLessonPage: React.FC = () => {
                         <span className="text-[11px] font-bold text-slate-700">
                           Resulting High-Quality Output:
                         </span>
-                        <div className="p-3 bg-white border border-purple-200 rounded-lg text-xs text-slate-800 leading-relaxed whitespace-pre-wrap font-sans">
-                          {topic.workedExample.afterOutput}
+                        <div className="p-3 bg-white border border-purple-200 rounded-lg text-xs text-slate-800 leading-relaxed font-sans">
+                          <FormattedContent content={topic.workedExample.afterOutput} />
                         </div>
                       </div>
 
@@ -715,8 +714,8 @@ export const AiDayLessonPage: React.FC = () => {
                       <span className="text-[11px] font-bold text-purple-700 uppercase tracking-wider">
                         Model Output:
                       </span>
-                      <div className="p-4 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap font-sans">
-                        {scenario.modelOutput}
+                      <div className="p-4 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 leading-relaxed font-sans">
+                        <FormattedContent content={scenario.modelOutput} />
                       </div>
                     </div>
 

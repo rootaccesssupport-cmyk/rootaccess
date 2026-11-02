@@ -13,24 +13,35 @@ describe('RootAccess Course Ratings & Interview Course Removal', () => {
     'manual-qa-fundamentals',
     'sql-for-qa-engineers',
     'api-testing-postman',
+    'ai-prompt-engineering',
   ];
 
-  describe('1. 20 Member Ratings per Course', () => {
-    it('ensures each active course has dummy ratings from exactly 20 members', () => {
+  const expectedCounts: Record<string, number> = {
+    'playwright-automation': 20,
+    'manual-qa-fundamentals': 20,
+    'sql-for-qa-engineers': 14,
+    'api-testing-postman': 12,
+    'ai-prompt-engineering': 33,
+  };
+
+  describe('1. Varied Member Ratings per Course (20/12/14/33 etc.)', () => {
+    it('ensures each active course has dummy ratings from varied members (20, 14, 12, 33)', () => {
       activeCourseSlugs.forEach((slug) => {
         const summary = getCourseRatingSummary(slug);
-        expect(summary.totalRatings, `Course ${slug} should have 20 ratings`).toBe(20);
-        expect(summary.reviews.length, `Course ${slug} reviews array should have 20 items`).toBe(20);
+        const expected = expectedCounts[slug];
+        expect(summary.totalRatings, `Course ${slug} should have ${expected} ratings`).toBe(expected);
+        expect(summary.reviews.length, `Course ${slug} reviews array should have ${expected} items`).toBe(expected);
       });
     });
   });
 
-  describe('2. Average Rating of 4.2 / 4.4 / 4.5', () => {
-    it('ensures course average ratings match the requested 4.2 to 4.5 range', () => {
+  describe('2. Average Rating of 4.2 / 4.4 / 4.5 / 4.6', () => {
+    it('ensures course average ratings match the requested 4.2 to 4.6 range', () => {
       const playwright = getCourseRatingSummary('playwright-automation');
       const manual = getCourseRatingSummary('manual-qa-fundamentals');
       const sql = getCourseRatingSummary('sql-for-qa-engineers');
       const api = getCourseRatingSummary('api-testing-postman');
+      const ai = getCourseRatingSummary('ai-prompt-engineering');
 
       // Playwright: 4.5 average
       expect(playwright.averageRating).toBe(4.5);
@@ -43,6 +54,9 @@ describe('RootAccess Course Ratings & Interview Course Removal', () => {
 
       // API Testing: 4.2 average
       expect(api.averageRating).toBe(4.2);
+
+      // AI Course: 4.6 average
+      expect(ai.averageRating).toBe(4.6);
     });
 
     it('mathematically validates that the reviews array average matches the summary averageRating', () => {
@@ -106,7 +120,7 @@ describe('RootAccess Course Ratings & Interview Course Removal', () => {
       render(<CourseRatingDisplay courseSlug="sql-for-qa-engineers" variant="banner" />);
 
       expect(screen.getByText('4.5 / 5.0')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /20 verified learner ratings/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /14 verified learner ratings/i })).toBeInTheDocument();
       expect(screen.getByText(/100% ≥ 3★ ratings/i)).toBeInTheDocument();
     });
 
@@ -114,8 +128,8 @@ describe('RootAccess Course Ratings & Interview Course Removal', () => {
       render(<CourseRatingDisplay courseSlug="api-testing-postman" variant="section" />);
 
       expect(screen.getByText('4.2')).toBeInTheDocument();
-      expect(screen.getByText(/learner reviews \(20 members\)/i)).toBeInTheDocument();
-      expect(screen.getByText(/read all 20 student reviews/i)).toBeInTheDocument();
+      expect(screen.getByText(/learner reviews \(12 members\)/i)).toBeInTheDocument();
+      expect(screen.getByText(/read all 12 student reviews/i)).toBeInTheDocument();
       expect(screen.getByText('Rating Distribution')).toBeInTheDocument();
     });
   });

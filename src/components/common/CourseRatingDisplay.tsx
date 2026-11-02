@@ -174,7 +174,7 @@ export const CourseRatingDisplay: React.FC<CourseRatingDisplayProps> = ({
                 className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-xs cursor-pointer"
               >
                 <MessageSquareQuote className="w-4 h-4" />
-                <span>Read All 20 Student Reviews</span>
+                <span>Read All {summary.totalRatings} Student Reviews</span>
               </button>
             </div>
           </div>
@@ -253,7 +253,7 @@ export const CourseRatingDisplay: React.FC<CourseRatingDisplayProps> = ({
                     : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
                 }`}
               >
-                All (20)
+                All ({summary.totalRatings})
               </button>
               {([5, 4, 3] as const).map((stars) => (
                 <button
@@ -312,7 +312,7 @@ export const CourseRatingDisplay: React.FC<CourseRatingDisplayProps> = ({
 
             {/* Footer */}
             <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 shrink-0">
-              <span>All 20 ratings are ≥ 3 stars • Verified RootAccess Learners</span>
+              <span>All {summary.totalRatings} ratings are ≥ 3 stars • Verified RootAccess Learners</span>
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}

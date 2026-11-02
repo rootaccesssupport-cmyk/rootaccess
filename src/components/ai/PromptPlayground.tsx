@@ -18,6 +18,7 @@ import {
   AI_DAYS_DATA,
   PromptPlaygroundScenario,
 } from '../../data/aiPromptCurriculumData';
+import { FormattedContent } from './FormattedContent';
 
 export interface SavedPromptItem {
   id: string;
@@ -54,7 +55,7 @@ const ALL_PLAYGROUND_SCENARIOS: PromptPlaygroundScenario[] = [
     improvedPrompt:
       'ROLE: Senior Workplace Productivity Consultant\nTASK: Generate a 3-step practical action plan for integrating AI assistants into daily engineering standups.\nCONTEXT: Distributed team of 8 software engineers working in 2-week sprints.\nCONSTRAINTS: Under 200 words. Focus exclusively on task extraction and blocker identification.\nOUTPUT FORMAT: Markdown table with columns: Stage, Action, Time Allocation, Tool.',
     improvedOutput:
-      '| Stage | Action | Time Allocation | Tool |\n| :--- | :--- | :--- | :--- |\n| **1. Pre-Standup Extraction** | Paste raw commit logs and pull requests into AI to generate 3 bullet points: Completed, In Progress, Blocked. | 3 mins / dev | Local AI Co-Pilot |\n| **2. Live Blocker Triage** | Feed the team blocker list to extract immediate dependencies and cross-squad owners. | 5 mins (Scrum) | Shared Meeting Assistant |\n| **3. Automated Confluence Sync** | Transform spoken notes into Jira ticket sub-tasks and publish directly to sprint Confluence dashboard. | 2 mins (Post-meeting) | Jira / Confluence Integration |',
+      '| Stage | Action | Time Allocation | Tool |\n| :--- | :--- | :--- | :--- |\n| 1. Pre-Standup Extraction | Paste raw commit logs and pull requests into AI to generate 3 bullet points: Completed, In Progress, Blocked. | 3 mins per dev | Local AI Co-Pilot |\n| 2. Live Blocker Triage | Feed the team blocker list to extract immediate dependencies and cross-squad owners. | 5 mins (Scrum) | Shared Meeting Assistant |\n| 3. Automated Confluence Sync | Transform spoken notes into Jira ticket sub-tasks and publish directly to sprint Confluence dashboard. | 2 mins (Post-meeting) | Jira / Confluence Integration |',
     improvementHighlights: [
       'Clearly defines a senior consultant persona.',
       'Constrains response to concrete daily standup stages.',
@@ -591,8 +592,8 @@ export const PromptPlayground: React.FC<PromptPlaygroundProps> = ({
             {/* Tab 1: Direct Output Result */}
             {activeOutputTab === 'result' && (
               <div className="space-y-3">
-                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 overflow-x-auto text-xs sm:text-sm text-slate-800 font-sans leading-relaxed whitespace-pre-wrap">
-                  {displayedOutput}
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 overflow-x-auto text-xs sm:text-sm text-slate-800 font-sans leading-relaxed">
+                  <FormattedContent content={displayedOutput} />
                 </div>
 
                 {metrics.score < 60 && (
@@ -645,8 +646,8 @@ export const PromptPlayground: React.FC<PromptPlaygroundProps> = ({
                       Structured &amp; Actionable
                     </span>
                   </div>
-                  <div className="text-xs text-slate-800 font-sans leading-relaxed whitespace-pre-wrap bg-white p-3 rounded-lg border border-emerald-100 overflow-x-auto">
-                    {selectedScenario.improvedOutput}
+                  <div className="text-xs text-slate-800 font-sans leading-relaxed bg-white p-3 rounded-lg border border-emerald-100 overflow-x-auto">
+                    <FormattedContent content={selectedScenario.improvedOutput} />
                   </div>
                   <div className="space-y-1 pt-1">
                     <span className="text-[11px] font-bold text-emerald-900">Why it excels:</span>
