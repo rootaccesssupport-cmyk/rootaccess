@@ -594,7 +594,39 @@ export const App: React.FC = () => {
 
             {/* SQL Fundamentals to Practical Database Testing (5 Days) */}
             <Route
-              path="/courses/sql-for-qa-engineers/day-:dayNumber"
+              path="/courses/sql-for-qa-engineers/day-1"
+              element={
+                <ProtectedRoute>
+                  <SqlDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/sql-for-qa-engineers/day-2"
+              element={
+                <ProtectedRoute>
+                  <SqlDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/sql-for-qa-engineers/day-3"
+              element={
+                <ProtectedRoute>
+                  <SqlDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/sql-for-qa-engineers/day-4"
+              element={
+                <ProtectedRoute>
+                  <SqlDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/sql-for-qa-engineers/day-5"
               element={
                 <ProtectedRoute>
                   <SqlDayLessonPage />
@@ -612,7 +644,39 @@ export const App: React.FC = () => {
 
             {/* API Testing with Postman (5 Days) */}
             <Route
-              path="/courses/api-testing-postman/day-:dayNumber"
+              path="/courses/api-testing-postman/day-1"
+              element={
+                <ProtectedRoute>
+                  <ApiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/api-testing-postman/day-2"
+              element={
+                <ProtectedRoute>
+                  <ApiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/api-testing-postman/day-3"
+              element={
+                <ProtectedRoute>
+                  <ApiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/api-testing-postman/day-4"
+              element={
+                <ProtectedRoute>
+                  <ApiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/api-testing-postman/day-5"
               element={
                 <ProtectedRoute>
                   <ApiDayLessonPage />

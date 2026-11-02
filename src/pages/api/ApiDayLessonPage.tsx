@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   CheckCircle2,
   ChevronRight,
@@ -25,9 +25,15 @@ import { API_DAYS_DATA, API_COURSE_METADATA } from '../../data/apiCurriculumData
 import { PostmanInteractiveStudio } from '../../components/api/PostmanInteractiveStudio';
 
 export const ApiDayLessonPage: React.FC = () => {
-  const { dayNumber: dayParam } = useParams<{ dayNumber: string }>();
+  const { dayNumber: dayParam } = useParams<{ dayNumber?: string }>();
   const navigate = useNavigate();
-  const dayNumber = parseInt(dayParam || '1', 10);
+  const location = useLocation();
+
+  // Extract day number from /day-1, /day/1, or params
+  const pathMatch = location.pathname.match(/day[/-]?([1-5])/i);
+  const parsedDayFromPath = pathMatch ? parseInt(pathMatch[1], 10) : NaN;
+  const parsedDayFromParam = parseInt(dayParam || '', 10);
+  const dayNumber = !isNaN(parsedDayFromPath) ? parsedDayFromPath : (!isNaN(parsedDayFromParam) ? parsedDayFromParam : 1);
 
   const { isCourseEnrolled, isLessonCompleted, markLessonComplete } = useProgress();
   const isEnrolled = isCourseEnrolled('api-testing-postman');
