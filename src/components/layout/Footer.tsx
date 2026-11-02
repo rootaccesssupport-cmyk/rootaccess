@@ -64,6 +64,11 @@ export const Footer: React.FC = () => {
                   API Testing with Postman
                 </Link>
               </li>
+              <li>
+                <Link to="/courses/ai-prompt-engineering" className="hover:text-white transition-colors text-purple-400 font-medium">
+                  AI &amp; Prompt Engineering (New)
+                </Link>
+              </li>
             </ul>
           </div>
 

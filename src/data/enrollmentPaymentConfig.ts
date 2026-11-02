@@ -26,6 +26,7 @@ export const ENROLLMENT_PAYMENT_CONFIG = {
     'playwright-automation': { inr: 649, originalInr: 1599, label: 'Playwright Automation with JavaScript + AI', isLaunchOffer: true },
     'sql-for-qa-engineers': { inr: 299, originalInr: 599, label: 'SQL', isLaunchOffer: true },
     'api-testing-postman': { inr: 299, originalInr: 599, label: 'API Testing', isLaunchOffer: true },
+    'ai-prompt-engineering': { inr: 299, originalInr: 599, label: 'AI Fundamentals & Prompt Engineering', isLaunchOffer: true },
     'devops-engineering': { inr: 3499, originalInr: 6999, label: 'DevOps Engineering Academy', isLaunchOffer: false },
   } as Record<string, CoursePriceInfo>,
 

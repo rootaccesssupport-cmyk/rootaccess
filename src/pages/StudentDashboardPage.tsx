@@ -51,7 +51,7 @@ interface CatalogCourse {
   tags: string[];
   courseUrl: string;
   syllabusUrl: string;
-  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug';
+  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug' | 'Sparkles';
   colorTheme: 'indigo' | 'purple' | 'sky' | 'emerald' | 'amber' | 'rose';
 }
 
@@ -120,6 +120,22 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     iconName: 'Send',
     colorTheme: 'amber',
   },
+  {
+    id: 'ai-prompt-engineering',
+    slug: 'ai-prompt-engineering',
+    title: 'AI Fundamentals & Prompt Engineering',
+    category: 'AI & Productivity',
+    badge: '7-Day Practical Course',
+    duration: '7 Days (10 Hours)',
+    level: 'Beginner Friendly',
+    description:
+      'Learn how AI works, use AI tools effectively, write better prompts and apply AI to real-world tasks. Practise through guided exercises, knowledge checks and a final hands-on project. No coding experience required.',
+    tags: ['Generative AI', 'Prompt Engineering', 'LLM Mechanics', 'Prompt Playground', 'Workplace AI', 'Responsible AI'],
+    courseUrl: '/courses/ai-prompt-engineering/day-1',
+    syllabusUrl: '/courses/ai-prompt-engineering',
+    iconName: 'Sparkles',
+    colorTheme: 'purple',
+  },
 ];
 
 const COURSE_CATEGORIES = [
@@ -128,6 +144,7 @@ const COURSE_CATEGORIES = [
   'Test Automation',
   'Database & SQL',
   'API Testing',
+  'AI & Productivity',
 ];
 
 export const StudentDashboardPage: React.FC = () => {
@@ -362,6 +379,8 @@ export const StudentDashboardPage: React.FC = () => {
         return <Briefcase className="w-5 h-5 text-rose-600" />;
       case 'Bug':
         return <Bug className="w-5 h-5 text-rose-600" />;
+      case 'Sparkles':
+        return <Sparkles className="w-5 h-5 text-purple-600" />;
       default:
         return <BookOpen className="w-5 h-5 text-indigo-600" />;
     }

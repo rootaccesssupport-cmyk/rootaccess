@@ -52,6 +52,9 @@ import { DevOpsDay2LessonPage } from './pages/devops/DevOpsDay2LessonPage';
 import { DevOpsDay3LessonPage } from './pages/devops/DevOpsDay3LessonPage';
 import { SqlDayLessonPage } from './pages/sql/SqlDayLessonPage';
 import { ApiDayLessonPage } from './pages/api/ApiDayLessonPage';
+import { AiDayLessonPage } from './pages/ai/AiDayLessonPage';
+import { AiCourseCertificatePage } from './pages/ai/AiCourseCertificatePage';
+import { AdminAiCourseManagerPage } from './pages/admin/AdminAiCourseManagerPage';
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
 import { AdminInstagramCreatorPage } from './pages/admin/AdminInstagramCreatorPage';
 import { CareersPage } from './pages/CareersPage';
@@ -131,6 +134,16 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <AdminInstagramCreatorPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Protected Route: Admin AI Course Manager */}
+            <Route
+              path="/admin/ai-course-manager"
+              element={
+                <ProtectedRoute>
+                  <AdminAiCourseManagerPage />
                 </ProtectedRoute>
               }
             />
@@ -703,6 +716,80 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <ApiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* AI Fundamentals & Prompt Engineering (7 Days) */}
+            <Route
+              path="/courses/ai-prompt-engineering/day-1"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/day-2"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/day-3"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/day-4"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/day-5"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/day-6"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/day-7"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/day/:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <AiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-prompt-engineering/certificate"
+              element={
+                <ProtectedRoute>
+                  <AiCourseCertificatePage />
                 </ProtectedRoute>
               }
             />

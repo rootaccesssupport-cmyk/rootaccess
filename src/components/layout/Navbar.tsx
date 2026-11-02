@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Briefcase,
   Camera,
+  Sparkles,
 } from 'lucide-react';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 
@@ -92,6 +93,15 @@ export const Navbar: React.FC = () => {
         colorIcon: 'text-amber-600',
         badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
         syllabusUrl: '/courses/api-testing-postman',
+      };
+    }
+    if (pathname.includes('ai-prompt-engineering') || pathname.includes('prompt-engineering')) {
+      return {
+        title: 'AI & Prompt Engineering',
+        icon: Sparkles,
+        colorIcon: 'text-purple-600',
+        badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
+        syllabusUrl: '/courses/ai-prompt-engineering',
       };
     }
     return {

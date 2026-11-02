@@ -1349,6 +1349,285 @@ Coupon is accepted. Total calculation shows: $35.00 - $50.00 = -$15.00.
       ],
     },
   },
+  {
+    id: 'course-ai-prompt-engineering',
+    slug: 'ai-prompt-engineering',
+    trackId: 'track-ai-prompt-engineering',
+    trackName: 'AI Fundamentals & Prompt Engineering',
+    title: 'AI Fundamentals & Prompt Engineering',
+    description:
+      'Learn how AI works, use AI tools effectively, write better prompts and apply AI to real-world tasks. Practise through guided exercises, knowledge checks and a final hands-on project. No coding experience required.',
+    iconName: 'Sparkles',
+    badge: '7-Day Practical Course',
+    estimatedHours: 10,
+    learningOutcomes: [
+      'Understand fundamental AI and generative AI concepts.',
+      'Understand what large language models do and where they can fail.',
+      'Write clear, structured and effective prompts.',
+      'Improve prompts through iteration and evaluation.',
+      'Apply AI to research, writing, learning and workplace productivity.',
+      'Verify AI-generated answers and use AI responsibly.',
+      'Build a reusable prompt library and complete a final project.',
+    ],
+    lessons: [
+      {
+        id: 'ai-day-1',
+        slug: 'day-1',
+        title: 'Day 1: AI Fundamentals',
+        durationMinutes: 40,
+        difficulty: 'Beginner',
+        summary: 'Core concepts, AI vs ML vs DL vs GenAI, LLM token prediction, search vs AI, and task suitability risk tiers.',
+        sections: [
+          {
+            title: '1. Demystifying the AI Hierarchy',
+            content: 'Artificial Intelligence encompasses all machine cognitive tasks. Generative AI is a specialized deep learning branch that creates novel text, code, and images using neural networks.',
+          },
+          {
+            title: '2. Token Prediction & Attention Mechanics',
+            content: 'LLMs calculate mathematical probabilities of likely next tokens rather than retrieving static answers from memory. Plausible text can still be factually incorrect.',
+          },
+          {
+            title: '3. The Three Operational Risk Tiers',
+            content: 'Tier 1 is safe for automation (brainstorming, formatting). Tier 2 requires human verification (code, calculations). Tier 3 is strictly prohibited for public models (passwords, PII, trade secrets).',
+          },
+        ],
+        keyTakeaways: [
+          'Generative AI predicts likely tokens; it does not possess human consciousness.',
+          'Always classify tasks into operational risk tiers before using AI.',
+          'Grounding prompts with reference text minimizes hallucinations.',
+        ],
+        practicalChecklist: [
+          'Audit personal daily tasks for AI suitability',
+          'Identify at least 1 Tier 3 task to never upload to public models',
+          'Complete the Day 1 Knowledge Check quiz',
+        ],
+      },
+      {
+        id: 'ai-day-2',
+        slug: 'day-2',
+        title: 'Day 2: Getting Started with AI Tools',
+        durationMinutes: 40,
+        difficulty: 'Beginner',
+        summary: 'Conversational interaction, background context anchoring, multi-turn follow-up prompting, and requesting structured outputs.',
+        sections: [
+          {
+            title: '1. Conversational Context Anchoring',
+            content: 'Anchor prompts with background details, timelines, and constraints to prevent models from defaulting to generic encyclopedia entries.',
+          },
+          {
+            title: '2. Multi-Turn Iteration',
+            content: 'Refine outputs sequentially across turns: shorten, adjust tone, format into tables, and request self-critiques.',
+          },
+        ],
+        keyTakeaways: [
+          'Context is the steering wheel of generative models.',
+          'Iterative follow-up turns sculpt generic drafts into finished deliverables.',
+        ],
+        practicalChecklist: [
+          'Draft a 14-day study schedule with exact daily time limits',
+          'Execute a two-turn follow-up refinement in the playground',
+        ],
+      },
+      {
+        id: 'ai-day-3',
+        slug: 'day-3',
+        title: 'Day 3: Prompt Engineering Fundamentals',
+        durationMinutes: 40,
+        difficulty: 'Beginner',
+        summary: 'The 6-Part Framework: Role, Task, Context, Constraints, Output Format, and Success Criteria. Eliminating ambiguity.',
+        sections: [
+          {
+            title: '1. The 6-Part Prompt Architecture',
+            content: 'Organize high-stakes requests into: Role, Task, Context, Constraints, Format, and Success Criteria for predictable quality.',
+          },
+          {
+            title: '2. Persona Priming & Ambiguity Removal',
+            content: 'Assigning a domain expert role primes the model attention space. Replace vague words ("brief", "good") with quantifiable metrics.',
+          },
+        ],
+        keyTakeaways: [
+          'Constraints eliminate unwanted outputs and anchor quality.',
+          'Quantify word counts, formatting containers, and success standards.',
+        ],
+        practicalChecklist: [
+          'Transform an ambiguous prompt using all 6 parts',
+          'Score 100% on the prompt structure analyzer in the studio',
+        ],
+      },
+      {
+        id: 'ai-day-4',
+        slug: 'day-4',
+        title: 'Day 4: Advanced Prompting Techniques',
+        durationMinutes: 45,
+        difficulty: 'Intermediate',
+        summary: 'Few-shot prompting with exemplar pairs, step-by-step reasoning decomposition, and reference grounding.',
+        sections: [
+          {
+            title: '1. Zero-Shot vs Few-Shot Prompting',
+            content: 'Providing 2 or 3 completed input/output pairs steers categorization and custom formatting with far greater consistency than lengthy rules.',
+          },
+          {
+            title: '2. Step-by-Step Decomposition & Grounding',
+            content: 'Instruct the model to work step-by-step before concluding. Ground answers in supplied reference text with explicit refusal instructions.',
+          },
+        ],
+        keyTakeaways: [
+          'Exemplar pairs teach structure through patterns.',
+          'No prompting technique can guarantee 100% elimination of hallucinations.',
+        ],
+        practicalChecklist: [
+          'Build a few-shot prompt for defect triage',
+          'Decompose messy meeting notes into a sprint task table',
+        ],
+      },
+      {
+        id: 'ai-day-5',
+        slug: 'day-5',
+        title: 'Day 5: AI for Work and Productivity',
+        durationMinutes: 40,
+        difficulty: 'Intermediate',
+        summary: 'Executive document summarization, spreadsheet formula design, error log translation, and the Anti-Blind-Trust rule.',
+        sections: [
+          {
+            title: '1. Caveat-Preserving Summarization',
+            content: 'Direct the model to preserve exact numerical figures, deadlines, and conditional caveats when condensing long reports.',
+          },
+          {
+            title: '2. Spreadsheet Formulas & Technical Troubleshooting',
+            content: 'Generate error-handled XLOOKUP and conditional formulas. Translate cryptic error logs without executing unreviewed code in production.',
+          },
+        ],
+        keyTakeaways: [
+          'Never execute AI code on production databases without human sandbox review.',
+          'Supply exact sheet names and column letters for spreadsheet prompts.',
+        ],
+        practicalChecklist: [
+          'Generate a 4-part incident resolution package for a payment outage',
+          'Create a nested Google Sheets formula with blank cell handling',
+        ],
+      },
+      {
+        id: 'ai-day-6',
+        slug: 'day-6',
+        title: 'Day 6: Accuracy, Limitations and Responsible AI',
+        durationMinutes: 45,
+        difficulty: 'Intermediate',
+        summary: 'The 4-Point Factual Verification Checklist, spotting planted hallucinations, copyright boundaries, and data sanitization.',
+        sections: [
+          {
+            title: '1. The 4-Point Factual Verification Checklist',
+            content: 'Systematically verify: (1) Dates & timelines, (2) Calculations & sums, (3) Code method names, (4) Academic citations against primary sources.',
+          },
+          {
+            title: '2. Intellectual Property & Ethical Boundaries',
+            content: 'Understand open-source licensing risks in generated code. Sanitize prompts with generic placeholders to protect personal privacy.',
+          },
+        ],
+        keyTakeaways: [
+          'Fluency is not accuracy: articulate prose is often the mask of a hallucination.',
+          'Replace customer and company PII with generic placeholders.',
+        ],
+        practicalChecklist: [
+          'Spot 3 planted errors in an AI-generated history passage',
+          'Execute the 4-point verification checklist before publishing',
+        ],
+      },
+      {
+        id: 'ai-day-7',
+        slug: 'day-7',
+        title: 'Day 7: Final Practical Project',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Capstone: Build Your Personal AI Productivity Workflow. Rubric evaluation across 5 dimensions and verified certification.',
+        sections: [
+          {
+            title: '1. Capstone Project Architecture',
+            content: 'Select a real task, define success criteria, test in the playground, perform weak vs improved comparison, and build a verification checklist.',
+          },
+          {
+            title: '2. The 5-Dimension Rubric & Certification',
+            content: 'Score ≥ 80% on Task Definition, Prompt Architecture, Output Quality, Verification, and Responsible AI to unlock your official RootAccess Verified Credential.',
+          },
+        ],
+        keyTakeaways: [
+          'A tested prompt library transforms ad-hoc AI usage into permanent workplace leverage.',
+          'Responsible AI requires human ownership of every published deliverable.',
+        ],
+        practicalChecklist: [
+          'Submit the Capstone Project submission template',
+          'Score ≥ 80% on the deterministic rubric evaluation',
+          'Save the verified prompt to your personal Prompt Library',
+        ],
+      },
+    ],
+    quiz: {
+      id: 'quiz-ai-prompt-engineering',
+      title: 'AI Fundamentals & Prompt Engineering Certification Assessment',
+      passingScorePercent: 80,
+      questions: [
+        {
+          id: 'q-ai-cert-1',
+          question: 'What is the fundamental operational mechanism of Large Language Models (LLMs)?',
+          options: [
+            'They calculate statistical probabilities to predict the most likely next token based on prior text.',
+            'They run SQL database searches against Wikipedia for every query.',
+            'They possess biological human reasoning capabilities.',
+            'They copy pre-written human paragraphs from an internal hard drive.',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'LLMs are probabilistic token prediction systems trained on neural networks; they generate text one token at a time based on learned mathematical weights.',
+        },
+        {
+          id: 'q-ai-cert-2',
+          question: 'Why is defining CONSTRAINTS crucial in the 6-Part Prompt Framework?',
+          options: [
+            'Because constraints make models run 10x faster.',
+            'Because constraints eliminate the wide probability space of unwanted styles, excessive lengths, and hallucinated external claims.',
+            'Because AI tools refuse to run without constraints.',
+            'Because constraints disable token billing.',
+          ],
+          correctAnswerIndex: 1,
+          explanation: 'Without negative boundaries, models output whatever is statistically common, which often includes verbose essays and unwanted generalizations. Constraints anchor quality.',
+        },
+        {
+          id: 'q-ai-cert-3',
+          question: 'What is the key benefit of Few-Shot prompting?',
+          options: [
+            'It provides 2 or 3 completed exemplar pairs (Input -> Output) to guide formatting and classification patterns with high consistency.',
+            'It allows you to use AI without an internet connection.',
+            'It guarantees that the AI will never make any grammatical errors.',
+            'It prevents the model from generating code.',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'Showing concrete examples primes the model pattern-matching engine to mirror the exact structure, tone, and logic of your examples.',
+        },
+        {
+          id: 'q-ai-cert-4',
+          question: 'What is the "Anti-Blind-Trust Rule" for technical and financial AI outputs?',
+          options: [
+            'Never execute AI code, SQL, or shell commands directly in production without human review and sandbox verification.',
+            'Never use spreadsheets with AI.',
+            'Assume all calculations are 100% correct if they are inside a table.',
+            'Never use Indian Rupees in prompts.',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'Language models are linguistic pattern engines, not deterministic compilers or calculators. All code and critical numbers must be verified by humans.',
+        },
+        {
+          id: 'q-ai-cert-5',
+          question: 'How should sensitive customer or company data be handled before using public AI tools?',
+          options: [
+            'Type it in lowercase letters.',
+            'Sanitize the text by replacing all real names, account numbers, and credentials with generic placeholders (e.g. [Customer_Name], [Account_ID]).',
+            'Upload the unredacted files at midnight.',
+            'Delete your account after prompting.',
+          ],
+          correctAnswerIndex: 1,
+          explanation: 'The sanitization pattern allows you to leverage the drafting power of the model without exposing private personally identifiable information (PII) or confidential secrets.',
+        },
+      ],
+    },
+  },
 ];
 
 export const SIMULATED_BUGS: SimulatedBug[] = [

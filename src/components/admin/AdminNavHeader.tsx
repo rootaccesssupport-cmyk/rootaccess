@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShieldCheck, CreditCard, Camera } from 'lucide-react';
+import { ShieldCheck, CreditCard, Camera, Sparkles } from 'lucide-react';
 
 export const AdminNavHeader: React.FC = () => {
   const location = useLocation();
@@ -8,6 +8,7 @@ export const AdminNavHeader: React.FC = () => {
 
   const isEnrollments = pathname.includes('/admin/enrollments');
   const isInstagram = pathname.includes('/admin/instagram-creator');
+  const isAiCourse = pathname.includes('/admin/ai-course-manager');
 
   return (
     <div className="bg-slate-900 border-b border-slate-800 text-white">
@@ -59,6 +60,18 @@ export const AdminNavHeader: React.FC = () => {
               <span className="px-1.5 py-0.2 text-[9px] font-extrabold bg-rose-500/20 text-rose-300 rounded-full border border-rose-500/30">
                 AI + QA
               </span>
+            </Link>
+
+            <Link
+              to="/admin/ai-course-manager"
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                isAiCourse
+                  ? 'bg-purple-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+              <span>AI Course Manager</span>
             </Link>
           </div>
         </div>

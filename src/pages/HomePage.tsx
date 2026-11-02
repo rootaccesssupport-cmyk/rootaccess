@@ -83,6 +83,18 @@ export const HomePage: React.FC = () => {
       link: '/courses/api-testing-postman',
       actionText: 'Explore Curriculum',
     },
+    {
+      slug: 'ai-prompt-engineering',
+      title: 'AI Fundamentals & Prompt Engineering',
+      courseName: 'Practical Prompting & Workplace AI',
+      tag: 'Generative AI & Productivity',
+      badge: '7-Day Practical Course • Live Now',
+      icon: <Sparkles className="w-5 h-5 text-purple-600" />,
+      description: 'Learn how AI works, use AI tools effectively, write better prompts and apply AI to real-world tasks. Practise through guided exercises, knowledge checks and a final hands-on project. No coding experience required.',
+      skills: ['LLM Mechanics', '6-Part Prompt Framework', 'Few-Shot Prompting', 'Factual Verification', 'Workplace Automation', 'Prompt Library'],
+      link: '/courses/ai-prompt-engineering',
+      actionText: 'Explore Curriculum',
+    },
   ];
 
   const faqs = [
