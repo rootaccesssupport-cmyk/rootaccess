@@ -40,7 +40,6 @@ import {
 export const DevOpsDay3LessonPage: React.FC = () => {
   const {
     state: devopsState,
-    enrollInCourse: enrollDevOps,
     getDayProgress,
     markTopicRead,
     markActivityCompleted,
@@ -49,14 +48,9 @@ export const DevOpsDay3LessonPage: React.FC = () => {
     markInterviewReviewed,
     submitQuiz,
   } = useDevOps();
-  const { isCourseEnrolled, enrollInCourse } = useProgress();
+  const { isCourseEnrolled } = useProgress();
 
   const isEnrolled = isCourseEnrolled('devops-engineering') || devopsState.enrolled;
-
-  const handleEnroll = () => {
-    enrollDevOps();
-    enrollInCourse('devops-engineering');
-  };
 
   const progress = getDayProgress(3);
 
@@ -193,14 +187,13 @@ export const DevOpsDay3LessonPage: React.FC = () => {
       <CourseEnrollmentGate
         courseTitle="DevOps Engineering Academy"
         courseSlug="devops-engineering"
-        description="Course enrollment is required to access interactive lessons, simulated Linux terminals, scenario missions, and interview prep. Enrollment is 100% free during early access—click below to enroll instantly."
+        description="Day 1 is open for free exploration. To access Day 3: CI/CD Pipeline Architecture, Incident Diagnostics & Production Log Analysis, please enroll."
         bulletPoints={[
           "36-Day structured DevOps roadmap with Days 1–3 interactive modules live",
           "Simulated Linux Terminal Sandbox with Ubuntu 24.04 FHS navigation",
           "Production CI/CD Release Room and Incident Diagnostic Studios",
           "Real-world DevOps interview preparation and senior-engineer model answers",
         ]}
-        onEnroll={handleEnroll}
         backLink="/courses/devops-engineering"
         backLinkText="View DevOps Roadmap"
         accentColor="indigo"

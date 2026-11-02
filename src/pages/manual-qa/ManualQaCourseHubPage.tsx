@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   CheckCircle2,
@@ -15,6 +15,7 @@ import {
   FileCode2,
   ChevronRight,
   Bug,
+  MessageCircle,
 } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -22,11 +23,13 @@ import { useManualQa } from '../../context/ManualQaContext';
 import { useProgress } from '../../context/ProgressContext';
 import { MANUAL_QA_DAYS, COURSE_METADATA } from '../../data/manualQaCurriculum';
 import { CoursePricingDisplay } from '../../components/common/CoursePricingDisplay';
+import { CourseEnrollmentModal } from '../../components/enrollment/CourseEnrollmentModal';
 
 export const ManualQaCourseHubPage: React.FC = () => {
   const { state, loading, resetProgressForTesting } = useManualQa();
-  const { isCourseEnrolled, enrollInCourse } = useProgress();
+  const { isCourseEnrolled } = useProgress();
   const isEnrolled = isCourseEnrolled('manual-qa-fundamentals');
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
   if (loading) {
     return (
@@ -80,11 +83,11 @@ export const ManualQaCourseHubPage: React.FC = () => {
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <button
-                onClick={() => enrollInCourse('manual-qa-fundamentals')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+                onClick={() => setIsEnrollModalOpen(true)}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Enroll in Course</span>
+                <MessageCircle className="w-4 h-4 fill-white" />
+                <span>Enroll &amp; Pay via UPI (WhatsApp)</span>
               </button>
               <Link
                 to="/courses/manual-qa-fundamentals"
@@ -97,6 +100,12 @@ export const ManualQaCourseHubPage: React.FC = () => {
           </div>
         </main>
         <Footer />
+        <CourseEnrollmentModal
+          isOpen={isEnrollModalOpen}
+          onClose={() => setIsEnrollModalOpen(false)}
+          courseSlug="manual-qa-fundamentals"
+          courseTitle={COURSE_METADATA.title}
+        />
       </div>
     );
   }

@@ -21,16 +21,17 @@ import { DEVOPS_COURSE_METADATA, DEVOPS_MODULES } from '../../data/devopsCurricu
 
 export const DevOpsCourseOverviewPage: React.FC = () => {
   const navigate = useNavigate();
-  const { state, enrollInCourse, getOverallStats, getDayProgress } = useDevOps();
-  const { isCourseEnrolled, enrollInCourse: enrollProgress } = useProgress();
+  const { state, getOverallStats, getDayProgress } = useDevOps();
+  const { isCourseEnrolled } = useProgress();
   const stats = getOverallStats();
 
   const isEnrolled = state.enrolled || isCourseEnrolled('devops-engineering');
 
   const handleStartLearning = () => {
+    // If not enrolled, navigate to Day 1 free preview
     if (!isEnrolled) {
-      enrollInCourse();
-      enrollProgress('devops-engineering');
+      navigate('/courses/devops-engineering/day-1');
+      return;
     }
     // Determine the next uncompleted day (1, 2, or 3)
     let nextDay = 1;

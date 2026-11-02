@@ -31,16 +31,11 @@ describe('QuizPage Component (Phase 4)', () => {
     );
   };
 
-  it('renders Course Enrollment Required gate when unenrolled and unlocks on clicking enroll', () => {
+  it('renders Course Enrollment Required gate when unenrolled', () => {
     renderQuiz('sql-for-qa-engineers', false);
 
-    expect(screen.getByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: /enroll in course/i }));
-    expect(
-      screen.getByRole('heading', { name: 'SQL for QA Engineers Certification Quiz' })
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Enrollment & Payment Required|Enrollment Required/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
   });
 
   it('renders quiz title and all questions for SQL course', () => {

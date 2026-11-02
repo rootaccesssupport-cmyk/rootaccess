@@ -71,7 +71,7 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
     renderAppAt('/manual-qa', false);
 
     expect(await screen.findByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /view full curriculum/i })).toBeInTheDocument();
   });
 
@@ -112,8 +112,8 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
   it('renders Course Enrollment Required for Surprise Test 1 when unenrolled', async () => {
     renderAppAt('/manual-qa/surprise-test-1', false);
 
-    expect(await screen.findByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
+    expect(await screen.findByText(/Enrollment & Payment Required/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
   });
 
   it('renders Surprise Test 1 directly with advisory banner when enrolled but Day 3 is incomplete', async () => {
@@ -126,8 +126,8 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
   it('renders Course Enrollment Required for Final Project when unenrolled', async () => {
     renderAppAt('/manual-qa/final-project', false);
 
-    expect(await screen.findByText('Course Enrollment Required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in course/i })).toBeInTheDocument();
+    expect(await screen.findByText(/Enrollment & Payment Required/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
   });
 
   it('renders Final Project directly with advisory banner when enrolled but prior days incomplete', async () => {

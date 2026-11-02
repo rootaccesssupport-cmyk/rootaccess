@@ -66,17 +66,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let isMounted = true;
 
     async function initializeAuth() {
-      // Clean up any legacy auth tokens and local users from localStorage
+      // Clean up any legacy mock local users from localStorage
       try {
         localStorage.removeItem('rootaccess_local_user');
-        const keysToRemove: string[] = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && (key.startsWith('sb-') || key.includes('auth-token'))) {
-            keysToRemove.push(key);
-          }
-        }
-        keysToRemove.forEach((k) => localStorage.removeItem(k));
       } catch {
         // ignore storage access issues
       }
@@ -225,10 +217,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const newUserId = data.session?.user?.id || data.user?.id;
       if (newUserId) {
         try {
+          localStorage.removeItem(`rootaccess_progress_${newUserId}`);
+          localStorage.removeItem('rootaccess_progress_guest');
+
           await supabase
             .from('profiles')
             .update({ enrolled_courses: [] })
             .eq('id', newUserId);
+
+          setProfile((prev) => (prev ? { ...prev, enrolled_courses: [] } : null));
         } catch {
           // ignore if table lock or background sync
         }

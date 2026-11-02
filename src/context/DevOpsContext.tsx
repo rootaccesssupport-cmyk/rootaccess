@@ -40,7 +40,7 @@ interface DevOpsContextType {
 const DevOpsContext = createContext<DevOpsContextType | undefined>(undefined);
 
 export const DevOpsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const userId = user?.id || 'guest_learner';
 
   const [state, setState] = useState<DevOpsLearnerState>(createInitialDevOpsState());
@@ -52,14 +52,22 @@ export const DevOpsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setLoading(true);
     loadDevOpsProgress(userId).then((loaded) => {
       if (isMounted) {
-        setState(loaded);
+        const isEnrolledInProfile =
+          profile && Array.isArray(profile.enrolled_courses)
+            ? profile.enrolled_courses.includes('devops-engineering')
+            : false;
+
+        setState({
+          ...loaded,
+          enrolled: profile ? isEnrolledInProfile : Boolean(loaded.enrolled),
+        });
         setLoading(false);
       }
     });
     return () => {
       isMounted = false;
     };
-  }, [userId]);
+  }, [userId, profile, profile?.enrolled_courses]);
 
   // Save progress helper
   const updateAndPersist = useCallback(
@@ -74,12 +82,10 @@ export const DevOpsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   );
 
   const enrollInCourse = useCallback(() => {
-    updateAndPersist((prev) => ({
-      ...prev,
-      enrolled: true,
-      enrolledAt: prev.enrolledAt || new Date().toISOString(),
-    }));
-  }, [updateAndPersist]);
+    // Direct self-enrollment is strictly disabled.
+    // Course access must be granted by an administrator upon payment verification.
+    console.warn('Direct DevOps enrollment is disabled. Course access must be granted by an administrator.');
+  }, []);
 
   const getDayProgress = useCallback(
     (dayNumber: number): DevOpsDayProgress => {

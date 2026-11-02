@@ -50,7 +50,8 @@ describe('Playwright Automation — Day 6 Surprise Assessment 1 Implementation',
   it('renders Enrollment Gate when student is not enrolled in the course', () => {
     renderSurpriseTest1Page(false);
 
-    expect(screen.getByText(/Course Enrollment Required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Enrollment & Payment Required|Enrollment Required/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
   });
 
   it('locks assessment when Day 6 is not completed', () => {

@@ -58,7 +58,7 @@ export async function loadDevOpsProgress(userId: string): Promise<DevOpsLearnerS
         .eq('user_id', userId);
 
       if (!error && data && data.length > 0) {
-        const nextState = { ...initial, enrolled: true };
+        const nextState = { ...initial, enrolled: false };
         data.forEach((row: any) => {
           if (row.day_number && nextState.days[row.day_number]) {
             nextState.days[row.day_number] = {

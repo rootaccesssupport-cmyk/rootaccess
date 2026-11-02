@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { COURSES, SIMULATED_BUGS } from '../data/curriculumData';
 import type { ProgressState, QuizScoreRecord, BugReportSubmission } from '../types/curriculum';
 
@@ -45,7 +44,7 @@ const DEFAULT_INITIAL_STATE: ProgressState = {
 };
 
 export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, profile, refreshProfile } = useAuth();
+  const { user, profile } = useAuth();
   const storageKey = useMemo(() => {
     return user?.id ? `rootaccess_progress_${user.id}` : 'rootaccess_progress_guest';
   }, [user?.id]);
@@ -275,39 +274,12 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 
   const enrollInCourse = useCallback(
-    (courseSlug: string) => {
-      const normalized = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
-
-      setState((prev) => {
-        const current = prev.enrolledCourses || [];
-        if (current.includes(normalized)) return prev;
-        const updated = [...current, normalized];
-
-        // Sync to Supabase profiles if logged in
-        if (user && isSupabaseConfigured) {
-          supabase
-            .from('profiles')
-            .update({
-              enrolled_courses: updated,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', user.id)
-            .then(({ error }) => {
-              if (error) {
-                console.warn('Could not sync enrolled_courses to Supabase:', error.message);
-              } else {
-                refreshProfile?.();
-              }
-            });
-        }
-
-        return {
-          ...prev,
-          enrolledCourses: updated,
-        };
-      });
+    (_courseSlug: string) => {
+      // Direct self-enrollment is strictly disabled.
+      // Course access must be granted by an administrator upon payment verification.
+      console.warn('Direct enrollment is disabled. Course access must be granted by an administrator.');
     },
-    [user, refreshProfile]
+    []
   );
 
   const resetProgress = useCallback(() => {

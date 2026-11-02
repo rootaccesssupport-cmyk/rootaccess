@@ -9,7 +9,6 @@ import {
   Clock,
   RotateCcw,
   ShieldCheck,
-  Lock,
   ChevronRight,
 } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
@@ -17,13 +16,14 @@ import { Footer } from '../../components/layout/Footer';
 import { useManualQa } from '../../context/ManualQaContext';
 import { useProgress } from '../../context/ProgressContext';
 import { QUESTION_BANK } from '../../data/manualQaQuestionBank';
+import { CourseEnrollmentGate } from '../../components/common/CourseEnrollmentGate';
 
 export const SurpriseTestPage: React.FC = () => {
   const location = useLocation();
   const isFinalAssessment = location.pathname.includes('final-assessment');
 
   const { state, takeSurpriseTest1, takeFinalAssessment } = useManualQa();
-  const { isCourseEnrolled, enrollInCourse } = useProgress();
+  const { isCourseEnrolled } = useProgress();
   const isEnrolled = isCourseEnrolled('manual-qa-fundamentals');
 
   // Test metadata
@@ -50,36 +50,20 @@ export const SurpriseTestPage: React.FC = () => {
   // Check enrollment
   if (!isEnrolled) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
-        <Navbar />
-        <div className="flex-1 max-w-lg mx-auto px-4 py-16 flex items-center justify-center text-center">
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-xs space-y-4">
-            <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto border border-indigo-100 shadow-2xs">
-              <Lock className="w-7 h-7" />
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Course Enrollment Required</h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Surprise tests and certification assessments require enrollment in the Manual QA course. Day 1 is completely free to start!
-            </p>
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                onClick={() => enrollInCourse('manual-qa-fundamentals')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors text-xs cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Enroll in Course</span>
-              </button>
-              <Link
-                to="/courses/manual-qa-fundamentals"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-colors text-xs"
-              >
-                <span>View Curriculum</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
+      <CourseEnrollmentGate
+        courseTitle="Manual Testing &amp; Defect Life Cycle Masterclass"
+        courseSlug="manual-qa-fundamentals"
+        description="Day 1 is completely free to start! Surprise tests, practical scenario evaluations, and verified certification assessments require active course enrollment."
+        bulletPoints={[
+          'Complete 5-day intensive curriculum (Fundamentals, EP & BVA, Jira, Agile, Retesting)',
+          'Interactive scenario design tables and deterministic rubric evaluations',
+          'Mid-course surprise gatekeeper test and final portfolio assessment',
+          'RootAccess Official Manual QA Certificate of Completion with unique ID',
+        ]}
+        backLink="/courses/manual-qa-fundamentals"
+        backLinkText="View Course Curriculum"
+        accentColor="indigo"
+      />
     );
   }
 

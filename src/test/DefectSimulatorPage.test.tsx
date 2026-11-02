@@ -22,9 +22,9 @@ describe('DefectSimulatorPage Component (Phase 4)', () => {
     localStorage.clear();
     renderSimulator();
 
-    expect(screen.getByText('QA Course Enrollment Required')).toBeInTheDocument();
     expect(screen.getByText('Workplace Defect Simulation Lab')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enroll in manual qa track/i })).toBeInTheDocument();
+    expect(screen.getByText(/Enrollment & Payment Required/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enroll & Pay via UPI \(WhatsApp\)/i })).toBeInTheDocument();
   });
 
   describe('When student is enrolled in QA track', () => {
