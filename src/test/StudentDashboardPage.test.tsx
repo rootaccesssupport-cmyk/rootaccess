@@ -163,7 +163,7 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     const searchInput = screen.getByPlaceholderText(/search courses, skills, or topics/i);
     fireEvent.change(searchInput, { target: { value: 'SQL' } });
 
-    expect(screen.getByText('SQL & Backend Database Audits for QA')).toBeInTheDocument();
+    expect(screen.getByText('SQL Fundamentals to Practical Database Testing')).toBeInTheDocument();
     expect(screen.queryByText('Playwright Automation with JavaScript + AI')).not.toBeInTheDocument();
 
     // Clear search

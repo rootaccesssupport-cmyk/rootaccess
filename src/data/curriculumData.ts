@@ -307,118 +307,157 @@ Coupon is accepted. Total calculation shows: $35.00 - $50.00 = -$15.00.
     slug: 'sql-for-qa-engineers',
     trackId: 'track-sql',
     trackName: 'SQL & Database Audits',
-    title: 'SQL & Backend Database Audits for QA Engineers',
-    description: 'Learn to verify backend data integrity, write multi-table JOINs, detect orphaned records, and validate database transactions during API and UI testing.',
+    title: 'SQL Fundamentals to Practical Database Testing',
+    description: 'Master SQL from relational foundations to practical database migration testing and source-to-target reconciliation. Learn SELECT, WHERE, JOINs, aggregations, window functions, and live defect audits with an in-browser deterministic SQL sandbox.',
     iconName: 'Database',
-    badge: 'Backend Track',
-    estimatedHours: 6,
+    badge: '5-Day Practical Course',
+    estimatedHours: 12,
     learningOutcomes: [
-      'Write production-grade SQL queries to verify frontend transactions against database tables',
-      'Use INNER, LEFT, and RIGHT JOINs to detect missing or orphaned foreign key records',
-      'Identify NULL edge cases, duplicate entries, and timestamp inconsistencies in staging databases',
-      'Audit user balances, inventory decrements, and status state changes using aggregate functions',
+      'Day 1: Master relational foundations, tables, datatypes, SELECT, WHERE operators, LIKE, BETWEEN, IN, ORDER BY, and LIMIT',
+      'Day 2: Audit database integrity using COUNT/SUM/AVG, GROUP BY, HAVING, and INNER, LEFT, and RIGHT multi-table JOINs',
+      'Day 3: Write subqueries, CTEs, CASE WHEN conditional logic, UNION/UNION ALL, and safe transaction scripts (BEGIN/COMMIT/ROLLBACK)',
+      'Day 4: Implement window functions (ROW_NUMBER, RANK, DENSE_RANK, PARTITION BY), deduplication logic, and EXPLAIN query plan analysis',
+      'Day 5: Execute source-to-target ETL database migration testing, financial balance reconciliation, and the 7-Defect Capstone Audit',
     ],
     lessons: [
       {
-        id: 'lesson-sql-verification',
-        slug: 'sql-data-verification',
-        title: 'Verifying Frontend Transactions Against Relational Tables',
-        durationMinutes: 30,
+        id: 'sql-day-1',
+        slug: 'day-1',
+        title: 'Day 1: Relational Foundations, SELECT & Filtering Syntax',
+        durationMinutes: 45,
         difficulty: 'Beginner',
-        summary: 'Learn how to inspect the database after submitting a UI form or calling a payment endpoint to confirm true persistence.',
+        summary: 'Understand database tables, primary keys, SELECT queries, WHERE filters, logical operators, LIKE, BETWEEN, IN, ORDER BY, and LIMIT.',
         sections: [
           {
-            title: '1. Why Frontend Verification is Not Enough',
-            content: 'A common mistake rookie QA testers make is assuming that a green "Success!" banner on the UI means the operation succeeded. In reality, modern applications often have backend disconnects:\n• Frontend state updates optimistically, but the database write fails.\n• Foreign keys are inserted as NULL due to asynchronous race conditions.\n• Status columns remain "PENDING" instead of transitioning to "COMPLETED".',
+            title: '1. Relational Database Concepts & Schema Inspection',
+            content: 'Relational databases store structured business entities in tables with typed columns, primary keys, and foreign keys. QA engineers inspect schemas to verify that primary keys guarantee uniqueness and foreign keys enforce referential integrity across transactional tables.',
           },
           {
-            title: '2. Core Verification Queries',
-            content: 'When testing a checkout flow, execute verification queries against the orders and order_items tables:',
-            codeSnippet: {
-              language: 'sql',
-              code: `-- Verify that order was created with status 'PAID' and correct amount
-SELECT 
-    id, 
-    customer_id, 
-    total_amount, 
-    discount_amount, 
-    payment_status, 
-    created_at
-FROM orders
-WHERE customer_id = 'cust_8492'
-ORDER BY created_at DESC
-LIMIT 1;
-
--- Verify line items decrement inventory
-SELECT 
-    p.id AS product_id,
-    p.name,
-    p.stock_quantity,
-    oi.quantity AS ordered_qty
-FROM order_items oi
-JOIN products p ON oi.product_id = p.id
-WHERE oi.order_id = 'ord_10293';`,
-            },
+            title: '2. Querying with SELECT, WHERE & Filtering Operators',
+            content: 'Filter production rows precisely using equality (=, !=), numeric boundaries (<, <=, >, >=), range checks (BETWEEN ... AND ...), list matching (IN (...)), and wildcard text matching (LIKE "test%").',
           },
         ],
         keyTakeaways: [
-          'Always verify both UI feedback and backend database state.',
-          'Check that inventory, balance, and state flags reflect the transaction accurately.',
-          'Confirm timestamps use UTC and are ordered properly.',
+          'SELECT retrieves specific columns instead of dumping all fields with SELECT * in production.',
+          'WHERE filters rows before aggregation or sorting.',
+          'ORDER BY and LIMIT allow deterministic pagination and audit inspection.',
         ],
         practicalChecklist: [
-          'Query newly created records by ID immediately after UI submission',
-          'Check for unexpected NULL values in non-nullable business fields',
-          'Verify related table rows via foreign key lookups',
+          'Inspect table schema and primary key definitions',
+          'Execute targeted WHERE clauses to filter test accounts',
+          'Verify pagination using LIMIT and OFFSET',
         ],
       },
       {
-        id: 'lesson-sql-joins-orphans',
-        slug: 'sql-joins-and-orphaned-records',
-        title: 'Multi-Table JOINs & Finding Orphaned Data Defects',
-        durationMinutes: 35,
-        difficulty: 'Intermediate',
-        summary: 'Master SQL JOIN techniques to uncover referential integrity flaws and orphaned records in staging environments.',
+        id: 'sql-day-2',
+        slug: 'day-2',
+        title: 'Day 2: Aggregations, GROUP BY & Multi-Table Relational JOINs',
+        durationMinutes: 50,
+        difficulty: 'Beginner',
+        summary: 'Calculate business metrics using COUNT, SUM, AVG, MIN, MAX; group records with GROUP BY and HAVING; and join related tables using INNER, LEFT, and RIGHT JOINs.',
         sections: [
           {
-            title: '1. Finding Orphaned Records with LEFT JOIN',
-            content: 'Orphaned records occur when a child table points to a non-existent parent row. For instance, an order_item referencing a deleted product_id. This causes silent crashes in production analytics.',
-            codeSnippet: {
-              language: 'sql',
-              code: `-- Find all order items where the associated product no longer exists
-SELECT 
-    oi.id AS order_item_id,
-    oi.order_id,
-    oi.product_id
-FROM order_items oi
-LEFT JOIN products p ON oi.product_id = p.id
-WHERE p.id IS NULL;`,
-            },
+            title: '1. Aggregate Functions & GROUP BY / HAVING',
+            content: 'Aggregate functions compute summaries across sets of rows. Use GROUP BY to bucket records by customer or category, and use HAVING to filter aggregated groups (such as finding duplicate transactions where COUNT(*) > 1).',
           },
           {
-            title: '2. Auditing Duplicates with GROUP BY & HAVING',
-            content: 'Testing user registration or payment idempotency requires checking that duplicate records were not erroneously inserted:',
-            codeSnippet: {
-              language: 'sql',
-              code: `-- Find duplicate transactions generated within the same second
-SELECT 
-    customer_id, 
-    amount, 
-    COUNT(*) AS duplicate_count
-FROM transactions
-GROUP BY customer_id, amount, DATE_TRUNC('second', created_at)
-HAVING COUNT(*) > 1;`,
-            },
+            title: '2. Multi-Table Relational JOINs',
+            content: 'INNER JOIN returns only matching rows across tables. LEFT JOIN retains all records from the parent table, exposing orphaned child records when parent.id IS NULL.',
           },
         ],
         keyTakeaways: [
-          'LEFT JOIN with WHERE parent.id IS NULL reveals orphaned data.',
-          'GROUP BY with HAVING COUNT(*) > 1 is essential for duplicate payment testing.',
-          'Database audits reveal edge cases invisible to the browser UI.',
+          'HAVING filters groups post-aggregation; WHERE filters individual rows pre-aggregation.',
+          'LEFT JOIN with WHERE right.id IS NULL is the primary pattern for detecting orphaned data.',
+          'Always use clear table aliases (e.g. c for customers, o for orders) in multi-table queries.',
         ],
         practicalChecklist: [
-          'Run foreign key orphan checks after deletion and refund test cases',
-          'Inspect transaction tables for duplicate charges during network timeout simulations',
+          'Check for orphaned order items using LEFT JOIN and IS NULL',
+          'Identify duplicate customer email registrations using GROUP BY ... HAVING COUNT(*) > 1',
+          'Reconcile total order revenue per customer against financial ledger balances',
+        ],
+      },
+      {
+        id: 'sql-day-3',
+        slug: 'day-3',
+        title: 'Day 3: Subqueries, CTEs, Conditional Logic & Safe Transactions',
+        durationMinutes: 55,
+        difficulty: 'Intermediate',
+        summary: 'Build complex queries with scalar and correlated subqueries, readable Common Table Expressions (WITH cte AS), conditional CASE WHEN expressions, and safe DML transactions.',
+        sections: [
+          {
+            title: '1. Subqueries and Common Table Expressions (CTEs)',
+            content: 'Subqueries nest SELECT statements inside WHERE or FROM clauses. CTEs (WITH query_name AS (...)) structure multi-step transformations into readable, maintainable building blocks.',
+          },
+          {
+            title: '2. CASE WHEN, COALESCE & Safe DML Transactions',
+            content: 'Transform raw data into human-readable business tiers using CASE WHEN. Safeguard data modifications using explicit transactions: BEGIN, UPDATE/INSERT/DELETE, verification SELECT, and COMMIT or ROLLBACK.',
+          },
+        ],
+        keyTakeaways: [
+          'CTEs improve query readability and test maintainability compared to nested subqueries.',
+          'COALESCE(column, fallback) replaces NULL values with deterministic defaults.',
+          'Always execute DML inside a transaction block in test environments to facilitate clean rollbacks.',
+        ],
+        practicalChecklist: [
+          'Categorize customer order volumes using CASE WHEN expressions',
+          'Use CTEs to compute customer lifetime value before filtering high-value tiers',
+          'Test transactional rollback by simulating mid-flight constraint violations',
+        ],
+      },
+      {
+        id: 'sql-day-4',
+        slug: 'day-4',
+        title: 'Day 4: Window Functions, Deduplication & Execution Plans',
+        durationMinutes: 60,
+        difficulty: 'Intermediate',
+        summary: 'Master advanced SQL analytical functions: ROW_NUMBER, RANK, DENSE_RANK, PARTITION BY, deduplication workflows, dataset comparison, and EXPLAIN query plan optimization.',
+        sections: [
+          {
+            title: '1. Window Functions: ROW_NUMBER(), RANK(), and PARTITION BY',
+            content: 'Window functions calculate values across a set of table rows related to the current row without collapsing rows into a single summary. Use PARTITION BY to group calculations per customer or category.',
+          },
+          {
+            title: '2. Deduplication & Query Execution Optimization',
+            content: 'Identify and prune duplicate rows using ROW_NUMBER() OVER (PARTITION BY unique_key ORDER BY created_at DESC). Analyze performance bottlenecks using EXPLAIN query plans to verify index usage.',
+          },
+        ],
+        keyTakeaways: [
+          'ROW_NUMBER() assigns consecutive integers; RANK() leaves gaps on ties; DENSE_RANK() does not leave gaps.',
+          'Window functions execute after WHERE, GROUP BY, and HAVING clauses.',
+          'EXPLAIN output reveals sequential table scans versus fast index scans.',
+        ],
+        practicalChecklist: [
+          'Deduplicate payment event logs retaining only the latest timestamp per order',
+          'Rank top customers by spend within each geographical region',
+          'Inspect query plans for missing indexes on foreign key columns',
+        ],
+      },
+      {
+        id: 'sql-day-5',
+        slug: 'day-5',
+        title: 'Day 5: Database Migration Reconciliation & Capstone Audit',
+        durationMinutes: 75,
+        difficulty: 'Advanced',
+        summary: 'End-to-end source-to-target database migration testing: record counts, primary key checks, financial balance reconciliation, and the 7-Point Customer & Order Migration Capstone.',
+        sections: [
+          {
+            title: '1. Source-to-Target Data Migration Verification Methodology',
+            content: 'When legacy databases migrate to modern architectures (PostgreSQL/MySQL), QA validates four pillars: Volume (row counts), Structure (schema datatypes), Integrity (foreign keys), and Value (column-by-column checksums and balances).',
+          },
+          {
+            title: '2. The 7-Point Migration Defect Audit Capstone',
+            content: 'Execute systematic SQL audits on seeded migration tables (src_customers vs tgt_customers, src_orders vs tgt_orders) to detect missing rows, balance truncations, status corruptions, and duplicate keys.',
+          },
+        ],
+        keyTakeaways: [
+          'Never sign off on a data migration based solely on matching table row counts.',
+          'Perform source-minus-target and target-minus-source difference audits using FULL OUTER JOIN or EXCEPT.',
+          'Verify that financial sums match down to the exact decimal point between source and target.',
+        ],
+        practicalChecklist: [
+          'Compare source and target total record counts by status',
+          'Detect orphaned target records missing from the source system',
+          'Reconcile total transaction amounts between source and target databases',
         ],
       },
     ],
@@ -471,95 +510,157 @@ HAVING COUNT(*) > 1;`,
     slug: 'api-testing-postman',
     trackId: 'track-api',
     trackName: 'API Testing & Postman',
-    title: 'API Testing & Automation with Postman',
-    description: 'Learn REST API architectures, request parameterization, Bearer token authentication, status codes, and writing automated Chai assertion scripts in Postman.',
+    title: 'API Testing with Postman — Beginner to Practical QA',
+    description: 'Master RESTful API testing, HTTP protocols, status codes, Bearer JWT authentication, Postman automation, environment variables, Chai test assertions, and hands-on e-commerce defect hunting.',
     iconName: 'Send',
-    badge: 'API Track',
-    estimatedHours: 7,
+    badge: '5-Day Practical Course',
+    estimatedHours: 12,
     learningOutcomes: [
-      'Understand HTTP methods (GET, POST, PUT, PATCH, DELETE) and HTTP status codes (2xx, 4xx, 5xx)',
-      'Construct automated test scripts using Postman and Chai assertion library (pm.test, pm.expect)',
-      'Extract dynamic response values (JWT tokens, resource IDs) and save them into environment variables',
-      'Test edge cases: expired tokens, invalid payloads, SQL injection parameters, and rate limiting',
+      'Day 1: Understand client-server architecture, REST principles, HTTP methods, headers, parameters, JSON structure, and status codes 2xx-5xx',
+      'Day 2: Validate request payloads, response structures, PUT vs PATCH differences, data types, and response time SLAs',
+      'Day 3: Test authentication vs authorization, API keys, Bearer JWT tokens, role-based access control (RBAC), and negative edge cases',
+      'Day 4: Automate Postman collections, chain requests using environment variables, and write robust assertions using pm.test and pm.expect',
+      'Day 5: Execute the E-Commerce REST API Defect Audit Capstone (4 seeded bugs) and master Top 10 QA interview scenarios',
     ],
     lessons: [
       {
-        id: 'lesson-rest-http-basics',
-        slug: 'rest-http-status-codes',
-        title: 'HTTP Methods, Status Codes & Request Payloads',
-        durationMinutes: 25,
+        id: 'api-day-1',
+        slug: 'day-1',
+        title: 'Day 1: API Foundations, Client-Server Architecture & HTTP Methods',
+        durationMinutes: 45,
         difficulty: 'Beginner',
-        summary: 'Deep dive into REST API architecture, request headers, query vs path parameters, and HTTP response codes.',
+        summary: 'Understand REST API architecture, HTTP request-response lifecycle, methods (GET, POST, PUT, DELETE), headers, URL query/path parameters, and HTTP status codes (2xx, 4xx, 5xx).',
         sections: [
           {
-            title: '1. The Anatomy of an HTTP Request',
-            content: 'An API request consists of:\n1. **Method:** GET (read), POST (create), PUT (replace), PATCH (partial update), DELETE (remove).\n2. **Endpoint URL:** Base URL + Path (e.g. `https://api.rootaccess.org/v1/students/123`).\n3. **Headers:** Metadata like `Content-Type: application/json` and `Authorization: Bearer <token>`.\n4. **Parameters:** Query parameters (`?status=active&limit=10`) or Path parameters (`/students/{id}`).\n5. **Body (Payload):** JSON data payload sent with POST, PUT, or PATCH requests.',
+            title: '1. The Client-Server Architecture & REST Principles',
+            content: 'Modern web and mobile applications communicate with backend services via stateless HTTP REST APIs. Clients dispatch requests with methods, headers, and payloads; servers validate requests and return structured JSON responses with standard HTTP status codes.',
           },
           {
-            title: '2. HTTP Status Codes Every QA Engineer Must Know',
-            content: '• **200 OK:** Request succeeded.\n• **201 Created:** New resource successfully created (standard for POST).\n• **204 No Content:** Operation succeeded, no body returned (common for DELETE).\n• **400 Bad Request:** Client sent invalid JSON schema or missing required fields.\n• **401 Unauthorized:** Missing or invalid authentication token.\n• **403 Forbidden:** Authenticated user lacks permission to access resource.\n• **404 Not Found:** Resource endpoint does not exist.\n• **422 Unprocessable Entity:** Payload syntactically valid JSON, but fails business rules.\n• **500 Internal Server Error:** Unhandled server exception (always a bug!).',
+            title: '2. HTTP Status Code Taxonomy for QA Engineers',
+            content: '2xx indicates success (200 OK, 201 Created). 4xx indicates client faults (400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 422 Unprocessable Entity). 5xx indicates server-side crashes (500 Internal Server Error) which require immediate defect filing.',
           },
         ],
         keyTakeaways: [
-          'POST should return 201 Created with the new resource ID in the response body.',
-          'Never accept a 200 OK status when the response body contains an error message (anti-pattern).',
-          '500 Internal Server Error indicates an unhandled backend exception that requires a bug report.',
+          'REST APIs use HTTP verbs deterministically: GET reads, POST creates, PUT replaces, PATCH updates, DELETE removes.',
+          'Never accept HTTP 200 OK when the response body contains an error message (REST anti-pattern).',
+          'HTTP headers carry critical metadata such as Content-Type and Authorization tokens.',
         ],
         practicalChecklist: [
-          'Verify that sending empty body to POST returns 400 Bad Request',
-          'Verify that requesting non-existent ID returns 404 Not Found',
-          'Confirm sensitive information (passwords, tokens) is never exposed in error responses',
+          'Verify GET endpoints return 200 OK with valid JSON payloads',
+          'Confirm POST endpoints return 201 Created with the generated resource ID',
+          'Test invalid endpoint paths return 404 Not Found rather than 500 crashes',
         ],
       },
       {
-        id: 'lesson-postman-assertions',
-        slug: 'postman-automated-assertions',
-        title: 'Writing Automated Postman Assertions with Chai',
-        durationMinutes: 35,
-        difficulty: 'Intermediate',
-        summary: 'Write test scripts in Postman to assert status codes, response time, JSON schema validation, and header security.',
+        id: 'api-day-2',
+        slug: 'day-2',
+        title: 'Day 2: Request & Response Validation, JSON Schema & Response Times',
+        durationMinutes: 50,
+        difficulty: 'Beginner',
+        summary: 'Validate response schemas, verify required fields and data types, test PUT versus PATCH update semantics, and evaluate performance against response time SLAs.',
         sections: [
           {
-            title: '1. Writing Postman Tests using pm.test and pm.expect',
-            content: 'In Postman, the "Tests" tab allows you to execute JavaScript assertions immediately after the response arrives.',
-            codeSnippet: {
-              language: 'javascript',
-              code: `// Test 1: Validate Status Code is 200 OK
-pm.test("Status code is 200 OK", function () {
-    pm.response.to.have.status(200);
-});
-
-// Test 2: Verify Response Time is acceptable for SLAs
-pm.test("Response time is under 500ms", function () {
-    pm.expect(pm.response.responseTime).to.be.below(500);
-});
-
-// Test 3: Validate JSON Schema and Field Values
-pm.test("User object contains expected fields", function () {
-    const jsonData = pm.response.json();
-    pm.expect(jsonData).to.be.an("object");
-    pm.expect(jsonData.id).to.be.a("string");
-    pm.expect(jsonData.email).to.include("@");
-    pm.expect(jsonData.isActive).to.eql(true);
-});
-
-// Test 4: Save JWT Token into Environment Variable
-pm.test("Save auth token for chained requests", function () {
-    const jsonData = pm.response.json();
-    pm.environment.set("authToken", jsonData.access_token);
-});`,
-            },
+            title: '1. Response Schema & Field Validation',
+            content: 'Beyond status codes, QA must verify that every JSON response adheres to its contract: property types (string, number, boolean, array), non-null requirements, and value bounds.',
+          },
+          {
+            title: '2. PUT vs PATCH Semantics & SLA Timing',
+            content: 'PUT idempotently replaces the entire resource; omitting fields resets them. PATCH partially updates specified fields without disturbing unchanged properties. Response times must comply with API performance SLAs (e.g. < 500ms).',
           },
         ],
         keyTakeaways: [
-          'Use pm.response.to.have.status() for response code verification.',
-          'Validate response times against company performance SLAs.',
-          'Chain API requests by saving response tokens into Postman environment variables.',
+          'PUT replaces the full entity; PATCH modifies only the specified attributes.',
+          'Validate nested object structures and arrays for empty list handling.',
+          'Monitor response time metrics to detect backend query degradation before production.',
         ],
         practicalChecklist: [
-          'Add status code test to all requests in the collection',
-          'Assert exact data types (string, number, boolean, array)',
-          'Verify negative tests return expected error messages',
+          'Assert data types of all response fields using Chai assertions',
+          'Verify PUT replaces full entity while PATCH preserves omitted fields',
+          'Confirm response time is within acceptable SLA limits (< 500ms)',
+        ],
+      },
+      {
+        id: 'api-day-3',
+        slug: 'day-3',
+        title: 'Day 3: Authentication, Bearer Tokens, RBAC & Negative Testing',
+        durationMinutes: 55,
+        difficulty: 'Intermediate',
+        summary: 'Differentiate authentication from authorization; test Bearer JWT tokens, API keys, and Role-Based Access Control (RBAC); and audit malformed JSON, SQL injection, and rate limiting.',
+        sections: [
+          {
+            title: '1. Authentication vs Authorization (401 vs 403)',
+            content: 'Authentication (401 Unauthorized) verifies WHO the user is (e.g. valid Bearer JWT). Authorization (403 Forbidden) verifies WHAT an authenticated user is permitted to do. QA audits ensure normal users cannot access admin endpoints.',
+          },
+          {
+            title: '2. Negative Testing & Security Audits',
+            content: 'Test endpoints against edge cases: malformed JSON bodies (400), expired JWT tokens (401), privilege escalation attempts (403), rapid burst requests (429 Too Many Requests), and sensitive data leakage (passwords/PII).',
+          },
+        ],
+        keyTakeaways: [
+          '401 Unauthorized = Missing or invalid credentials; 403 Forbidden = Authenticated but insufficient permissions.',
+          'Tokens must never be hardcoded into source code; store them in environment variables.',
+          'Verify that sensitive attributes (e.g. password_hash, salt) are never leaked in user responses.',
+        ],
+        practicalChecklist: [
+          'Verify missing Bearer token returns 401 Unauthorized',
+          'Confirm standard student token calling admin endpoints returns 403 Forbidden',
+          'Test malformed JSON payload returns 400 Bad Request with helpful error message',
+        ],
+      },
+      {
+        id: 'api-day-4',
+        slug: 'day-4',
+        title: 'Day 4: Postman Test Automation, Collections & Environment Chaining',
+        durationMinutes: 60,
+        difficulty: 'Intermediate',
+        summary: 'Structure Postman collections, manage environment variables, chain dynamic values between dependent API requests, and write comprehensive Chai test scripts.',
+        sections: [
+          {
+            title: '1. Postman Test Scripts & the pm.* Sandbox',
+            content: 'Postman executes JavaScript test assertions in the Tests tab using pm.test and pm.expect. Assert status codes, headers, response times, and JSON body properties in real time.',
+          },
+          {
+            title: '2. Request Chaining with Environment Variables',
+            content: 'Extract dynamic response values (such as an auth token or new order ID) using pm.environment.set() and pass them into subsequent requests using {{variableName}} syntax.',
+          },
+        ],
+        keyTakeaways: [
+          'Dynamic chaining eliminates manual copy-pasting of IDs and tokens across test runs.',
+          'Collections group requests into repeatable, automated test suites.',
+          'Chai assertions (to.be.an, to.have.property, to.eql) provide declarative, readable test criteria.',
+        ],
+        practicalChecklist: [
+          'Create login request that dynamically saves JWT token to pm.environment',
+          'Chain auth token into subsequent authenticated requests using {{authToken}}',
+          'Write automated status code, schema, and response time assertions for every request',
+        ],
+      },
+      {
+        id: 'api-day-5',
+        slug: 'day-5',
+        title: 'Day 5: E-Commerce REST API Defect Audit Capstone & Senior QA Interview',
+        durationMinutes: 75,
+        difficulty: 'Advanced',
+        summary: 'Execute the full E-Commerce REST API Capstone Project (audit /auth, /products, /cart, /orders for 4 seeded defects) and master Top 10 API QA interview questions with model answers.',
+        sections: [
+          {
+            title: '1. The E-Commerce REST API Defect Audit Capstone',
+            content: 'Simulate end-to-end QA verification on a realistic e-commerce API. Inspect and document 4 seeded critical defects: negative quantity handling, price tampering vulnerabilities, checkout crash on empty carts, and IDOR order access flaws.',
+          },
+          {
+            title: '2. Top 10 API Testing Interview Scenarios & Senior Answers',
+            content: 'Master senior QA interview questions covering idempotent HTTP methods, difference between PUT and PATCH, handling 401 vs 403, testing rate limits (429), API mocking strategies, and microservices contract testing.',
+          },
+        ],
+        keyTakeaways: [
+          'IDOR (Insecure Direct Object Reference) vulnerabilities occur when endpoints lack user ownership checks.',
+          'Input validation must reject negative quantities and invalid currency formats before database writes.',
+          'Senior QA engineers articulate technical root causes and business risks, not just test step failures.',
+        ],
+        practicalChecklist: [
+          'Audit cart items endpoint for negative quantity validation defects',
+          'Test order placement endpoint for server crash on empty cart (500 vs 400)',
+          'Review and practice the Top 10 API testing interview questions and senior-level answers',
         ],
       },
     ],
@@ -603,6 +704,30 @@ pm.test("Save auth token for chained requests", function () {
           ],
           correctAnswerIndex: 1,
           explanation: 'Hiding server errors behind a 200 OK status confuses client libraries, monitoring systems, and automated test frameworks. Errors must emit appropriate 4xx or 5xx codes.',
+        },
+        {
+          id: 'q4',
+          question: 'What is the primary difference between HTTP PUT and HTTP PATCH methods?',
+          options: [
+            'PUT is only used for images, while PATCH is used for text',
+            'PUT is idempotent and replaces the entire resource; PATCH applies a partial update modifying only specified fields',
+            'PATCH is not an official HTTP method',
+            'PUT can only be sent once per day',
+          ],
+          correctAnswerIndex: 1,
+          explanation: 'PUT completely replaces the resource state, resetting omitted fields. PATCH updates only the supplied properties without overwriting unspecified attributes.',
+        },
+        {
+          id: 'q5',
+          question: 'What is an Insecure Direct Object Reference (IDOR) vulnerability in REST API testing?',
+          options: [
+            'A broken database table index',
+            'When an API endpoint allows a user to access or modify another user\'s private record simply by changing the ID in the URL parameter without authorization checks',
+            'A timeout error caused by slow network connections',
+            'When an API returns XML instead of JSON',
+          ],
+          correctAnswerIndex: 1,
+          explanation: 'IDOR occurs when an application exposes a reference to an internal object (e.g. /v1/orders/102) and fails to verify that the logged-in user actually owns that resource.',
         },
       ],
     },

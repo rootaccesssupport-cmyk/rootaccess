@@ -50,6 +50,8 @@ import { DevOpsCourseOverviewPage } from './pages/devops/DevOpsCourseOverviewPag
 import { DevOpsDay1LessonPage } from './pages/devops/DevOpsDay1LessonPage';
 import { DevOpsDay2LessonPage } from './pages/devops/DevOpsDay2LessonPage';
 import { DevOpsDay3LessonPage } from './pages/devops/DevOpsDay3LessonPage';
+import { SqlDayLessonPage } from './pages/sql/SqlDayLessonPage';
+import { ApiDayLessonPage } from './pages/api/ApiDayLessonPage';
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
 
 import { ScrollToTop } from './components/common/ScrollToTop';
@@ -586,6 +588,42 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <DevOpsDay3LessonPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* SQL Fundamentals to Practical Database Testing (5 Days) */}
+            <Route
+              path="/courses/sql-for-qa-engineers/day-:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <SqlDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/sql-for-qa-engineers/day/:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <SqlDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* API Testing with Postman (5 Days) */}
+            <Route
+              path="/courses/api-testing-postman/day-:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <ApiDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/api-testing-postman/day/:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <ApiDayLessonPage />
                 </ProtectedRoute>
               }
             />

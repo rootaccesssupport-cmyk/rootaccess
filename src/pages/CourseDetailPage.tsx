@@ -250,6 +250,10 @@ export const CourseDetailPage: React.FC = () => {
                         navigate('/manual-qa/day/1');
                       } else if (course.slug === 'devops-engineering') {
                         navigate('/courses/devops-engineering/day-1');
+                      } else if (course.slug === 'sql-for-qa-engineers') {
+                        navigate('/courses/sql-for-qa-engineers/day-1');
+                      } else if (course.slug === 'api-testing-postman') {
+                        navigate('/courses/api-testing-postman/day-1');
                       } else if (firstUnfinishedLesson) {
                         navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
                       }
@@ -267,6 +271,10 @@ export const CourseDetailPage: React.FC = () => {
                       navigate('/courses/playwright-automation/day-1');
                     } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
                       navigate('/manual-qa');
+                    } else if (course.slug === 'sql-for-qa-engineers') {
+                      navigate('/courses/sql-for-qa-engineers/day-1');
+                    } else if (course.slug === 'api-testing-postman') {
+                      navigate('/courses/api-testing-postman/day-1');
                     } else {
                       navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
                     }
@@ -383,6 +391,10 @@ export const CourseDetailPage: React.FC = () => {
                         ? `/courses/playwright-automation/day-${idx + 1}`
                         : course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing'
                         ? `/manual-qa/day/${idx + 1}`
+                        : course.slug === 'sql-for-qa-engineers'
+                        ? `/courses/sql-for-qa-engineers/day-${idx + 1}`
+                        : course.slug === 'api-testing-postman'
+                        ? `/courses/api-testing-postman/day-${idx + 1}`
                         : `/courses/${course.slug}/lessons/${lesson.slug}`
                     }
                     className="shrink-0 inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 transition-all shadow-2xs"
