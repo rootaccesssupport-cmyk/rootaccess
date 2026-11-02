@@ -21,6 +21,7 @@ import {
   Image as ImageIcon,
   Sparkles,
   Film,
+  Gauge,
 } from 'lucide-react';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 
@@ -103,6 +104,15 @@ export const Navbar: React.FC = () => {
         colorIcon: 'text-purple-600',
         badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
         syllabusUrl: '/courses/ai-prompt-engineering',
+      };
+    }
+    if (pathname.includes('jmeter')) {
+      return {
+        title: 'Apache JMeter',
+        icon: Gauge,
+        colorIcon: 'text-amber-500',
+        badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
+        syllabusUrl: '/courses/jmeter-performance-testing',
       };
     }
     return {

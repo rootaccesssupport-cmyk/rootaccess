@@ -21,6 +21,7 @@ import {
   GraduationCap,
   ExternalLink,
   Film,
+  Gauge,
 } from 'lucide-react';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
@@ -94,6 +95,18 @@ export const HomePage: React.FC = () => {
       description: 'Learn how AI works, use AI tools effectively, write better prompts and apply AI to real-world tasks. Practise through guided exercises, knowledge checks and a final hands-on project. No coding experience required.',
       skills: ['LLM Mechanics', '6-Part Prompt Framework', 'Few-Shot Prompting', 'Factual Verification', 'Workplace Automation', 'Prompt Library'],
       link: '/courses/ai-prompt-engineering',
+      actionText: 'Explore Curriculum',
+    },
+    {
+      slug: 'jmeter-performance-testing',
+      title: 'Apache JMeter Performance Testing',
+      courseName: 'Apache JMeter: Performance Testing from Zero to Practical',
+      tag: 'Performance Engineering',
+      badge: '10-Day Practical Course • Live Now',
+      icon: <Gauge className="w-5 h-5 text-amber-500" />,
+      description: 'Master performance testing from the ground up: concurrency saturation models, realistic workload simulation, dynamic REST API correlation, CSV parameterization, non-GUI CLI pipelines, and full-scale bottleneck root-cause analysis.',
+      skills: ['Concurrency & Saturation', 'Test Plan Scoping Tree', 'REST HTTP Samplers', 'CSV Parameterization', 'JSONPath Correlation', 'CLI & HTML Reports'],
+      link: '/courses/jmeter-performance-testing',
       actionText: 'Explore Curriculum',
     },
   ];

@@ -9,6 +9,7 @@ export const AdminNavHeader: React.FC = () => {
   const isEnrollments = pathname.includes('/admin/enrollments');
   const isInstagram = pathname.includes('/admin/instagram-creator') || pathname.includes('/admin/image-generator');
   const isAiCourse = pathname.includes('/admin/ai-course-manager');
+  const isJmeterCourse = pathname.includes('/admin/jmeter-course');
 
   return (
     <div className="bg-slate-900 border-b border-slate-800 text-white">
@@ -34,10 +35,10 @@ export const AdminNavHeader: React.FC = () => {
           </div>
 
           {/* Admin Sub-Navigation Tabs */}
-          <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-2xl border border-slate-800">
+          <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-2xl border border-slate-800 overflow-x-auto scrollbar-none">
             <Link
               to="/admin/enrollments"
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                 isEnrollments
                   ? 'bg-rose-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -49,7 +50,7 @@ export const AdminNavHeader: React.FC = () => {
 
             <Link
               to="/admin/instagram-creator"
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                 isInstagram
                   ? 'bg-rose-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -64,14 +65,26 @@ export const AdminNavHeader: React.FC = () => {
 
             <Link
               to="/admin/ai-course-manager"
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                 isAiCourse
                   ? 'bg-purple-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span>AI Course Manager</span>
+              <span>AI Course</span>
+            </Link>
+
+            <Link
+              to="/admin/jmeter-course"
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                isJmeterCourse
+                  ? 'bg-amber-500 text-slate-950 font-extrabold shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+              <span>JMeter Course</span>
             </Link>
           </div>
         </div>

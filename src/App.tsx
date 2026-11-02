@@ -55,6 +55,9 @@ import { ApiDayLessonPage } from './pages/api/ApiDayLessonPage';
 import { AiDayLessonPage } from './pages/ai/AiDayLessonPage';
 import { AiCourseCertificatePage } from './pages/ai/AiCourseCertificatePage';
 import { AdminAiCourseManagerPage } from './pages/admin/AdminAiCourseManagerPage';
+import { JmeterDayLessonPage } from './pages/jmeter/JmeterDayLessonPage';
+import { JmeterCourseCertificatePage } from './pages/jmeter/JmeterCourseCertificatePage';
+import { AdminJmeterCourseManagerPage } from './pages/admin/AdminJmeterCourseManagerPage';
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
 import { AdminInstagramCreatorPage } from './pages/admin/AdminInstagramCreatorPage';
 import { CareersPage } from './pages/CareersPage';
@@ -166,6 +169,16 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <AdminAiCourseManagerPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Protected Route: Admin JMeter Course Manager */}
+            <Route
+              path="/admin/jmeter-course"
+              element={
+                <ProtectedRoute>
+                  <AdminJmeterCourseManagerPage />
                 </ProtectedRoute>
               }
             />
@@ -812,6 +825,104 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <AiCourseCertificatePage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Apache JMeter: Performance Testing from Zero to Practical (10 Days) */}
+            <Route
+              path="/courses/jmeter-performance-testing/day-1"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-2"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-3"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-4"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-5"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-6"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-7"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-8"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-9"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day-10"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/day/:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <JmeterDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/jmeter-performance-testing/certificate"
+              element={
+                <ProtectedRoute>
+                  <JmeterCourseCertificatePage />
                 </ProtectedRoute>
               }
             />

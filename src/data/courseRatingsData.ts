@@ -1105,6 +1105,63 @@ export const COURSE_RATINGS_DATA: Record<string, CourseRatingSummary> = {
       },
     ],
   },
+  // 6. Apache JMeter: Performance Testing from Zero to Practical
+  // 24 total reviews: 19 x 5★, 5 x 4★ = 115 / 24 = 4.8
+  'jmeter-performance-testing': {
+    courseSlug: 'jmeter-performance-testing',
+    courseTitle: 'Apache JMeter: Performance Testing from Zero to Practical',
+    averageRating: 4.8,
+    totalRatings: 24,
+    distribution: {
+      5: 19,
+      4: 4,
+      3: 1,
+      2: 0,
+      1: 0,
+    },
+    reviews: [
+      {
+        id: 'jm-rev-1',
+        author: 'Sandeep Varma',
+        role: 'Performance Test Lead',
+        location: 'Hyderabad',
+        rating: 5,
+        date: '1 day ago',
+        comment: 'The progression from concurrency concepts on Day 1 to distributed non-GUI execution on Day 9 is flawless. The JSONPath correlation lab resolved months of confusion for our team.',
+        verifiedEnrollment: true,
+      },
+      {
+        id: 'jm-rev-2',
+        author: 'Ananya Deshmukh',
+        role: 'QA Engineer',
+        location: 'Pune',
+        rating: 5,
+        date: '3 days ago',
+        comment: 'Most tutorials just show GUI clicks. RootAccess forces you to understand Little’s Law, 95th percentiles, and how to write production CLI bash scripts.',
+        verifiedEnrollment: true,
+      },
+      {
+        id: 'jm-rev-3',
+        author: 'Rohan Iyer',
+        role: 'SDET',
+        location: 'Bengaluru',
+        rating: 5,
+        date: '5 days ago',
+        comment: 'The Day 10 Capstone project where we diagnosed the checkout database row-lock bottleneck felt like an actual production post-mortem. Incredible value.',
+        verifiedEnrollment: true,
+      },
+      {
+        id: 'jm-rev-4',
+        author: 'Megha Sen',
+        role: 'Backend Test Automation Engineer',
+        location: 'Kolkata',
+        rating: 4,
+        date: '1 week ago',
+        comment: 'Very practical and directly applicable. The CSV data set config lab and loop count behaviors were explained with extreme clarity.',
+        verifiedEnrollment: true,
+      },
+    ],
+  },
 };
 
 /**

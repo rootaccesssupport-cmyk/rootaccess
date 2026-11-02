@@ -28,6 +28,7 @@ import {
   Target,
   MessageCircle,
   Sparkles,
+  Gauge,
 } from 'lucide-react';
 
 export const CourseDetailPage: React.FC = () => {
@@ -96,6 +97,8 @@ export const CourseDetailPage: React.FC = () => {
         return <Briefcase className="w-6 h-6 text-purple-600" />;
       case 'Sparkles':
         return <Sparkles className="w-6 h-6 text-purple-600" />;
+      case 'Gauge':
+        return <Gauge className="w-6 h-6 text-amber-500" />;
       default:
         return <BookOpen className="w-6 h-6 text-indigo-600" />;
     }
@@ -264,6 +267,8 @@ export const CourseDetailPage: React.FC = () => {
                         navigate('/courses/api-testing-postman/day-1');
                       } else if (course.slug === 'ai-prompt-engineering') {
                         navigate('/courses/ai-prompt-engineering/day-1');
+                      } else if (course.slug === 'jmeter-performance-testing') {
+                        navigate('/courses/jmeter-performance-testing/day-1');
                       } else if (firstUnfinishedLesson) {
                         navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
                       }
@@ -287,6 +292,8 @@ export const CourseDetailPage: React.FC = () => {
                       navigate('/courses/api-testing-postman/day-1');
                     } else if (course.slug === 'ai-prompt-engineering') {
                       navigate('/courses/ai-prompt-engineering/day-1');
+                    } else if (course.slug === 'jmeter-performance-testing') {
+                      navigate('/courses/jmeter-performance-testing/day-1');
                     } else {
                       navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
                     }
@@ -409,6 +416,8 @@ export const CourseDetailPage: React.FC = () => {
                         ? `/courses/api-testing-postman/day-${idx + 1}`
                         : course.slug === 'ai-prompt-engineering'
                         ? `/courses/ai-prompt-engineering/day-${idx + 1}`
+                        : course.slug === 'jmeter-performance-testing'
+                        ? `/courses/jmeter-performance-testing/day-${idx + 1}`
                         : `/courses/${course.slug}/lessons/${lesson.slug}`
                     }
                     className="shrink-0 inline-flex items-center gap-1 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 transition-all shadow-2xs"

@@ -1628,6 +1628,304 @@ Coupon is accepted. Total calculation shows: $35.00 - $50.00 = -$15.00.
       ],
     },
   },
+  {
+    id: 'course-jmeter-performance-testing',
+    slug: 'jmeter-performance-testing',
+    trackId: 'track-performance-testing',
+    trackName: 'Performance Testing & Engineering',
+    title: 'Apache JMeter: Performance Testing from Zero to Practical',
+    description: 'Master performance testing from the ground up: concurrency saturation models, realistic workload simulation, dynamic REST API correlation, CSV parameterization, non-GUI CLI pipelines, and full-scale bottleneck root-cause analysis.',
+    iconName: 'Gauge',
+    badge: 'Performance Track',
+    estimatedHours: 12,
+    learningOutcomes: [
+      'Architect robust JMeter Test Plans using Thread Groups, Controllers, Timers, and Listeners',
+      'Execute realistic concurrency simulations and apply Little’s Law to throughput and latency models',
+      'Parameterize dynamic test datasets using CSV Data Set Config and correlation with JSONPath PostProcessors',
+      'Implement Response Assertions and duration SLAs to automatically catch performance degradations',
+      'Execute headless, high-volume stress tests via JMeter CLI and generate HTML Dashboard reports',
+      'Diagnose database locking, thread pool contention, and memory leaks through aggregate metric analysis',
+    ],
+    lessons: [
+      {
+        id: 'jmeter-day-1',
+        slug: 'day-1',
+        title: 'Day 1: Fundamentals of Performance Testing & JMeter Core Architecture',
+        durationMinutes: 45,
+        difficulty: 'Beginner',
+        summary: 'Explore why performance testing is essential, the saturation curve, Little’s Law, and how JMeter simulates concurrent virtual users.',
+        sections: [
+          {
+            title: '1. Why Functional Testing Alone Fails in Production',
+            content: 'An application can pass 100% of functional automated tests and still crash within seconds of launch. Performance testing evaluates speed, responsiveness, scalability, and stability under anticipated concurrent user load.',
+          },
+          {
+            title: '2. The Saturation Curve & Little’s Law',
+            content: 'As concurrent users climb, system latency remains low until reaching the saturation knee. Beyond capacity, response times increase exponentially while throughput plateaus or collapses due to resource queueing.',
+          },
+        ],
+        keyTakeaways: [
+          'High load breaks systems at shared bottlenecks: connection pools, thread limits, and database row locks.',
+          'Always monitor both 95th percentile response times and throughput (req/sec), not just arithmetic averages.',
+        ],
+        practicalChecklist: [
+          'Manipulate concurrency slider to observe saturation knee and degradation thresholds',
+          'Calculate Little’s Law theoretical concurrency: Users = Throughput × Latency',
+        ],
+      },
+      {
+        id: 'jmeter-day-2',
+        slug: 'day-2',
+        title: 'Day 2: Test Plan Architecture & The Thread Group Hierarchy',
+        durationMinutes: 45,
+        difficulty: 'Beginner',
+        summary: 'Master the JMeter scoping tree: Test Plan, Thread Groups, Ramp-Up formulas, and Execution Order rules.',
+        sections: [
+          {
+            title: '1. Scoping & Execution Order Rules',
+            content: 'JMeter executes components in a strict hierarchical order: Config Elements -> Pre-Processors -> Timers -> Sampler -> Post-Processors -> Assertions -> Listeners.',
+          },
+        ],
+        keyTakeaways: [
+          'Never place heavy graphical Listeners inside child samplers during performance runs.',
+          'Calculate ramp-up time carefully so all threads do not DDoS the target system instantaneously.',
+        ],
+        practicalChecklist: [
+          'Build an authentic JMX tree with Thread Group, Samplers, and View Results Tree',
+          'Verify execution scoping and parent-child parameter inheritance',
+        ],
+      },
+      {
+        id: 'jmeter-day-3',
+        slug: 'day-3',
+        title: 'Day 3: HTTP Samplers, Headers & REST API Testing',
+        durationMinutes: 50,
+        difficulty: 'Beginner',
+        summary: 'Configure REST API HTTP samplers with JSON payloads, query parameters, and global HTTP Header Managers.',
+        sections: [
+          {
+            title: '1. REST Samplers & Global HTTP Header Configuration',
+            content: 'Define server protocols, domain hostnames, and endpoints with reusable defaults. Configure Content-Type: application/json across all child requests.',
+          },
+        ],
+        keyTakeaways: [
+          'Use HTTP Request Defaults at the Test Plan root to avoid hardcoding hosts in individual samplers.',
+        ],
+        practicalChecklist: [
+          'Configure GET and POST samplers against mock REST endpoints',
+          'Inspect raw request headers and server response payloads',
+        ],
+      },
+      {
+        id: 'jmeter-day-4',
+        slug: 'day-4',
+        title: 'Day 4: Assertions & Validation (Pass/Fail Criteria)',
+        durationMinutes: 45,
+        difficulty: 'Intermediate',
+        summary: 'Enforce Response Code, Text Substring, and Duration Assertions to guarantee strict SLAs during load spikes.',
+        sections: [
+          {
+            title: '1. SLA Enforcement with Multiple Assertions',
+            content: 'Verify HTTP status 200, check for critical JSON tokens in response bodies, and fail requests exceeding max latency SLAs.',
+          },
+        ],
+        keyTakeaways: [
+          'A 200 OK containing an embedded error message is a failure; always combine Response Code and Body assertions.',
+        ],
+        practicalChecklist: [
+          'Apply Response Code and Duration assertions to detect slow responses',
+          'Validate error scenarios when server response times breach 800ms',
+        ],
+      },
+      {
+        id: 'jmeter-day-5',
+        slug: 'day-5',
+        title: 'Day 5: Dynamic Data Parameterization (CSV Data Set Config)',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Eliminate duplicate user requests by driving virtual threads with realistic CSV data and ${variable} syntax.',
+        sections: [
+          {
+            title: '1. Realistic User Variation with CSV Datasets',
+            content: 'Parameterize login accounts, search queries, and purchase orders so servers do not serve cached static responses.',
+          },
+        ],
+        keyTakeaways: [
+          'Configure Recycle on EOF and Stop Thread settings depending on whether data can be reused.',
+        ],
+        practicalChecklist: [
+          'Map CSV columns to variables and observe unique request dispatches across 3 simulated threads',
+        ],
+      },
+      {
+        id: 'jmeter-day-6',
+        slug: 'day-6',
+        title: 'Day 6: Dynamic Correlation & JSON Extractor (Session Handling)',
+        durationMinutes: 55,
+        difficulty: 'Intermediate',
+        summary: 'Extract dynamic session IDs and JWT tokens from responses and inject them into subsequent authenticated requests.',
+        sections: [
+          {
+            title: '1. Overcoming Session & Authentication Barriers',
+            content: 'Extract tokens using JSONPath syntax ($.data.token) and supply them via Bearer Authorization headers in downstream calls.',
+          },
+        ],
+        keyTakeaways: [
+          'Hardcoded tokens fail after expiry; dynamic correlation is mandatory for authentic end-to-end user journeys.',
+        ],
+        practicalChecklist: [
+          'Extract JWT token from /api/auth/login and forward it to /api/cart/checkout',
+        ],
+      },
+      {
+        id: 'jmeter-day-7',
+        slug: 'day-7',
+        title: 'Day 7: Realistic Workload Modeling & Timers',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Model realistic human think times, Gaussian random delays, Constant Throughput Timers, and Load vs Stress profiles.',
+        sections: [
+          {
+            title: '1. The Danger of Zero Think Time',
+            content: 'Without timers, threads blast requests continuously without reading pauses, turning a 50-user test into an unintended DDoS attack.',
+          },
+        ],
+        keyTakeaways: [
+          'Timers in JMeter execute before samplers; use pacing and constant throughput to regulate TPS.',
+        ],
+        practicalChecklist: [
+          'Design Load, Stress, Spike, and Endurance profiles and visualize the workload timeline',
+        ],
+      },
+      {
+        id: 'jmeter-day-8',
+        slug: 'day-8',
+        title: 'Day 8: Performance Metrics & Aggregate Analysis',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Interpret Average, Median, 90th/95th/99th percentiles, Throughput (TPS), and Error Rates to pinpoint bottlenecks.',
+        sections: [
+          {
+            title: '1. Why Percentiles Matter More Than Averages',
+            content: 'The arithmetic average masks outlier spikes. A 95th percentile reveals the slowest 5% of customer interactions that drive churn.',
+          },
+        ],
+        keyTakeaways: [
+          'Check server resource utilization (CPU, memory, disk I/O, DB pools) alongside JMeter response charts.',
+        ],
+        practicalChecklist: [
+          'Analyze an Aggregate Report table, spot degraded endpoints, and formulate root cause hypotheses',
+        ],
+      },
+      {
+        id: 'jmeter-day-9',
+        slug: 'day-9',
+        title: 'Day 9: Non-GUI Command-Line Execution & HTML Dashboards',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Execute headless stress tests with jmeter -n -t -l -e -o, tune JVM heap options, and integrate into CI/CD pipelines.',
+        sections: [
+          {
+            title: '1. The Golden Rule of JMeter: Never Load Test in GUI Mode',
+            content: 'The Java Swing GUI consumes massive memory and CPU, creating client-side bottlenecks that distort measurement metrics.',
+          },
+        ],
+        keyTakeaways: [
+          'Always use non-GUI mode with -n flag and generate the native HTML dashboard report via -e -o.',
+        ],
+        practicalChecklist: [
+          'Construct a production-grade non-GUI CLI command with custom properties and run terminal simulation',
+        ],
+      },
+      {
+        id: 'jmeter-day-10',
+        slug: 'day-10',
+        title: 'Day 10: Capstone Project: End-to-End Performance Test of an E-Commerce API',
+        durationMinutes: 60,
+        difficulty: 'Intermediate',
+        summary: 'Build a full-scale performance test suite from scratch, execute baseline and peak simulations, diagnose bottlenecks, and generate executive reports.',
+        sections: [
+          {
+            title: '1. The Complete Performance Engineering Workflow',
+            content: 'Synthesize all 9 days: construct the JMX test plan, parameterize credentials, correlate cart tokens, simulate 50 concurrent shoppers, diagnose the checkout database lock, and write the remediation report.',
+          },
+        ],
+        keyTakeaways: [
+          'A performance engineer delivers actionable root-cause diagnoses and remediation architectures, not just raw graphs.',
+        ],
+        practicalChecklist: [
+          'Complete all 7 project milestones in the interactive capstone workbench and pass evaluation',
+        ],
+      },
+    ],
+    quiz: {
+      id: 'quiz-jmeter-course-final',
+      title: 'Apache JMeter Performance Engineering Final Certification Quiz',
+      passingScorePercent: 80,
+      questions: [
+        {
+          id: 'q-jm-final-1',
+          question: 'Why should performance tests NEVER be executed using the JMeter GUI during formal test runs?',
+          options: [
+            'The GUI consumes extensive client CPU and memory rendering UI elements, distorting true latency measurements.',
+            'The GUI does not support HTTP requests.',
+            'The GUI requires root administrative privileges on Linux servers.',
+            'The GUI automatically terminates after 10 requests.',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'JMeter GUI is designed strictly for test authoring and debugging. Running heavy loads in GUI mode consumes client memory, leading to false client-side latency inflation and OutOfMemoryErrors.',
+        },
+        {
+          id: 'q-jm-final-2',
+          question: 'In Apache JMeter execution scoping, in what order are elements executed around a Sampler?',
+          options: [
+            'Config Elements -> Pre-Processors -> Timers -> Sampler -> Post-Processors -> Assertions -> Listeners',
+            'Listeners -> Assertions -> Sampler -> Config Elements',
+            'Sampler -> Timers -> Pre-Processors -> Config Elements',
+            'Assertions -> Post-Processors -> Sampler -> Timers',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'JMeter enforces this strict lifecycle: setup config is read, pre-processors modify requests, timers pause execution, the sampler fires, post-processors extract data, assertions validate responses, and listeners record metrics.',
+        },
+        {
+          id: 'q-jm-final-3',
+          question: 'What does the 95th Percentile metric in an Aggregate Report indicate?',
+          options: [
+            '95% of all requests completed in or faster than this response time; only 5% were slower.',
+            'The average latency of the top 95 requests.',
+            'That the server was healthy 95% of the time.',
+            'The throughput rate of 95 requests per second.',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'The 95th percentile is a critical SLA threshold showing the upper boundary for 95% of user interactions, protecting against false comfort from skewed arithmetic averages.',
+        },
+        {
+          id: 'q-jm-final-4',
+          question: 'Which component should be used to extract an OAuth Bearer token from a JSON response payload for use in subsequent HTTP samplers?',
+          options: [
+            'JSON Extractor (Post-Processor)',
+            'HTTP Header Manager (Config Element)',
+            'Constant Timer',
+            'Response Assertion',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'A JSON Extractor is a Post-Processor that queries JSON response bodies using JSONPath expressions like $.token and saves values into JMeter variables.',
+        },
+        {
+          id: 'q-jm-final-5',
+          question: 'According to Little’s Law (N = X × R), if a system sustains 50 requests/sec with an average response time of 0.4 seconds, how many concurrent active users are in the system?',
+          options: [
+            '20 concurrent users',
+            '125 concurrent users',
+            '200 concurrent users',
+            '50 concurrent users',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'By Little’s Law: Concurrency (N) = Throughput (X) × Latency (R). Therefore, N = 50 req/sec × 0.4 sec = 20 concurrent users.',
+        },
+      ],
+    },
+  },
 ];
 
 export const SIMULATED_BUGS: SimulatedBug[] = [

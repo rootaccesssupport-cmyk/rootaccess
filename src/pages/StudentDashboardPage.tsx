@@ -27,6 +27,7 @@ import {
   MessageCircle,
   ExternalLink,
   GraduationCap,
+  Gauge,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -51,7 +52,7 @@ interface CatalogCourse {
   tags: string[];
   courseUrl: string;
   syllabusUrl: string;
-  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug' | 'Sparkles';
+  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug' | 'Sparkles' | 'Gauge';
   colorTheme: 'indigo' | 'purple' | 'sky' | 'emerald' | 'amber' | 'rose';
 }
 
@@ -136,12 +137,29 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     iconName: 'Sparkles',
     colorTheme: 'purple',
   },
+  {
+    id: 'jmeter-performance',
+    slug: 'jmeter-performance-testing',
+    title: 'Apache JMeter: Performance Testing from Zero to Practical',
+    category: 'Performance Testing',
+    badge: '10-Day Practical Intensive',
+    duration: '10 Days (15 Hours)',
+    level: 'Beginner to Intermediate',
+    description:
+      'Master performance testing from the ground up: concurrency saturation models, realistic workload simulation, dynamic REST API correlation, CSV parameterization, non-GUI CLI pipelines, and full-scale bottleneck root-cause analysis.',
+    tags: ['Apache JMeter', 'Performance Testing', 'Concurrency', 'REST APIs', 'Correlation', 'Non-GUI CLI', 'Capstone'],
+    courseUrl: '/courses/jmeter-performance-testing/day-1',
+    syllabusUrl: '/courses/jmeter-performance-testing',
+    iconName: 'Gauge',
+    colorTheme: 'amber',
+  },
 ];
 
 const COURSE_CATEGORIES = [
   'All Courses',
   'Manual QA & Testing',
   'Test Automation',
+  'Performance Testing',
   'Database & SQL',
   'API Testing',
   'AI & Productivity',
@@ -381,6 +399,8 @@ export const StudentDashboardPage: React.FC = () => {
         return <Bug className="w-5 h-5 text-rose-600" />;
       case 'Sparkles':
         return <Sparkles className="w-5 h-5 text-purple-600" />;
+      case 'Gauge':
+        return <Gauge className="w-5 h-5 text-amber-500" />;
       default:
         return <BookOpen className="w-5 h-5 text-indigo-600" />;
     }
