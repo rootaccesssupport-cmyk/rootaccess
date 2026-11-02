@@ -35,6 +35,7 @@ import { useManualQa } from '../context/ManualQaContext';
 import { COURSE_INTERVIEW_SCENARIOS } from '../data/interviewScenariosData';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../data/enrollmentPaymentConfig';
 import { CourseEnrollmentModal } from '../components/enrollment/CourseEnrollmentModal';
+import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 
 interface CatalogCourse {
   id: string;
@@ -1021,12 +1022,17 @@ export const StudentDashboardPage: React.FC = () => {
                             </span>
                           ))}
                         </div>
+
+                        {/* COURSE PRICING & LAUNCH OFFER */}
+                        <div className="pt-2">
+                          <CoursePricingDisplay courseSlug={course.slug} variant="card" showLifetimeBadge />
+                        </div>
                       </div>
 
                       {/* ACTION BAR */}
                       <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
                         <span className="text-xs font-semibold text-slate-500">
-                          {enrolled ? 'Track Active' : 'Open Access'}
+                          {enrolled ? 'Lifetime Access' : 'Day 1 Free Preview'}
                         </span>
 
                         <div className="flex items-center gap-2">

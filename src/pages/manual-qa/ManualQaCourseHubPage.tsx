@@ -21,6 +21,7 @@ import { Footer } from '../../components/layout/Footer';
 import { useManualQa } from '../../context/ManualQaContext';
 import { useProgress } from '../../context/ProgressContext';
 import { MANUAL_QA_DAYS, COURSE_METADATA } from '../../data/manualQaCurriculum';
+import { CoursePricingDisplay } from '../../components/common/CoursePricingDisplay';
 
 export const ManualQaCourseHubPage: React.FC = () => {
   const { state, loading, resetProgressForTesting } = useManualQa();
@@ -66,6 +67,7 @@ export const ManualQaCourseHubPage: React.FC = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Free students can explore the course curriculum and syllabus. To access the 5-day daily learning pathway, interactive scenario tables, Jira defect simulator, and verified certification, please enroll in this course.
               </p>
+              <CoursePricingDisplay courseSlug="manual-qa-fundamentals" variant="gate" />
             </div>
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-left space-y-2 text-slate-700">
               <div className="font-bold text-slate-900">What full course enrollment unlocks:</div>

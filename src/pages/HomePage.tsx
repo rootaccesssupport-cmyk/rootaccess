@@ -20,6 +20,7 @@ import {
   Layers,
   GraduationCap
 } from 'lucide-react';
+import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
@@ -32,6 +33,7 @@ export const HomePage: React.FC = () => {
 
   const tracks = [
     {
+      slug: 'devops-engineering',
       title: 'DevOps & Cloud Engineering',
       courseName: 'DevOps Engineering — From Fundamentals to Practical Projects',
       tag: 'Infrastructure & CI/CD',
@@ -44,6 +46,7 @@ export const HomePage: React.FC = () => {
       isFeatured: true,
     },
     {
+      slug: 'playwright-automation',
       title: 'Automation Testing Foundations',
       courseName: 'Playwright Automation with JavaScript + AI',
       tag: 'Code & Automation',
@@ -56,6 +59,7 @@ export const HomePage: React.FC = () => {
       isFeatured: true,
     },
     {
+      slug: 'manual-qa-fundamentals',
       title: 'Manual QA & Test Design',
       courseName: 'Manual QA in 5 Days: Interview Preparation',
       tag: 'Core Quality Foundation',
@@ -67,6 +71,7 @@ export const HomePage: React.FC = () => {
       actionText: 'Explore Curriculum',
     },
     {
+      slug: 'sql-for-qa-engineers',
       title: 'SQL for Software Testers',
       courseName: 'SQL & Database Audits for Engineers & Testers',
       tag: 'Database Verification',
@@ -78,6 +83,7 @@ export const HomePage: React.FC = () => {
       actionText: 'Explore Curriculum',
     },
     {
+      slug: 'api-testing-postman',
       title: 'API Testing with Postman',
       courseName: 'RESTful API Testing & Test Automation with Postman',
       tag: 'Backend Testing',
@@ -89,6 +95,7 @@ export const HomePage: React.FC = () => {
       actionText: 'Explore Curriculum',
     },
     {
+      slug: 'qa-interview-mastery',
       title: 'Interview & Resume Strategy',
       courseName: 'Tech Interview Mastery & Scenario Playbook',
       tag: 'Career Launch',
@@ -299,6 +306,11 @@ export const HomePage: React.FC = () => {
                             {skill}
                           </span>
                         ))}
+                      </div>
+
+                      {/* PRICING & LAUNCH OFFER */}
+                      <div className="pt-3 border-t border-slate-100 mb-4">
+                        <CoursePricingDisplay courseSlug={track.slug} variant="card" showLifetimeBadge />
                       </div>
 
                       {track.link && (

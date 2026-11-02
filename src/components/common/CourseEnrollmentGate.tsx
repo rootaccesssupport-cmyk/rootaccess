@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Lock, AlertTriangle, Sparkles, ArrowLeft, CheckCircle2, MessageCircle } from 'lucide-react';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
-import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 import { CourseEnrollmentModal } from '../enrollment/CourseEnrollmentModal';
+import { CoursePricingDisplay } from './CoursePricingDisplay';
 
 interface CourseEnrollmentGateProps {
   courseTitle: string;
@@ -28,11 +28,6 @@ export const CourseEnrollmentGate: React.FC<CourseEnrollmentGateProps> = ({
   accentColor = 'indigo',
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const priceInfo = ENROLLMENT_PAYMENT_CONFIG.pricing[courseSlug] || {
-    inr: 1999,
-    originalInr: 3999,
-  };
 
   const colorStyles = {
     indigo: {
@@ -79,13 +74,7 @@ export const CourseEnrollmentGate: React.FC<CourseEnrollmentGateProps> = ({
               {description} Day 1 is 100% free for all registered students. Days 2+ require active enrollment approved after UPI payment.
             </p>
 
-            <div className="pt-2 flex items-center justify-center gap-3">
-              <span className="text-2xl font-extrabold text-slate-900">₹{priceInfo.inr}</span>
-              <span className="text-sm text-slate-400 line-through">₹{priceInfo.originalInr}</span>
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Lifetime Access
-              </span>
-            </div>
+            <CoursePricingDisplay courseSlug={courseSlug} variant="gate" />
           </div>
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-left space-y-2.5 text-slate-700">

@@ -5,6 +5,7 @@ import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
 import { useManualQa } from '../context/ManualQaContext';
 import { CourseEnrollmentModal } from '../components/enrollment/CourseEnrollmentModal';
+import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 import {
   BookOpen,
   Database,
@@ -224,6 +225,8 @@ export const CourseDetailPage: React.FC = () => {
                       </p>
                     </div>
                   </div>
+
+                  <CoursePricingDisplay courseSlug={course.slug} variant="detail" />
 
                   <button
                     onClick={() => {

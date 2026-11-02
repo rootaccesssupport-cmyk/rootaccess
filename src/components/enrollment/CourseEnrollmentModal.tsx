@@ -13,8 +13,9 @@ import {
   Check,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
+import { ENROLLMENT_PAYMENT_CONFIG, getCoursePriceDetails } from '../../data/enrollmentPaymentConfig';
 import { enrollmentService } from '../../services/enrollmentService';
+import { CoursePricingDisplay } from '../common/CoursePricingDisplay';
 
 interface CourseEnrollmentModalProps {
   isOpen: boolean;
@@ -41,11 +42,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
 
   if (!isOpen) return null;
 
-  const priceInfo = ENROLLMENT_PAYMENT_CONFIG.pricing[courseSlug] || {
-    inr: 1999,
-    originalInr: 3999,
-    label: courseTitle,
-  };
+  const priceDetails = getCoursePriceDetails(courseSlug);
 
   const userName = profile?.full_name || user?.user_metadata?.full_name || 'Student';
   const userEmail = user?.email || '';
@@ -121,16 +118,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
           </p>
 
           <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-            <div>
-              <span className="text-[11px] text-slate-400 uppercase font-semibold">Special Pricing</span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-extrabold text-white">₹{priceInfo.inr}</span>
-                <span className="text-sm text-slate-400 line-through">₹{priceInfo.originalInr}</span>
-                <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                  50% OFF
-                </span>
-              </div>
-            </div>
+            <CoursePricingDisplay courseSlug={courseSlug} variant="modal" />
             <div className="text-right text-[11px] text-slate-300">
               <span className="block font-semibold">Free Day 1 Preview</span>
               <span className="text-emerald-400 font-medium">Days 2+ Locked</span>
@@ -160,7 +148,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
 
                 <p className="text-xs text-emerald-900 leading-relaxed">
                   Click the button below to message our instructor directly on WhatsApp at{' '}
-                  <strong className="text-emerald-950 font-mono">{ENROLLMENT_PAYMENT_CONFIG.whatsappNumber}</strong>. You will receive the direct UPI ID / QR code to pay <strong>₹{priceInfo.inr}</strong>.
+                  <strong className="text-emerald-950 font-mono">{ENROLLMENT_PAYMENT_CONFIG.whatsappNumber}</strong>. You will receive the direct UPI ID / QR code to pay <strong>{priceDetails.formattedInr}</strong>.
                 </p>
 
                 <a
@@ -212,7 +200,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
                     rows={2}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder="e.g. Sent ₹1999 from Rahul Sharma on PhonePe. Please approve."
+                    placeholder={`e.g. Sent ${priceDetails.formattedInr} from Rahul Sharma on PhonePe. Please approve.`}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
                   />
                 </div>
