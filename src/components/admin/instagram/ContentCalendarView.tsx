@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Calendar,
-  Video,
+  Image as ImageIcon,
   Layers,
   ExternalLink,
   Edit,
@@ -121,12 +121,12 @@ export const ContentCalendarView: React.FC<ContentCalendarViewProps> = ({
                         </span>
 
                         <div className="flex items-center gap-1 text-[11px] text-slate-400">
-                          {item.recommendedFormat === 'Reel' ? (
-                            <Video className="w-3 h-3 text-rose-400" />
-                          ) : (
+                          {item.recommendedFormat === 'Carousel' ? (
                             <Layers className="w-3 h-3 text-indigo-400" />
+                          ) : (
+                            <ImageIcon className="w-3 h-3 text-rose-400" />
                           )}
-                          <span>{item.recommendedFormat}</span>
+                          <span>{item.recommendedFormat === 'Carousel' ? 'Carousel' : 'Image Post'}</span>
                         </div>
                       </div>
 
@@ -135,7 +135,7 @@ export const ContentCalendarView: React.FC<ContentCalendarViewProps> = ({
                       </h4>
 
                       <p className="text-xs text-slate-400 line-clamp-2 mt-2 leading-relaxed">
-                        "{item.reel.hook}"
+                        {item.imagePost?.subtitle || item.learningObjective || item.whyUseful}
                       </p>
                     </div>
 

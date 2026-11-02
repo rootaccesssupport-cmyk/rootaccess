@@ -492,14 +492,14 @@ export const instagramCreatorService = {
     // Day 5: QA Interview
     // Day 6: Real-World Scenario
     // Day 7: AI Testing or Framework Practice
-    const plannedCategories: { category: InstagramCategory; format: 'Reel' | 'Carousel' }[] = [
-      { category: 'SQL for beginners and QA testers', format: 'Reel' },
+    const plannedCategories: { category: InstagramCategory; format: 'Single-image post' | 'Carousel' }[] = [
+      { category: 'SQL for beginners and QA testers', format: 'Single-image post' },
       { category: 'Manual Testing and test case design', format: 'Carousel' },
-      { category: 'API Testing with Postman', format: 'Reel' },
-      { category: 'Playwright Automation with JavaScript', format: 'Reel' },
+      { category: 'API Testing with Postman', format: 'Single-image post' },
+      { category: 'Playwright Automation with JavaScript', format: 'Single-image post' },
       { category: 'Software Testing interview questions', format: 'Carousel' },
       { category: 'Real-world QA scenarios and debugging', format: 'Carousel' },
-      { category: 'AI-assisted software testing', format: 'Reel' },
+      { category: 'AI-assisted software testing', format: 'Single-image post' },
     ];
 
     const days: PlannerDay[] = [];

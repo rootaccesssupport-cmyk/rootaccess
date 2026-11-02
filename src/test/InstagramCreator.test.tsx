@@ -209,9 +209,9 @@ describe('RootAccess Instagram Creator — Unit & Integration Tests', () => {
         expect(day.alreadyGenerated).toBe(false);
       });
 
-      // Verify balance of formats (should include both Reel and Carousel across the week)
+      // Verify balance of formats (should include both Single-image post and Carousel across the week)
       const formats = plan.days.map((d) => d.recommendedFormat);
-      expect(formats).toContain('Reel');
+      expect(formats).toContain('Single-image post');
       expect(formats).toContain('Carousel');
     });
   });

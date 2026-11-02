@@ -12,6 +12,7 @@ import {
   Settings,
   Trash2,
   Copy,
+  RefreshCw,
 } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -24,6 +25,7 @@ import { AiSettingsModal } from '../../components/admin/instagram/AiSettingsModa
 import { useAuth } from '../../context/AuthContext';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 import {
+  InstagramCategory,
   InstagramPostDraft,
   PlannerDay,
   SevenDayPlan,
@@ -53,6 +55,8 @@ export const AdminInstagramCreatorPage: React.FC = () => {
   const [activeDraft, setActiveDraft] = useState<InstagramPostDraft | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isRegeneratingTopic, setIsRegeneratingTopic] = useState(false);
+  const [customTopicInput, setCustomTopicInput] = useState('');
+  const [customCategory, setCustomCategory] = useState<InstagramCategory>('SQL for beginners and QA testers');
 
   // Content Management State
   const [drafts, setDrafts] = useState<InstagramPostDraft[]>([]);
@@ -180,6 +184,120 @@ export const AdminInstagramCreatorPage: React.FC = () => {
     }
   };
 
+  // Handle Generate Custom Topic Instagram Post
+  const handleGenerateCustomTopic = async (topicTitleToUse?: string) => {
+    const title = (topicTitleToUse || customTopicInput).trim();
+    if (!title) {
+      handleGenerateToday();
+      return;
+    }
+    setIsGenerating(true);
+    setNoticeMessage(null);
+    try {
+      // Find matching template or build from scratch
+      const matched = INSTAGRAM_TOPIC_BANK.find(
+        (t) =>
+          t.topicTitle.toLowerCase().includes(title.toLowerCase()) ||
+          title.toLowerCase().includes(t.topicTitle.toLowerCase())
+      );
+      const baseTemplate: PreCuratedTopicTemplate = matched || {
+        id: `custom-${Date.now()}`,
+        topicTitle: title,
+        category: customCategory,
+        targetAudience: 'Software Testers and Engineers',
+        difficultyLevel: 'Beginner',
+        learningObjective: `Master ${title} with practical hands-on examples`,
+        whyUseful: `Key testing principle for ${title} to prevent bugs in production`,
+        recommendedFormat: 'Single-image post',
+        imagePost: {
+          headline: title,
+          subtitle: `Essential engineering guide to ${title} • RootAccess`,
+          categoryTag: customCategory.split(' ')[0],
+          templateStyle: 'code_terminal',
+          aspectRatio: '1:1',
+          theme: 'rootaccess_dark',
+          codeSnippet: `-- Example for ${title}\nSELECT * FROM sample_table\nWHERE status = 'active';`,
+          badSnippet: '// ❌ Common Mistake\n// unverified syntax',
+          goodSnippet: '// ✅ RootAccess Fix\n// verified syntax',
+          bulletPoints: [
+            `Understand ${title} step-by-step`,
+            'Prevent regression and assertion failures',
+            'Learn by doing with RootAccess hands-on labs',
+          ],
+          callToAction: 'Follow @RootAccess.tech • Learn by Doing',
+        },
+        reel: {
+          hook: `Stop making this mistake with ${title}!`,
+          hookRationale: 'Direct pattern interrupt',
+          durationSeconds: 28,
+          script: `Here is the key insight for ${title}`,
+          visualDirections: 'Code overlay',
+          onScreenText: title,
+          transitions: 'Cut',
+          closingCta: 'RootAccess — Learn by Doing',
+          coverTitle: title,
+        },
+        carousel: {
+          headline: title,
+          designGuidance: 'High contrast slides',
+          slides: [
+            {
+              slideNumber: 1,
+              slideType: 'hook',
+              headline: title,
+              bodyText: `Everything you need to know about ${title} in 30 seconds.`,
+              visualNote: 'Bold cover',
+            },
+            {
+              slideNumber: 2,
+              slideType: 'content',
+              headline: 'Core Principle',
+              bodyText: `Key takeaway and implementation rule for ${title}.`,
+              visualNote: 'Code breakdown',
+            },
+            {
+              slideNumber: 3,
+              slideType: 'cta',
+              headline: 'Learn by Doing',
+              bodyText: 'Practice software testing on real systems at RootAccess.tech',
+              visualNote: 'Closing slide',
+            },
+          ],
+        },
+        caption: {
+          captionText: `Master ${title} in your software testing workflow! 🚀\n\nSave this post for your next test run and follow @RootAccess.tech for daily engineering insights.\n\n#SoftwareTesting #RootAccess #QAEngineering`,
+          hashtags: ['#SoftwareTesting', '#QA', '#RootAccess', '#Engineering'],
+          engagementQuestion: `Have you encountered bugs related to ${title}? Let us know in the comments!`,
+          searchKeywords: [title, 'software testing', 'QA'],
+          callToAction: 'Link in bio to practice hands-on.',
+        },
+        research: {
+          verifiedFacts: [`${title} is a fundamental engineering concept tested in industry sprints.`],
+          officialDocSources: [{ title: 'Official Documentation', url: 'https://rootaccess.tech', dateChecked: '2025-01-01' }],
+          isEvergreen: true,
+        },
+      };
+
+      const newDraft = instagramCreatorService.createDraftFromTemplate(baseTemplate);
+      setActiveDraft(newDraft);
+      await instagramCreatorService.saveDraft(newDraft);
+      await loadDrafts();
+      setCustomTopicInput('');
+      setNoticeMessage({
+        type: 'success',
+        text: `Generated Instagram post for "${title}"! Scroll down to preview and download.`,
+      });
+      setTimeout(() => {
+        const studioEl = document.getElementById('image-studio-section');
+        studioEl?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } catch (err: any) {
+      setNoticeMessage({ type: 'error', text: `Failed to generate post: ${err.message}` });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   // Handle Regenerate Topic (30-day anti-repetition)
   const handleRegenerateTopic = async () => {
     setIsRegeneratingTopic(true);
@@ -283,7 +401,8 @@ export const AdminInstagramCreatorPage: React.FC = () => {
       return (
         d.topicTitle.toLowerCase().includes(q) ||
         d.category.toLowerCase().includes(q) ||
-        d.reel.hook.toLowerCase().includes(q) ||
+        (d.imagePost?.headline && d.imagePost.headline.toLowerCase().includes(q)) ||
+        (d.imagePost?.subtitle && d.imagePost.subtitle.toLowerCase().includes(q)) ||
         d.caption.captionText.toLowerCase().includes(q)
       );
     }
@@ -375,7 +494,95 @@ export const AdminInstagramCreatorPage: React.FC = () => {
           </div>
         )}
 
-        {/* 1. TODAY'S RECOMMENDED TOPIC CARD */}
+        {/* 1. INSTANT POST IMAGE GENERATOR BAR */}
+        <div className="bg-gradient-to-r from-slate-900 via-rose-950/20 to-slate-900 border-2 border-rose-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+                <h2 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                  <ImageIcon className="w-5 h-5 text-rose-400" />
+                  <span>Instant Instagram Post Generator</span>
+                </h2>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  100% Downloadable PNG
+                </span>
+              </div>
+              <p className="text-xs text-slate-300">
+                Type any tech topic or click a preset below to instantly render and download your Instagram post graphic.
+              </p>
+            </div>
+          </div>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleGenerateCustomTopic();
+            }}
+            className="mt-4 flex flex-col sm:flex-row items-stretch gap-2.5"
+          >
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={customTopicInput}
+                onChange={(e) => setCustomTopicInput(e.target.value)}
+                placeholder="Type any topic (e.g. SQL NULL vs 0, API 401 vs 403, Playwright Locators, Test Cases)..."
+                className="w-full px-4 py-3 bg-slate-950 border border-slate-700 focus:border-rose-500 rounded-2xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none font-medium shadow-inner"
+              />
+            </div>
+
+            <select
+              value={customCategory}
+              onChange={(e) => setCustomCategory(e.target.value as InstagramCategory)}
+              className="px-3.5 py-3 bg-slate-950 border border-slate-700 rounded-2xl text-xs text-slate-300 focus:outline-none focus:border-rose-500 cursor-pointer shrink-0 font-medium"
+            >
+              {INSTAGRAM_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+
+            <button
+              type="submit"
+              disabled={isGenerating}
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 active:scale-[0.99] text-xs sm:text-sm font-extrabold text-white transition-all shadow-lg shadow-rose-600/30 cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2 shrink-0 border border-rose-400/30"
+            >
+              {isGenerating ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <Sparkles className="w-4 h-4 text-rose-200" />
+              )}
+              <span>Generate Instagram Post</span>
+            </button>
+          </form>
+
+          {/* Quick 1-click popular presets */}
+          <div className="mt-3 flex items-center gap-2 overflow-x-auto text-[11px] pt-1">
+            <span className="text-slate-400 shrink-0 font-semibold">Quick Presets:</span>
+            {[
+              'SQL COUNT(*) vs COUNT(col)',
+              'API PUT vs PATCH Data Loss',
+              'Playwright getByRole vs XPath',
+              'Boundary Value Analysis in QA',
+              'JavaScript == vs === in Test Assertions',
+            ].map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => {
+                  setCustomTopicInput(preset);
+                  handleGenerateCustomTopic(preset);
+                }}
+                className="px-2.5 py-1 rounded-xl bg-slate-800/80 hover:bg-rose-600 text-slate-300 hover:text-white transition-all border border-slate-700/60 whitespace-nowrap cursor-pointer shrink-0"
+              >
+                ⚡ {preset}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 2. TODAY'S RECOMMENDED TOPIC CARD */}
         <TopicCard
           topic={recommendedTopic}
           onGenerate={handleGenerateToday}
@@ -659,12 +866,12 @@ export const AdminInstagramCreatorPage: React.FC = () => {
                           </span>
 
                           <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                            {d.recommendedFormat === 'Reel' || d.recommendedFormat === 'Single-image post' ? (
-                              <ImageIcon className="w-3 h-3 text-rose-400" />
-                            ) : (
+                            {d.recommendedFormat === 'Carousel' ? (
                               <Layers className="w-3 h-3 text-indigo-400" />
+                            ) : (
+                              <ImageIcon className="w-3 h-3 text-rose-400" />
                             )}
-                            <span>{d.recommendedFormat === 'Reel' ? 'Image Post' : d.recommendedFormat}</span>
+                            <span>{d.recommendedFormat === 'Carousel' ? 'Carousel' : 'Image Post'}</span>
                           </span>
                         </div>
 
@@ -673,7 +880,7 @@ export const AdminInstagramCreatorPage: React.FC = () => {
                         </h4>
 
                         <p className="text-xs text-slate-400 line-clamp-2 mt-2 leading-relaxed">
-                          "{d.reel.hook}"
+                          {d.imagePost?.subtitle || d.learningObjective || d.whyUseful}
                         </p>
                       </div>
 

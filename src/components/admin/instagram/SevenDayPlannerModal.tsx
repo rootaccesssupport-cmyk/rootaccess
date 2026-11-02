@@ -3,7 +3,7 @@ import {
   Calendar,
   X,
   RefreshCw,
-  Video,
+  Image as ImageIcon,
   Layers,
   ArrowRight,
 } from 'lucide-react';
@@ -113,13 +113,13 @@ export const SevenDayPlannerModal: React.FC<SevenDayPlannerModalProps> = ({
                     {day.dayOfWeek}
                   </div>
 
-                  <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-900 text-indigo-300 border border-slate-800 mb-2">
-                    {day.recommendedFormat === 'Reel' ? (
-                      <Video className="w-2.5 h-2.5 text-rose-400" />
-                    ) : (
+                  <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-900 text-slate-300 border border-slate-800 mb-2">
+                    {day.recommendedFormat === 'Carousel' ? (
                       <Layers className="w-2.5 h-2.5 text-indigo-400" />
+                    ) : (
+                      <ImageIcon className="w-2.5 h-2.5 text-rose-400" />
                     )}
-                    <span>{day.recommendedFormat}</span>
+                    <span>{day.recommendedFormat === 'Carousel' ? 'Carousel' : 'Image Post'}</span>
                   </div>
 
                   <h4 className="text-xs font-bold text-white line-clamp-2 leading-snug mb-2 group-hover:text-rose-300 transition-colors">
@@ -127,7 +127,7 @@ export const SevenDayPlannerModal: React.FC<SevenDayPlannerModalProps> = ({
                   </h4>
 
                   <p className="text-[11px] text-slate-400 line-clamp-3 leading-relaxed mb-3">
-                    "{day.hook}"
+                    {day.learningObjective || day.topicTitle}
                   </p>
                 </div>
 
@@ -139,7 +139,7 @@ export const SevenDayPlannerModal: React.FC<SevenDayPlannerModalProps> = ({
                     }}
                     className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-800 hover:bg-rose-600 active:bg-rose-700 text-xs font-bold text-white transition-all cursor-pointer"
                   >
-                    <span>Generate Post</span>
+                    <span>Generate Post Image</span>
                     <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>

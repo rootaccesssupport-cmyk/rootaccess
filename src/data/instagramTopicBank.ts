@@ -73,7 +73,7 @@ export const INSTAGRAM_TOPIC_BANK: PreCuratedTopicTemplate[] = [
     difficultyLevel: 'Beginner',
     learningObjective: 'Understand how NULL values impact COUNT queries to prevent missing critical database data defects during test runs.',
     whyUseful: '90% of junior QA testers use COUNT(*) everywhere and miss silent database bugs where nullable foreign keys or user phone numbers are silently NULL.',
-    recommendedFormat: 'Reel',
+    recommendedFormat: 'Single-image post',
     relevantCourseSlug: 'sql-for-qa-engineers',
     reel: {
       hook: 'Stop using COUNT(*) for everything in your QA database tests! Here is why.',
@@ -352,7 +352,7 @@ Learn practical manual QA and defect reporting by doing on RootAccess. Link in b
     difficultyLevel: 'Intermediate',
     learningObjective: 'Understand full replacement (PUT) vs partial update (PATCH) and write automated Postman Chai assertions to prevent destructive data overwrites.',
     whyUseful: 'Developers frequently implement PUT as PATCH or vice-versa, causing silent data erasure when partial JSON payloads overwrite missing fields with NULL.',
-    recommendedFormat: 'Reel',
+    recommendedFormat: 'Single-image post',
     relevantCourseSlug: 'api-testing-postman',
     reel: {
       hook: 'Is PUT just another word for PATCH? If your API testing team thinks so, you are leaking data loss bugs!',
@@ -501,7 +501,7 @@ Learn API Testing with Postman by doing at RootAccess. Link in bio!`,
     difficultyLevel: 'Intermediate',
     learningObjective: 'Learn to use Playwright user-facing locators (getByRole, getByText) to create flaky-free, resilient automation suites that mimic real users.',
     whyUseful: 'XPath and brittle CSS classes break every time UI libraries update styles or DOM structures. getByRole tests accessibility and remains resilient across redesigns.',
-    recommendedFormat: 'Reel',
+    recommendedFormat: 'Single-image post',
     relevantCourseSlug: 'playwright-automation',
     reel: {
       hook: 'If your automated Playwright tests are still using XPath like this, you need to stop right now!',
@@ -913,7 +913,7 @@ Save this guide for your next debugging session! 🔖
     difficultyLevel: 'Beginner',
     learningObjective: 'Eliminate hardcoded sleep delays in favor of dynamic web-first assertions and auto-waiting to speed up test execution by 500%.',
     whyUseful: 'Hardcoded sleeps make CI/CD pipelines excruciatingly slow and fail randomly on slower runners. Playwright has auto-waiting built into its core.',
-    recommendedFormat: 'Reel',
+    recommendedFormat: 'Single-image post',
     relevantCourseSlug: 'playwright-automation',
     reel: {
       hook: 'If you have page.waitForTimeout(5000) sprinkled throughout your automation scripts... we need to talk.',
@@ -1053,7 +1053,7 @@ Save this post to clean up your automation framework! 📌
     difficultyLevel: 'Beginner',
     learningObjective: 'Understand JavaScript type coercion in assertions so your automated test validations never pass falsely on \'0\' vs false.',
     whyUseful: 'Using loose equality (==) in test scripts often makes test assertions report false positives (passing when the backend data is actually corrupt).',
-    recommendedFormat: 'Reel',
+    recommendedFormat: 'Single-image post',
     relevantCourseSlug: 'playwright-automation',
     reel: {
       hook: 'Why did this automated test PASS when the backend data was completely wrong? JavaScript type coercion!',
@@ -1337,7 +1337,7 @@ Save this architecture blueprint! 📌
     difficultyLevel: 'Intermediate',
     learningObjective: 'Use AI prompting effectively to generate comprehensive boundary and equivalence test matrices, without trusting hallucinated assertions.',
     whyUseful: 'Most testers write weak prompts like "Write test cases for login" and get generic garbage. Prompting with domain constraints and state transitions unlocks 10x defect coverage.',
-    recommendedFormat: 'Reel',
+    recommendedFormat: 'Single-image post',
     relevantCourseSlug: 'playwright-automation',
     reel: {
       hook: 'Most testers use AI completely wrong! They ask: \'Write test cases for checkout\' and get generic garbage. Here is how senior QAs do it.',

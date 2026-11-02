@@ -101,9 +101,6 @@ ${draft.imagePost?.theme || 'rootaccess_dark'}
 Code Snippet / Core Takeaway:
 ${draft.imagePost?.codeSnippet || draft.reel.codeSnippet || 'N/A'}
 
-AI Background Prompt:
-${draft.imagePost?.aiImagePrompt || 'N/A'}
-
 Call to Action:
 ${draft.imagePost?.callToAction || 'Follow @RootAccess.tech • Learn by Doing'}
 
@@ -233,7 +230,7 @@ ${draft.research.officialDocSources.map((s) => `• ${s.title}: ${s.url} (Checke
           }`}
         >
           <ImageIcon className="w-3.5 h-3.5" />
-          <span>Post Image Generator</span>
+          <span>Post Image</span>
         </button>
 
         <button
@@ -245,7 +242,7 @@ ${draft.research.officialDocSources.map((s) => `• ${s.title}: ${s.url} (Checke
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
-          <span>Carousel ({draft.carousel.slides.length} Slides)</span>
+          <span>Carousel Post ({draft.carousel.slides.length} Slides)</span>
         </button>
 
         <button
@@ -683,7 +680,7 @@ ${draft.research.officialDocSources.map((s) => `• ${s.title}: ${s.url} (Checke
                     })
                   }
                   rows={4}
-                  placeholder="Notes on filming props, caption variations, or team approvals..."
+                  placeholder="Notes on graphic styles, caption variations, or team approvals..."
                   className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-rose-500"
                 />
               </div>

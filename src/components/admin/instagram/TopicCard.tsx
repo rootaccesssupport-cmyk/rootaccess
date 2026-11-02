@@ -107,15 +107,20 @@ export const TopicCard: React.FC<TopicCardProps> = ({
           <button
             onClick={onGenerate}
             disabled={isGenerating}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-sm font-bold text-white transition-all shadow-lg shadow-rose-600/30 cursor-pointer disabled:opacity-60"
-            title="Generate complete Image Post, Carousel, Caption & Research package"
+            className="w-full inline-flex flex-col items-center justify-center py-3.5 px-4 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 active:scale-[0.99] text-white transition-all shadow-xl shadow-rose-600/30 cursor-pointer disabled:opacity-60 border border-rose-400/30 group"
+            title="Generate ready-to-download Instagram Post Image"
           >
-            {isGenerating ? (
-              <RefreshCw className="w-4 h-4 animate-spin" />
-            ) : (
-              <ImageIcon className="w-4 h-4 text-rose-200" />
-            )}
-            <span>Generate Image Post</span>
+            <div className="flex items-center gap-2 text-sm sm:text-base font-extrabold">
+              {isGenerating ? (
+                <RefreshCw className="w-5 h-5 animate-spin" />
+              ) : (
+                <ImageIcon className="w-5 h-5 text-rose-200 group-hover:scale-110 transition-transform" />
+              )}
+              <span>Generate Instagram Post</span>
+            </div>
+            <span className="text-[11px] text-rose-100 font-medium opacity-90 mt-0.5">
+              Instant 1080p Downloadable Graphic
+            </span>
           </button>
 
           <div className="flex items-center gap-2 w-full">

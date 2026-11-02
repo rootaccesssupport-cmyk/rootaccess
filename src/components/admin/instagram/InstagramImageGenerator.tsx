@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Download,
-  Copy,
-  Check,
   RefreshCw,
   Sliders,
   Layers,
   Image as ImageIcon,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
   Code2,
@@ -70,7 +67,6 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
       { label: 'D', text: 'Option D: Deprecated syntax in modern engines' },
     ],
     callToAction: 'Follow @RootAccess.tech • Learn by Doing',
-    aiImagePrompt: `Hyper-minimalist 3D isometric tech studio background, obsidian black metallic textures, subtle crimson neon laser accent line (#e11d48), dark glass-morphism terminal card, sharp typography focus, cinematic rim lighting, 8k resolution studio product photography, clean and approachable.`,
   };
 
   const [activeMode, setActiveMode] = useState<'post' | 'carousel'>('post');
@@ -92,10 +88,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
   const [bullet2, setBullet2] = useState(initialPackage.bulletPoints?.[1] || 'Avoid silent regression and assertion false-positives');
   const [bullet3, setBullet3] = useState(initialPackage.bulletPoints?.[2] || 'Practice hands-on test engineering on RootAccess');
   const [callToAction, setCallToAction] = useState(initialPackage.callToAction || 'Follow @RootAccess.tech • Learn by Doing');
-  const [aiImagePrompt, setAiImagePrompt] = useState(initialPackage.aiImagePrompt || '');
 
-  // UI status
-  const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
@@ -116,7 +109,6 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
       quizQuestion: headline,
       quizOptions: initialPackage.quizOptions,
       callToAction,
-      aiImagePrompt,
     };
 
     onUpdateDraft({
@@ -138,7 +130,6 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
     bullet2,
     bullet3,
     callToAction,
-    aiImagePrompt,
     draft,
     onUpdateDraft,
     initialPackage.quizOptions,
@@ -930,17 +921,6 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
     setTimeout(() => setDownloadSuccess(null), 4000);
   };
 
-  // Copy AI Prompt
-  const handleCopyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(aiImagePrompt);
-      setCopiedPrompt(true);
-      setTimeout(() => setCopiedPrompt(false), 2500);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
     <div className="space-y-6 text-slate-100">
       {/* Top Controls Strip */}
@@ -956,7 +936,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             }`}
           >
             <ImageIcon className="w-4 h-4" />
-            <span>Single-Image Post Graphic</span>
+            <span>Single Post Image</span>
           </button>
 
           <button
@@ -968,7 +948,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             }`}
           >
             <Layers className="w-4 h-4" />
-            <span>Carousel Slide Cards ({draft.carousel.slides.length} Slides)</span>
+            <span>Multi-Slide Carousel ({draft.carousel.slides.length} Slides)</span>
           </button>
         </div>
 
@@ -999,7 +979,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             <span>
               {activeMode === 'carousel'
                 ? `Download Slide ${activeSlideIndex + 1} (PNG)`
-                : 'Download Image (PNG)'}
+                : 'Download Post Image (PNG)'}
             </span>
           </button>
         </div>
@@ -1324,29 +1304,6 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
                 </div>
               </div>
             )}
-          </div>
-
-          {/* 3. AI Image Background Prompt */}
-          <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-                <span>AI Background Prompt (Midjourney / Imagen)</span>
-              </span>
-              <button
-                onClick={handleCopyPrompt}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
-              >
-                {copiedPrompt ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                <span>{copiedPrompt ? 'Copied!' : 'Copy Prompt'}</span>
-              </button>
-            </div>
-            <textarea
-              rows={3}
-              value={aiImagePrompt}
-              onChange={(e) => setAiImagePrompt(e.target.value)}
-              className="w-full text-[11px] text-slate-300 leading-relaxed font-mono bg-slate-900 p-3 rounded-xl border border-slate-800/80 focus:outline-none focus:border-rose-500"
-            />
           </div>
         </div>
 
