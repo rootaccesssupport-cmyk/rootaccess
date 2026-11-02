@@ -67,9 +67,9 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     renderComponent();
 
     expect(screen.getByText('Lessons Completed')).toBeInTheDocument();
-    expect(screen.getByText('Defect Logged')).toBeInTheDocument();
+    expect(screen.getByText('Courses Enrolled')).toBeInTheDocument();
     expect(screen.getByText('Quizzes Answered')).toBeInTheDocument();
-    expect(screen.getByText('QA Readiness Level')).toBeInTheDocument();
+    expect(screen.getByText('Skill Level')).toBeInTheDocument();
   });
 
   it('reveals and hides the daily interview scenario model answer', () => {

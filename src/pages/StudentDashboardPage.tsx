@@ -5,7 +5,6 @@ import {
   LogOut,
   Play,
   CheckCircle2,
-  Clock,
   BookOpen,
   Award,
   Database,
@@ -27,6 +26,7 @@ import {
   ShieldCheck,
   MessageCircle,
   ExternalLink,
+  GraduationCap,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -598,7 +598,7 @@ export const StudentDashboardPage: React.FC = () => {
                     Your learning journey starts here.
                   </p>
                   <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-xl leading-relaxed">
-                    Explore our hands-on engineering academies—from <strong>Software Quality &amp; Defect Audits</strong> to <strong>Playwright Test Automation &amp; Databases</strong>. Practical workplace simulations built for everyone in tech.
+                    Explore our hands-on engineering academies—from <strong>Software Testing &amp; SQL Databases</strong> to <strong>Playwright Automation, AI &amp; APIs</strong>. Practical workplace simulations built for everyone in tech.
                   </p>
                 </div>
 
@@ -644,13 +644,13 @@ export const StudentDashboardPage: React.FC = () => {
 
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center gap-3.5">
                 <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600">
-                  <Award className="w-5 h-5" />
+                  <GraduationCap className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xl font-extrabold text-slate-900">
-                    {overallStats.bugsFoundCount}
+                    {enrolledCoursesList.length}
                   </div>
-                  <div className="text-xs text-slate-500 font-medium">Defect Logged</div>
+                  <div className="text-xs text-slate-500 font-medium">Courses Enrolled</div>
                 </div>
               </div>
 
@@ -668,13 +668,13 @@ export const StudentDashboardPage: React.FC = () => {
 
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center gap-3.5">
                 <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600">
-                  <Clock className="w-5 h-5" />
+                  <Award className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xl font-extrabold text-slate-900">
                     {overallStats.totalLessonsCompleted > 5 ? 'Intermediate' : 'Beginner'}
                   </div>
-                  <div className="text-xs text-slate-500 font-medium">QA Readiness Level</div>
+                  <div className="text-xs text-slate-500 font-medium">Skill Level</div>
                 </div>
               </div>
             </div>
