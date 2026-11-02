@@ -26,6 +26,7 @@ import {
   Check,
   ShieldCheck,
   MessageCircle,
+  ExternalLink,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -857,6 +858,43 @@ export const StudentDashboardPage: React.FC = () => {
                 )}
               </div>
             )}
+
+            {/* GROSSNUMBER CAREER BANNER */}
+            <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-7 rounded-3xl border border-indigo-500/20 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="space-y-2 max-w-xl text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Pan-India Career Network</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-white font-bold">GrossNumber.com</span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold text-white">
+                  Looking for QA &amp; Software Jobs Across India?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Discover verified opportunities in Bengaluru, Pune, Hyderabad, Mumbai, Delhi-NCR, Chennai, and remote positions across India on GrossNumber.com.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto">
+                <a
+                  href="https://grossnumber.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs sm:text-sm font-bold text-white transition-all shadow-md group cursor-pointer"
+                >
+                  <Briefcase className="w-4 h-4 text-indigo-200" />
+                  <span>Explore GrossNumber.com</span>
+                  <ExternalLink className="w-4 h-4 text-indigo-300 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+                <Link
+                  to="/careers"
+                  className="hidden sm:inline-flex items-center justify-center px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-colors"
+                >
+                  Careers Page
+                </Link>
+              </div>
+            </div>
           </div>
         )}
 

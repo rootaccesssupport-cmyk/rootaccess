@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Shield, CheckCircle } from 'lucide-react';
+import { Mail, Shield, CheckCircle, Briefcase, ExternalLink } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -20,9 +20,21 @@ export const Footer: React.FC = () => {
             <p className="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">
               A practical tech career platform for everyone—developers, QA engineers, test automation developers, and career switchers. Master real-world engineering skills, solve incident simulations, and build verifiable workplace expertise.
             </p>
-            <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
+            <div className="flex items-center gap-2 text-xs text-slate-400 pt-1">
               <Mail className="w-3.5 h-3.5 text-indigo-400" />
               <span>Enrollment &amp; Support: <a href="mailto:rootaccess.support@gmail.com" className="text-slate-200 font-mono hover:text-white transition-colors">rootaccess.support@gmail.com</a></span>
+            </div>
+            <div className="pt-2">
+              <a
+                href="https://grossnumber.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all group"
+              >
+                <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Careers &amp; Jobs Across India on GrossNumber.com</span>
+                <ExternalLink className="w-3 h-3 text-slate-500 group-hover:text-indigo-400 transition-colors" />
+              </a>
             </div>
           </div>
 
@@ -66,6 +78,12 @@ export const Footer: React.FC = () => {
               Platform
             </h3>
             <ul className="space-y-2 text-xs">
+              <li>
+                <Link to="/careers" className="hover:text-white transition-colors text-indigo-400 font-semibold flex items-center gap-1.5">
+                  <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Careers (GrossNumber)</span>
+                </Link>
+              </li>
               <li>
                 <Link to="/signup" className="hover:text-white transition-colors">
                   Create Account

@@ -53,6 +53,7 @@ import { DevOpsDay3LessonPage } from './pages/devops/DevOpsDay3LessonPage';
 import { SqlDayLessonPage } from './pages/sql/SqlDayLessonPage';
 import { ApiDayLessonPage } from './pages/api/ApiDayLessonPage';
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
+import { CareersPage } from './pages/CareersPage';
 
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { PageTransitionWrapper } from './components/common/PageTransitionWrapper';
@@ -69,6 +70,9 @@ export const App: React.FC = () => {
                 <Routes>
             {/* Public Homepage for Phase 2 */}
             <Route path="/" element={<HomePage />} />
+
+            {/* Careers Page navigating to GrossNumber.com */}
+            <Route path="/careers" element={<CareersPage />} />
 
             {/* Public authentication routes (redirect to /app if already logged in) */}
             <Route

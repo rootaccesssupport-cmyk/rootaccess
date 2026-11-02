@@ -17,6 +17,7 @@ import {
   Send,
   BookOpen,
   ShieldCheck,
+  Briefcase,
 } from 'lucide-react';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 
@@ -108,6 +109,7 @@ export const Navbar: React.FC = () => {
   const globalNavLinks = [
     { label: 'Dashboard', href: '/app', icon: LayoutDashboard },
     { label: 'Explore Courses', href: '/app?tab=catalog', icon: Compass },
+    { label: 'Careers', href: '/careers', icon: Briefcase, badge: 'India Jobs' },
   ];
 
   return (
@@ -164,9 +166,20 @@ export const Navbar: React.FC = () => {
                   >
                     Syllabus Overview
                   </Link>
+
+                  <div className="h-4 w-px bg-slate-200" />
+
+                  <Link
+                    to="/careers"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
+                    title="Find tech jobs across India on GrossNumber.com"
+                  >
+                    <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Careers</span>
+                  </Link>
                 </div>
               ) : (
-                // GLOBAL APP MODE: Clean high-level destinations (NO hardcoded course names)
+                // GLOBAL APP MODE: Clean high-level destinations
                 <div className="flex items-center gap-1 sm:gap-2 text-xs font-semibold">
                   {globalNavLinks.map((link) => {
                     const Icon = link.icon;
@@ -193,6 +206,11 @@ export const Navbar: React.FC = () => {
                           }`}
                         />
                         <span>{link.label}</span>
+                        {link.badge && (
+                          <span className="px-1.5 py-0.5 text-[9px] font-bold bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">
+                            {link.badge}
+                          </span>
+                        )}
                       </Link>
                     );
                   })}
@@ -200,7 +218,7 @@ export const Navbar: React.FC = () => {
               )
             ) : (
               // PUBLIC MARKETING LINKS (Unauthenticated visitors)
-              <div className="flex items-center gap-8 text-sm font-medium text-slate-600">
+              <div className="flex items-center gap-6 text-sm font-medium text-slate-600">
                 <a href="/#tracks" className="hover:text-slate-900 transition-colors">
                   Career Tracks
                 </a>
@@ -213,6 +231,17 @@ export const Navbar: React.FC = () => {
                 <a href="/#faq" className="hover:text-slate-900 transition-colors">
                   FAQ
                 </a>
+                <Link
+                  to="/careers"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 border border-slate-200 transition-all group"
+                  title="Discover tech & QA jobs across India on GrossNumber.com"
+                >
+                  <Briefcase className="w-3.5 h-3.5 text-indigo-600 group-hover:scale-110 transition-transform" />
+                  <span>Careers</span>
+                  <span className="px-1.5 py-0.5 text-[9px] font-bold bg-indigo-100 text-indigo-700 rounded-full">
+                    India Jobs
+                  </span>
+                </Link>
               </div>
             )}
           </div>
@@ -336,6 +365,20 @@ export const Navbar: React.FC = () => {
                       <Bug className="w-4 h-4 text-slate-400" />
                       <span>Defect Simulator Lab</span>
                     </Link>
+
+                    <Link
+                      to="/careers"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Briefcase className="w-4 h-4 text-indigo-600" />
+                        <span>Careers (GrossNumber)</span>
+                      </div>
+                      <span className="px-2 py-0.5 text-[9px] font-bold bg-indigo-100 text-indigo-800 rounded-full">
+                        India Jobs
+                      </span>
+                    </Link>
                   </>
                 ) : (
                   globalNavLinks.map((link) => {
@@ -345,10 +388,17 @@ export const Navbar: React.FC = () => {
                         key={link.label}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                        className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                       >
-                        <Icon className="w-4 h-4 text-slate-400" />
-                        <span>{link.label}</span>
+                        <div className="flex items-center gap-3">
+                          <Icon className="w-4 h-4 text-slate-400" />
+                          <span>{link.label}</span>
+                        </div>
+                        {link.badge && (
+                          <span className="px-2 py-0.5 text-[9px] font-bold bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">
+                            {link.badge}
+                          </span>
+                        )}
                       </Link>
                     );
                   })
@@ -400,6 +450,19 @@ export const Navbar: React.FC = () => {
                 >
                   FAQ
                 </a>
+                <Link
+                  to="/careers"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-indigo-50/70 text-indigo-900 font-semibold"
+                >
+                  <div className="flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-indigo-600" />
+                    <span>Careers &amp; Jobs (GrossNumber)</span>
+                  </div>
+                  <span className="px-2 py-0.5 text-[9px] font-bold bg-indigo-100 text-indigo-700 rounded-full border border-indigo-200">
+                    All India
+                  </span>
+                </Link>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">

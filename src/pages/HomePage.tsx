@@ -18,7 +18,8 @@ import {
   HelpCircle,
   Sparkles,
   Layers,
-  GraduationCap
+  GraduationCap,
+  ExternalLink,
 } from 'lucide-react';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 
@@ -560,6 +561,63 @@ export const HomePage: React.FC = () => {
                   className="inline-flex items-center justify-center w-full px-4 py-2.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors shadow-xs"
                 >
                   Join the Waitlist
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CAREERS & GROSSNUMBER BANNER SECTION */}
+        <section className="py-16 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white relative overflow-hidden border-y border-slate-800">
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="bg-slate-900/80 backdrop-blur-md rounded-3xl border border-indigo-500/30 p-8 sm:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-2xl">
+              <div className="max-w-2xl text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold mb-4 border border-indigo-500/30">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Pan-India Tech Job Discovery</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-white font-bold">GrossNumber.com</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                  Looking for QA &amp; Software Jobs Across India?
+                </h2>
+                <p className="mt-3 text-slate-300 text-sm sm:text-base leading-relaxed">
+                  We've partnered with <strong className="text-white">GrossNumber.com</strong> so RootAccess learners can find verified job openings in Bengaluru, Hyderabad, Pune, Mumbai, Delhi-NCR, Chennai, and remote positions.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-4 text-xs text-slate-400">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Software QA &amp; SDET</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>SQL Data &amp; API Roles</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Freshers &amp; Career Switchers</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto shrink-0">
+                <a
+                  href="https://grossnumber.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-lg shadow-indigo-600/30 group cursor-pointer"
+                >
+                  <Briefcase className="w-4 h-4 text-indigo-200" />
+                  <span>Explore Jobs on GrossNumber.com</span>
+                  <ExternalLink className="w-4 h-4 text-indigo-300 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+                <Link
+                  to="/careers"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 rounded-xl transition-colors text-center"
+                >
+                  <span>Learn About Careers Page</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
