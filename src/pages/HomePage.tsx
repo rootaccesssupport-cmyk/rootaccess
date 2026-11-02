@@ -20,6 +20,7 @@ import {
   Layers,
   GraduationCap,
   ExternalLink,
+  Film,
 } from 'lucide-react';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
@@ -181,6 +182,13 @@ export const HomePage: React.FC = () => {
               >
                 <FileText className="w-4 h-4 text-indigo-600" />
                 <span>Manual Testing</span>
+              </Link>
+              <Link
+                to="/motion"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-all shadow-2xs"
+              >
+                <Film className="w-4 h-4 text-rose-600" />
+                <span>Watch Motion Reel (1080p)</span>
               </Link>
               <a
                 href="#tracks"

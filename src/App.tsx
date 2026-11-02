@@ -58,6 +58,7 @@ import { AdminAiCourseManagerPage } from './pages/admin/AdminAiCourseManagerPage
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
 import { AdminInstagramCreatorPage } from './pages/admin/AdminInstagramCreatorPage';
 import { CareersPage } from './pages/CareersPage';
+import { MotionVideoPage } from './pages/MotionVideoPage';
 
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { PageTransitionWrapper } from './components/common/PageTransitionWrapper';
@@ -74,6 +75,11 @@ export const App: React.FC = () => {
                 <Routes>
             {/* Public Homepage for Phase 2 */}
             <Route path="/" element={<HomePage />} />
+
+            {/* Motion Graphics Promo Reel */}
+            <Route path="/motion" element={<MotionVideoPage />} />
+            <Route path="/promo" element={<Navigate to="/motion" replace />} />
+            <Route path="/video" element={<Navigate to="/motion" replace />} />
 
             {/* Careers Page navigating to GrossNumber.com */}
             <Route path="/careers" element={<CareersPage />} />

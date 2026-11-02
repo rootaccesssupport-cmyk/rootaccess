@@ -20,6 +20,7 @@ import {
   Briefcase,
   Image as ImageIcon,
   Sparkles,
+  Film,
 } from 'lucide-react';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 
@@ -120,6 +121,7 @@ export const Navbar: React.FC = () => {
   const globalNavLinks = [
     { label: 'Dashboard', href: '/app', icon: LayoutDashboard },
     { label: 'Explore Courses', href: '/app?tab=catalog', icon: Compass },
+    { label: 'Motion Reel', href: '/motion', icon: Film, badge: '1080p' },
     { label: 'Careers', href: '/careers', icon: Briefcase, badge: 'India Jobs' },
   ];
 
