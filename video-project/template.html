@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0">
+  <title>RootAccess — Product Reel</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      width: 1080px;
+      height: 1920px;
+      background-color: #030712;
+      color: #F8FAFC;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Light Effects */
+    .ambient-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 35%, rgba(220, 38, 38, 0.18) 0%, rgba(3, 7, 18, 0) 65%);
+      transition: opacity 0.5s ease;
+      z-index: 1;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Reels Safe Container */
+    .safe-viewport {
+      position: absolute;
+      top: 160px;
+      bottom: 280px;
+      left: 80px;
+      right: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    /* Base Scene Container */
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.96);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .scene.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    /* Premium Pill Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .badge-red {
+      background: rgba(220, 38, 38, 0.15);
+      border: 1.5px solid rgba(239, 68, 68, 0.6);
+      color: #FCA5A5;
+    }
+
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1.5px solid rgba(16, 185, 129, 0.6);
+      color: #6EE7B7;
+    }
+
+    .badge-dark {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      color: #E2E8F0;
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(30px);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 32px;
+      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+    }
+
+    /* SCENE 1 STYLES */
+    .hook-headline {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.25;
+      text-align: center;
+      max-width: 820px;
+      color: #FFFFFF;
+      letter-spacing: -0.03em;
+    }
+
+    .hook-headline span {
+      background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hook-logo-wrap {
+      margin-top: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .hook-logo {
+      height: 90px;
+      object-contain: contain;
+      filter: drop-shadow(0 15px 30px rgba(220, 38, 38, 0.35));
+    }
+
+    .tagline-sub {
+      font-size: 26px;
+      font-weight: 600;
+      color: #CBD5E1;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .red-beam {
+      width: 140px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #DC2626, #EF4444, transparent);
+      border-radius: 9999px;
+      box-shadow: 0 0 20px #EF4444;
+    }
+
+    /* SCENE 2 STYLES (COURSE CATALOG) */
+    .catalog-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .catalog-title {
+      font-size: 46px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+    }
+
+    .catalog-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      max-width: 840px;
+    }
+
+    .course-card-mini {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 32px;
+      border-radius: 26px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .course-card-mini.featured {
+      background: linear-gradient(135deg, rgba(6, 78, 59, 0.45) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 2px solid rgba(16, 185, 129, 0.7);
+      box-shadow: 0 20px 45px -10px rgba(16, 185, 129, 0.35);
+      transform: scale(1.03);
+    }
+
+    .course-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .course-icon-box {
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .course-title-text {
+      font-size: 26px;
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+
+    .course-badge-text {
+      font-size: 17px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .course-price-pill {
+      font-family: monospace;
+      font-size: 22px;
+      font-weight: 800;
+      padding: 10px 20px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #F8FAFC;
+    }
+
+    .supporting-banner {
+      margin-top: 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* SCENE 3 STYLES (OPEN SQL COURSE) */
+    .sql-intro-wrap {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .sql-hero-card {
+      padding: 44px;
+      border-radius: 36px;
+      background: linear-gradient(145deg, rgba(6, 78, 59, 0.4) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 2px solid rgba(16, 185, 129, 0.6);
+      box-shadow: 0 30px 60px -15px rgba(16, 185, 129, 0.35);
+    }
+
+    .journey-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .journey-step {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 24px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 22px;
+      font-weight: 600;
+      color: #E2E8F0;
+    }
+
+    .journey-step.active-step {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.6);
+      color: #A7F3D0;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .step-num.active {
+      background: #10B981;
+      color: #022C22;
+    }
+
+    /* SCENE 4 STYLES (SQL HERO DEMONSTRATION) */
+    .sql-demo-box {
+      width: 100%;
+      max-width: 880px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .code-editor-card {
+      border-radius: 28px;
+      background: #0B1120;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.9);
+      overflow: hidden;
+      font-family: "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+    }
+
+    .editor-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 26px;
+      background: #070D18;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .editor-dots {
+      display: flex;
+      gap: 10px;
+    }
+
+    .editor-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 9999px;
+    }
+
+    .code-content {
+      padding: 34px 38px;
+      font-size: 27px;
+      line-height: 1.7;
+      color: #E2E8F0;
+    }
+
+    .kw-select { color: #60A5FA; font-weight: 700; }
+    .kw-from   { color: #C084FC; font-weight: 700; }
+    .kw-where  { color: #F43F5E; font-weight: 700; }
+    .col-name  { color: #34D399; }
+    .val-str   { color: #FCD34D; font-weight: 600; }
+
+    .highlight-clause {
+      background: rgba(220, 38, 38, 0.25);
+      border-radius: 8px;
+      padding: 4px 10px;
+      border: 1px solid rgba(239, 68, 68, 0.6);
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+      display: inline-block;
+    }
+
+    /* Table Component */
+    .table-card {
+      border-radius: 28px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+    }
+
+    .table-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 26px;
+      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 19px;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .sql-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 24px;
+    }
+
+    .sql-table th {
+      padding: 18px 28px;
+      background: rgba(30, 41, 59, 0.5);
+      color: #94A3B8;
+      font-size: 20px;
+      font-weight: 700;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .sql-table td {
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #F1F5F9;
+      transition: all 0.3s ease;
+    }
+
+    .row-matched {
+      background: rgba(16, 185, 129, 0.22) !important;
+      color: #A7F3D0 !important;
+      font-weight: 700;
+    }
+
+    .row-matched td {
+      color: #6EE7B7 !important;
+      border-top: 1.5px solid rgba(16, 185, 129, 0.7);
+      border-bottom: 1.5px solid rgba(16, 185, 129, 0.7);
+    }
+
+    .row-dimmed {
+      opacity: 0.22;
+      filter: blur(1px);
+    }
+
+    /* SCENE 5 STYLES (LEARNING EXPERIENCE) */
+    .features-wrap {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .feature-card {
+      padding: 30px 34px;
+      border-radius: 28px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feature-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .feature-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .verification-box {
+      padding: 18px 24px;
+      border-radius: 18px;
+      background: rgba(6, 78, 59, 0.45);
+      border: 1.5px solid rgba(16, 185, 129, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 21px;
+      font-weight: 600;
+      color: #A7F3D0;
+    }
+
+    .quiz-question-box {
+      font-size: 22px;
+      font-weight: 600;
+      color: #F1F5F9;
+      line-height: 1.4;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-opt {
+      padding: 14px 20px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      font-size: 19px;
+      color: #CBD5E1;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .quiz-opt.selected-correct {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.8);
+      color: #A7F3D0;
+      font-weight: 700;
+    }
+
+    /* SCENE 6 STYLES (BRAND OUTRO) */
+    .brand-outro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 36px;
+    }
+
+    .outro-logo {
+      height: 110px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 45px rgba(220, 38, 38, 0.45));
+    }
+
+    .outro-title {
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: #FFFFFF;
+    }
+
+    .outro-tagline {
+      font-size: 38px;
+      font-weight: 700;
+      color: #E2E8F0;
+      letter-spacing: -0.01em;
+    }
+
+    .url-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 42px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      font-family: monospace;
+      font-size: 34px;
+      font-weight: 800;
+      color: #FFFFFF;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .cta-button {
+      padding: 24px 56px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+      color: #FFFFFF;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 20px 50px -10px rgba(220, 38, 38, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow" id="ambientGlow"></div>
+  <div class="grid-lines"></div>
+
+  <div class="safe-viewport">
+    <!-- SCENE 1: THE HOOK (0 - 4s) -->
+    <div class="scene" id="scene1">
+      <div class="badge badge-red" style="margin-bottom: 30px;">
+        Hands-On Tech Education
+      </div>
+      <h1 class="hook-headline">
+        “Learning tech skills <span>shouldn’t be complicated.</span>”
+      </h1>
+      <div class="hook-logo-wrap" id="scene1LogoWrap" style="opacity: 0; transform: translateY(20px);">
+        <div class="red-beam"></div>
+        <img class="hook-logo" id="scene1Logo" alt="RootAccess">
+        <div class="tagline-sub">Learn by Doing.</div>
+      </div>
+    </div>
+
+    <!-- SCENE 2: MEET ROOTACCESS (4 - 10s) -->
+    <div class="scene" id="scene2">
+      <div class="catalog-header">
+        <div class="badge badge-dark" style="margin-bottom: 16px;">
+          RootAccess Platform
+        </div>
+        <h2 class="catalog-title">Master In-Demand Skills</h2>
+      </div>
+
+      <div class="catalog-grid" id="catalogGrid">
+        <!-- Playwright Automation -->
+        <div class="course-card-mini" id="cardPlaywright">
+          <div class="course-info">
+            <div class="course-icon-box" style="color: #C084FC;">⚡</div>
+            <div>
+              <div class="course-title-text">Playwright Automation (JS + AI)</div>
+              <div class="course-badge-text" style="color: #C084FC;">20-Day Masterclass • Live</div>
+            </div>
+          </div>
+          <div class="course-price-pill">20 Days</div>
+        </div>
+
+        <!-- SQL Course (Hero Focus) -->
+        <div class="course-card-mini featured" id="cardSql">
+          <div class="course-info">
+            <div class="course-icon-box" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.5); color: #34D399;">🗄️</div>
+            <div>
+              <div class="course-title-text">SQL Fundamentals to Database QA</div>
+              <div class="course-badge-text" style="color: #6EE7B7;">5-Day Practical Course • ₹299</div>
+            </div>
+          </div>
+          <div class="course-price-pill" style="background: #10B981; color: #064E3B;">Featured</div>
+        </div>
+
+        <!-- API Testing Postman -->
+        <div class="course-card-mini" id="cardApi">
+          <div class="course-info">
+            <div class="course-icon-box" style="color: #FBBF24;">📡</div>
+            <div>
+              <div class="course-title-text">API Testing with Postman</div>
+              <div class="course-badge-text" style="color: #FBBF24;">5-Day Practical Course • Live</div>
+            </div>
+          </div>
+          <div class="course-price-pill">5 Days</div>
+        </div>
+
+        <!-- Manual QA -->
+        <div class="course-card-mini" id="cardManual">
+          <div class="course-info">
+            <div class="course-icon-box" style="color: #818CF8;">📋</div>
+            <div>
+              <div class="course-title-text">Manual QA & Defect Life Cycle</div>
+              <div class="course-badge-text" style="color: #818CF8;">5-Day Intensive • Live</div>
+            </div>
+          </div>
+          <div class="course-price-pill">5 Days</div>
+        </div>
+      </div>
+
+      <!-- Supporting Statement Banner (One message at a time) -->
+      <div class="supporting-banner">
+        <div class="badge badge-emerald" id="supportingCopy" style="font-size: 26px; padding: 14px 34px;">
+          Learn practical skills.
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 3: OPEN THE SQL COURSE (10 - 15s) -->
+    <div class="scene" id="scene3">
+      <div class="sql-intro-wrap">
+        <div class="badge badge-emerald" style="align-self: center;">
+          SQL, made simple.
+        </div>
+
+        <div class="sql-hero-card">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <span style="font-family: monospace; font-size: 20px; font-weight: 700; color: #34D399;">COURSE 03 / 5-DAY TRACK</span>
+            <span style="background: rgba(16, 185, 129, 0.2); color: #A7F3D0; padding: 6px 16px; border-radius: 12px; font-weight: 700; font-size: 18px;">Launch Price: ₹299</span>
+          </div>
+
+          <h3 style="font-size: 40px; font-weight: 800; color: #FFFFFF; line-height: 1.25;">
+            SQL Fundamentals to Practical Database Testing
+          </h3>
+
+          <p style="font-size: 22px; color: #CBD5E1; margin-top: 14px; line-height: 1.5;">
+            Write real queries, inspect relational integrity, solve exercises, and test migrations in an interactive SQL sandbox.
+          </p>
+
+          <div class="journey-timeline">
+            <div class="journey-step active-step" id="jStep1">
+              <span class="step-num active">✓</span>
+              <span>1. Open Course & Syllabus (5 Days)</span>
+            </div>
+            <div class="journey-step active-step" id="jStep2">
+              <span class="step-num active">✓</span>
+              <span>2. Select Day 1: SQL Foundations & Filtering</span>
+            </div>
+            <div class="journey-step active-step" id="jStep3">
+              <span class="step-num active">3</span>
+              <span>3. Understand Relational Data Models</span>
+            </div>
+            <div class="journey-step active-step" id="jStep4">
+              <span class="step-num active" style="background: #EF4444; color: #FFF;">⚡</span>
+              <span>4. Enter Hands-on SQL Sandbox</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 4: SQL DEMONSTRATION (HERO SEQUENCE) (15 - 25s) -->
+    <div class="scene" id="scene4">
+      <div class="sql-demo-box">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div class="badge badge-emerald">
+            Interactive SQL Engine
+          </div>
+          <div style="font-family: monospace; font-size: 20px; color: #94A3B8;">
+            RootAccess Deterministic Simulator
+          </div>
+        </div>
+
+        <!-- Syntax Highlighted Editor -->
+        <div class="code-editor-card">
+          <div class="editor-top-bar">
+            <div class="editor-dots">
+              <div class="editor-dot" style="background: #EF4444;"></div>
+              <div class="editor-dot" style="background: #F59E0B;"></div>
+              <div class="editor-dot" style="background: #10B981;"></div>
+            </div>
+            <div style="font-size: 18px; color: #94A3B8; font-weight: 600;">query.sql</div>
+            <div style="font-size: 16px; color: #34D399; font-weight: 700;">● Live Execution</div>
+          </div>
+
+          <div class="code-content" id="codeContent">
+            <!-- Dynamically typed via JS -->
+            <span class="kw-select">SELECT</span> <span class="col-name">name</span>, <span class="col-name">city</span><br>
+            <span class="kw-from">FROM</span> <span class="col-name">customers</span><br>
+            <span id="whereLine"><span class="kw-where">WHERE</span> <span class="col-name">city</span> = <span class="val-str">'Bengaluru'</span>;</span>
+          </div>
+        </div>
+
+        <!-- Fictional Customer Dataset Table -->
+        <div class="table-card">
+          <div class="table-header-bar">
+            <span id="tableTitle">Source Table: customers (4 rows)</span>
+            <span id="tableStatus" style="color: #6EE7B7;">Initial Dataset</span>
+          </div>
+
+          <table class="sql-table">
+            <thead>
+              <tr>
+                <th>name</th>
+                <th>city</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr id="row1"><td>Asha</td><td>Bengaluru</td></tr>
+              <tr id="row2"><td>Ravi</td><td>Hyderabad</td></tr>
+              <tr id="row3"><td>Neha</td><td>Bengaluru</td></tr>
+              <tr id="row4"><td>Arjun</td><td>Chennai</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Explanation Pill -->
+        <div style="display: flex; justify-content: center;" id="explanationPillBox">
+          <div class="badge badge-dark" id="explanationPill" style="font-size: 24px; padding: 14px 34px; border-color: rgba(16, 185, 129, 0.6); color: #A7F3D0;">
+            Filter data. Understand the result.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 5: SHOW THE LEARNING EXPERIENCE (25 - 30s) -->
+    <div class="scene" id="scene5">
+      <div class="features-wrap">
+        <div style="text-align: center;">
+          <div class="badge badge-red" style="margin-bottom: 14px;">
+            Active Learning
+          </div>
+          <h2 style="font-size: 44px; font-weight: 800; color: #FFFFFF;">
+            Learn by doing, not just watching.
+          </h2>
+        </div>
+
+        <!-- Feature 1: Verification Feedback -->
+        <div class="feature-card" style="border-color: rgba(16, 185, 129, 0.4);">
+          <div class="feature-title-row">
+            <div class="feature-name">
+              <span style="color: #10B981;">●</span> Instant Query Validation
+            </div>
+            <span style="font-family: monospace; font-size: 18px; color: #6EE7B7;">100% Match</span>
+          </div>
+          <div class="verification-box">
+            <span style="font-size: 28px;">✓</span>
+            <div>
+              <div style="font-weight: 800;">Verification Passed!</div>
+              <div style="font-size: 18px; opacity: 0.9; margin-top: 2px;">
+                Correct projection: returned 2 matching Bengaluru rows.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2: Checkpoint Quiz -->
+        <div class="feature-card">
+          <div class="feature-title-row">
+            <div class="feature-name">
+              <span style="color: #F59E0B;">●</span> Daily Checkpoint Quiz
+            </div>
+            <span style="background: rgba(16, 185, 129, 0.2); color: #6EE7B7; padding: 4px 14px; border-radius: 9999px; font-weight: 700; font-size: 16px;">
+              80% Passing Score
+            </span>
+          </div>
+
+          <div class="quiz-question-box">
+            Q: Which SQL clause filters records before aggregation?
+          </div>
+
+          <div class="quiz-options">
+            <div class="quiz-opt">A) HAVING</div>
+            <div class="quiz-opt selected-correct">
+              <span>✓ B) WHERE</span>
+              <span style="margin-left: auto; font-size: 15px; font-weight: 700; color: #34D399;">CORRECT</span>
+            </div>
+            <div class="quiz-opt">C) ORDER BY</div>
+          </div>
+        </div>
+
+        <!-- Feature 3: Progress Tracker -->
+        <div class="feature-card" style="padding: 22px 34px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 20px; font-weight: 700; color: #E2E8F0;">
+              Day 1 Progress: 4/4 Completed
+            </div>
+            <div style="color: #10B981; font-weight: 800; font-size: 20px;">
+              100% Done
+            </div>
+          </div>
+          <div style="width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 9999px; overflow: hidden; margin-top: 8px;">
+            <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #10B981, #34D399);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 6: BRAND ENDING (30 - 35s) -->
+    <div class="scene" id="scene6">
+      <div class="brand-outro">
+        <img class="outro-logo" id="scene6Logo" alt="RootAccess">
+
+        <div>
+          <h1 class="outro-title">RootAccess</h1>
+          <div class="outro-tagline" style="margin-top: 10px;">Learn by Doing.</div>
+        </div>
+
+        <div class="red-beam" style="width: 220px; height: 5px;"></div>
+
+        <div class="url-badge">
+          rootaccess.co.in
+        </div>
+
+        <div class="cta-button">
+          <span>Start learning today</span>
+          <span style="font-size: 32px;">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Embed Logo Asset from base64
+    let LOGO_B64 = '';
+    
+    // Seek to specific frame function called deterministically by Playwright
+    window.seekToFrame = function(frameIndex, totalFrames = 1050) {
+      const fps = 30.0;
+      const t = frameIndex / fps; // current time in seconds (0.0 to 35.0)
+
+      // Ensure logos are set
+      if (!window.logoSet && LOGO_B64) {
+        document.getElementById('scene1Logo').src = 'data:image/png;base64,' + LOGO_B64;
+        document.getElementById('scene6Logo').src = 'data:image/png;base64,' + LOGO_B64;
+        window.logoSet = true;
+      }
+
+      // Hide all scenes by default
+      const s1 = document.getElementById('scene1');
+      const s2 = document.getElementById('scene2');
+      const s3 = document.getElementById('scene3');
+      const s4 = document.getElementById('scene4');
+      const s5 = document.getElementById('scene5');
+      const s6 = document.getElementById('scene6');
+      const ambientGlow = document.getElementById('ambientGlow');
+
+      [s1, s2, s3, s4, s5, s6].forEach(s => {
+        s.style.opacity = '0';
+        s.style.transform = 'scale(0.96)';
+        s.style.display = 'none';
+      });
+
+      // Easing helpers
+      const clamp01 = (v) => Math.max(0, Math.min(1, v));
+      const easeInOut = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+      const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+
+      // ==========================================
+      // SCENE 1: THE HOOK (0.0s - 4.0s)
+      // ==========================================
+      if (t < 4.0) {
+        s1.style.display = 'flex';
+        // Fade in 0 - 0.6s, Fade out 3.5 - 4.0s
+        let op = 1.0;
+        if (t < 0.6) op = easeOut(t / 0.6);
+        else if (t > 3.5) op = easeOut((4.0 - t) / 0.5);
+
+        s1.style.opacity = op;
+        s1.style.transform = `scale(${0.96 + op * 0.04})`;
+
+        // Logo reveal inside Scene 1 around 2.4s
+        const logoWrap = document.getElementById('scene1LogoWrap');
+        if (t >= 2.2) {
+          const lProg = easeOut(clamp01((t - 2.2) / 0.7));
+          logoWrap.style.opacity = lProg;
+          logoWrap.style.transform = `translateY(${20 * (1 - lProg)}px)`;
+        } else {
+          logoWrap.style.opacity = '0';
+          logoWrap.style.transform = 'translateY(20px)';
+        }
+
+        ambientGlow.style.background = 'radial-gradient(circle at 50% 35%, rgba(220, 38, 38, 0.25) 0%, rgba(3, 7, 18, 0) 65%)';
+      }
+
+      // ==========================================
+      // SCENE 2: MEET ROOTACCESS (4.0s - 10.0s)
+      // ==========================================
+      else if (t >= 4.0 && t < 10.0) {
+        s2.style.display = 'flex';
+        let op = 1.0;
+        if (t < 4.5) op = easeOut((t - 4.0) / 0.5);
+        else if (t > 9.5) op = easeOut((10.0 - t) / 0.5);
+
+        s2.style.opacity = op;
+        // Subtle push-in scale from 1.0 to 1.04
+        const pushScale = 0.98 + 0.06 * ((t - 4.0) / 6.0);
+        s2.style.transform = `scale(${pushScale})`;
+
+        // Supporting statement sequence (one at a time)
+        const suppCopy = document.getElementById('supportingCopy');
+        if (t < 6.0) {
+          suppCopy.innerText = 'Learn practical skills.';
+          suppCopy.className = 'badge badge-emerald';
+        } else if (t < 8.0) {
+          suppCopy.innerText = 'Practice as you learn.';
+          suppCopy.className = 'badge badge-red';
+        } else {
+          suppCopy.innerText = 'Build real confidence.';
+          suppCopy.className = 'badge badge-emerald';
+        }
+
+        ambientGlow.style.background = 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.16) 0%, rgba(3, 7, 18, 0) 65%)';
+      }
+
+      // ==========================================
+      // SCENE 3: OPEN THE SQL COURSE (10.0s - 15.0s)
+      // ==========================================
+      else if (t >= 10.0 && t < 15.0) {
+        s3.style.display = 'flex';
+        let op = 1.0;
+        if (t < 10.5) op = easeOut((t - 10.0) / 0.5);
+        else if (t > 14.5) op = easeOut((15.0 - t) / 0.5);
+
+        s3.style.opacity = op;
+        s3.style.transform = `scale(${0.97 + 0.05 * ((t - 10.0) / 5.0)})`;
+
+        // Sequential step highlight
+        const sProg = (t - 10.0) / 5.0;
+        ['jStep1', 'jStep2', 'jStep3', 'jStep4'].forEach((id, idx) => {
+          const el = document.getElementById(id);
+          if (sProg > idx * 0.22) {
+            el.style.opacity = '1';
+            el.style.transform = 'translateX(0)';
+          } else {
+            el.style.opacity = '0.5';
+            el.style.transform = 'translateX(-10px)';
+          }
+        });
+
+        ambientGlow.style.background = 'radial-gradient(circle at 50% 40%, rgba(16, 185, 129, 0.22) 0%, rgba(3, 7, 18, 0) 70%)';
+      }
+
+      // ==========================================
+      // SCENE 4: SQL HERO DEMO (15.0s - 25.0s)
+      // ==========================================
+      else if (t >= 15.0 && t < 25.0) {
+        s4.style.display = 'flex';
+        let op = 1.0;
+        if (t < 15.5) op = easeOut((t - 15.0) / 0.5);
+        else if (t > 24.5) op = easeOut((25.0 - t) / 0.5);
+
+        s4.style.opacity = op;
+        s4.style.transform = 'scale(1)';
+
+        const localT = t - 15.0; // 0.0s to 10.0s
+
+        // 1. Animated typing of SQL Query (0.8s to 4.5s)
+        const codeBox = document.getElementById('codeContent');
+        if (localT < 1.2) {
+          codeBox.innerHTML = '<span class="kw-select">SELECT</span> <span class="col-name">name</span>, <span class="col-name">city</span><span style="border-right: 3px solid #60A5FA; margin-left: 4px;"></span>';
+        } else if (localT < 2.5) {
+          codeBox.innerHTML = '<span class="kw-select">SELECT</span> <span class="col-name">name</span>, <span class="col-name">city</span><br><span class="kw-from">FROM</span> <span class="col-name">customers</span><span style="border-right: 3px solid #C084FC; margin-left: 4px;"></span>';
+        } else {
+          // Full query typed
+          if (localT >= 5.0 && localT < 8.0) {
+            // Highlight WHERE clause
+            codeBox.innerHTML = '<span class="kw-select">SELECT</span> <span class="col-name">name</span>, <span class="col-name">city</span><br><span class="kw-from">FROM</span> <span class="col-name">customers</span><br><span class="highlight-clause"><span class="kw-where">WHERE</span> <span class="col-name">city</span> = <span class="val-str">\'Bengaluru\'</span>;</span>';
+          } else {
+            codeBox.innerHTML = '<span class="kw-select">SELECT</span> <span class="col-name">name</span>, <span class="col-name">city</span><br><span class="kw-from">FROM</span> <span class="col-name">customers</span><br><span class="kw-where">WHERE</span> <span class="col-name">city</span> = <span class="val-str">\'Bengaluru\'</span>;';
+          }
+        }
+
+        // 2. Table row highlighting & transitions
+        const r1 = document.getElementById('row1'); // Asha (Bengaluru)
+        const r2 = document.getElementById('row2'); // Ravi (Hyderabad)
+        const r3 = document.getElementById('row3'); // Neha (Bengaluru)
+        const r4 = document.getElementById('row4'); // Arjun (Chennai)
+        const tTitle = document.getElementById('tableTitle');
+        const tStatus = document.getElementById('tableStatus');
+        const tBody = document.getElementById('tableBody');
+
+        if (localT < 5.0) {
+          // Initial source table
+          tTitle.innerText = 'Source Table: customers (4 rows)';
+          tStatus.innerText = 'Initial Dataset';
+          tStatus.style.color = '#94A3B8';
+          [r1, r2, r3, r4].forEach(r => {
+            r.className = '';
+            r.style.display = 'table-row';
+          });
+        } else if (localT >= 5.0 && localT < 7.8) {
+          // Highlight matching Bengaluru rows, dim non-matching
+          tTitle.innerText = 'Filtering: city = \'Bengaluru\'';
+          tStatus.innerText = '2 Matches Identified';
+          tStatus.style.color = '#34D399';
+          r1.className = 'row-matched';
+          r3.className = 'row-matched';
+          r2.className = 'row-dimmed';
+          r4.className = 'row-dimmed';
+          r2.style.display = 'table-row';
+          r4.style.display = 'table-row';
+        } else {
+          // Filtered Result Table (only 2 rows)
+          tTitle.innerText = 'Query Output: (2 rows in 12ms)';
+          tStatus.innerText = '✓ Result Ready';
+          tStatus.style.color = '#10B981';
+          r1.className = 'row-matched';
+          r3.className = 'row-matched';
+          r2.style.display = 'none';
+          r4.style.display = 'none';
+        }
+
+        // Explanation pill fade in at 8.0s
+        const expPill = document.getElementById('explanationPillBox');
+        if (localT >= 7.8) {
+          expPill.style.opacity = '1';
+          expPill.style.transform = 'translateY(0)';
+        } else {
+          expPill.style.opacity = '0';
+          expPill.style.transform = 'translateY(15px)';
+        }
+
+        ambientGlow.style.background = 'radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.2) 0%, rgba(3, 7, 18, 0) 70%)';
+      }
+
+      // ==========================================
+      // SCENE 5: LEARNING EXPERIENCE (25.0s - 30.0s)
+      // ==========================================
+      else if (t >= 25.0 && t < 30.0) {
+        s5.style.display = 'flex';
+        let op = 1.0;
+        if (t < 25.5) op = easeOut((t - 25.0) / 0.5);
+        else if (t > 29.5) op = easeOut((30.0 - t) / 0.5);
+
+        s5.style.opacity = op;
+        s5.style.transform = `scale(${0.97 + 0.05 * ((t - 25.0) / 5.0)})`;
+
+        ambientGlow.style.background = 'radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.2) 0%, rgba(3, 7, 18, 0) 65%)';
+      }
+
+      // ==========================================
+      // SCENE 6: BRAND ENDING (30.0s - 35.0s)
+      // ==========================================
+      else {
+        s6.style.display = 'flex';
+        let op = 1.0;
+        if (t < 30.6) op = easeOut((t - 30.0) / 0.6);
+        else if (t > 34.4) op = easeOut((35.0 - t) / 0.6);
+
+        s6.style.opacity = op;
+        s6.style.transform = `scale(${0.96 + op * 0.04})`;
+
+        ambientGlow.style.background = 'radial-gradient(circle at 50% 40%, rgba(220, 38, 38, 0.3) 0%, rgba(3, 7, 18, 0) 65%)';
+      }
+    };
+
+    // Inject base64 logo if provided via window.setLogoB64
+    window.setLogoB64 = function(b64) {
+      LOGO_B64 = b64;
+      document.getElementById('scene1Logo').src = 'data:image/png;base64,' + b64;
+      document.getElementById('scene6Logo').src = 'data:image/png;base64,' + b64;
+      window.logoSet = true;
+    };
+  </script>
+</body>
+</html>

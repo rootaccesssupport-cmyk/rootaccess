@@ -19,7 +19,9 @@
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report",
     "test:unit": "vitest run",
-    "test:unit:watch": "vitest"
+    "test:unit:watch": "vitest",
+    "video:audio": "node video-project/audio-synth.js",
+    "video:render": "node video-project/render-reel.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
