@@ -149,8 +149,13 @@ export const enrollmentService = {
     return getLocalRequests();
   },
 
-  // Admin: Approve request and grant course enrollment
-  async approveRequest(requestId: string, adminEmail: string): Promise<{ success: boolean; error?: string }> {
+  // Admin: Approve request and grant course enrollment (with optional UTR / notes)
+  async approveRequest(
+    requestId: string,
+    adminEmail: string,
+    updatedUpiRef?: string,
+    adminNotes?: string
+  ): Promise<{ success: boolean; error?: string }> {
     // 1. Find request
     let target: EnrollmentRequest | null = null;
     const local = getLocalRequests();
@@ -173,10 +178,20 @@ export const enrollmentService = {
       return { success: false, error: 'Request not found' };
     }
 
+    const finalUpiRef = updatedUpiRef !== undefined ? updatedUpiRef.trim() : (target.upi_reference || '');
+    const finalNotes = adminNotes !== undefined ? adminNotes.trim() : (target.student_notes || '');
+
     // 2. Mark request as approved
     const updatedLocal = local.map((r) =>
       r.id === requestId
-        ? { ...r, status: 'approved' as const, reviewed_at: new Date().toISOString(), reviewed_by: adminEmail }
+        ? {
+            ...r,
+            status: 'approved' as const,
+            upi_reference: finalUpiRef,
+            student_notes: finalNotes,
+            reviewed_at: new Date().toISOString(),
+            reviewed_by: adminEmail,
+          }
         : r
     );
     saveLocalRequests(updatedLocal);
@@ -192,6 +207,8 @@ export const enrollmentService = {
           .from('enrollment_requests')
           .update({
             status: 'approved',
+            upi_reference: finalUpiRef,
+            student_notes: finalNotes,
             reviewed_at: new Date().toISOString(),
             reviewed_by: adminEmail,
           })
@@ -267,9 +284,17 @@ export const enrollmentService = {
     return { success: true };
   },
 
-  // Admin: Directly grant access to a student by email without prior request
-  async directGrantByEmail(email: string, courseSlug: string, adminEmail: string): Promise<{ success: boolean; message: string }> {
+  // Admin: Directly grant access to a student by email without prior request (with UTR & notes)
+  async directGrantByEmail(
+    email: string,
+    courseSlug: string,
+    adminEmail: string,
+    upiReference?: string,
+    notes?: string
+  ): Promise<{ success: boolean; message: string }> {
     const normalizedSlug = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
+    const finalUpiRef = upiReference ? upiReference.trim() : '';
+    const finalNotes = notes ? notes.trim() : 'Directly granted by administrator';
 
     if (isSupabaseConfigured) {
       try {
@@ -284,20 +309,20 @@ export const enrollmentService = {
         }
 
         const currentEnrolled: string[] = profile.enrolled_courses || [];
-        if (currentEnrolled.includes(normalizedSlug)) {
-          return { success: true, message: `Student already has access to this course.` };
+        const isAlreadyEnrolled = currentEnrolled.includes(normalizedSlug);
+
+        if (!isAlreadyEnrolled) {
+          const updated = [...currentEnrolled, normalizedSlug];
+          await supabase
+            .from('profiles')
+            .update({
+              enrolled_courses: updated,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', profile.id);
         }
 
-        const updated = [...currentEnrolled, normalizedSlug];
-        await supabase
-          .from('profiles')
-          .update({
-            enrolled_courses: updated,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', profile.id);
-
-        // Also upsert an approved request
+        // Upsert approved request with UTR
         await supabase.from('enrollment_requests').upsert({
           user_id: profile.id,
           user_email: profile.email,
@@ -305,11 +330,16 @@ export const enrollmentService = {
           course_slug: normalizedSlug,
           course_title: normalizedSlug,
           status: 'approved',
+          upi_reference: finalUpiRef,
+          student_notes: finalNotes,
           reviewed_at: new Date().toISOString(),
           reviewed_by: adminEmail,
         }, { onConflict: 'user_id,course_slug' });
 
-        return { success: true, message: `Successfully granted "${normalizedSlug}" to ${profile.full_name} (${profile.email})!` };
+        return {
+          success: true,
+          message: `Successfully granted "${normalizedSlug}" to ${profile.full_name} (${profile.email})${finalUpiRef ? ` [UTR: ${finalUpiRef}]` : ''}!`,
+        };
       } catch (err: any) {
         return { success: false, message: `Error: ${err.message}` };
       }
@@ -318,7 +348,7 @@ export const enrollmentService = {
     return { success: false, message: 'Database not connected.' };
   },
 
-  // Admin: Revoke access
+  // Admin: Revoke specific course access from a user
   async revokeAccess(userId: string, courseSlug: string): Promise<{ success: boolean; message: string }> {
     const normalizedSlug = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
 
@@ -347,12 +377,75 @@ export const enrollmentService = {
           .eq('user_id', userId)
           .eq('course_slug', normalizedSlug);
 
-        return { success: true, message: 'Access revoked successfully.' };
+        // Update local storage
+        const local = getLocalRequests();
+        saveLocalRequests(local.filter((r) => !(r.user_id === userId && r.course_slug === normalizedSlug)));
+
+        return { success: true, message: `Access to "${normalizedSlug}" has been revoked.` };
       } catch (err: any) {
         return { success: false, message: err.message };
       }
     }
 
+    const local = getLocalRequests();
+    saveLocalRequests(local.filter((r) => !(r.user_id === userId && r.course_slug === normalizedSlug)));
     return { success: true, message: 'Access revoked locally.' };
+  },
+
+  // Admin: Revoke ALL course access from a user
+  async revokeAllAccess(userId: string): Promise<{ success: boolean; message: string }> {
+    if (isSupabaseConfigured) {
+      try {
+        await supabase
+          .from('profiles')
+          .update({
+            enrolled_courses: [],
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', userId);
+
+        await supabase
+          .from('enrollment_requests')
+          .delete()
+          .eq('user_id', userId);
+
+        const local = getLocalRequests();
+        saveLocalRequests(local.filter((r) => r.user_id !== userId));
+
+        return { success: true, message: 'All course access revoked for this student.' };
+      } catch (err: any) {
+        return { success: false, message: err.message };
+      }
+    }
+
+    const local = getLocalRequests();
+    saveLocalRequests(local.filter((r) => r.user_id !== userId));
+    return { success: true, message: 'All course access revoked locally.' };
+  },
+
+  // Admin: Revoke access by student email
+  async revokeAccessByEmail(email: string, courseSlug?: string): Promise<{ success: boolean; message: string }> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('id, email, enrolled_courses')
+          .eq('email', email.trim().toLowerCase())
+          .maybeSingle();
+
+        if (error || !profile) {
+          return { success: false, message: `No registered account found with email: ${email}` };
+        }
+
+        if (!courseSlug || courseSlug === 'all') {
+          return this.revokeAllAccess(profile.id);
+        } else {
+          return this.revokeAccess(profile.id, courseSlug);
+        }
+      } catch (err: any) {
+        return { success: false, message: err.message };
+      }
+    }
+    return { success: false, message: 'Database not connected.' };
   },
 };
