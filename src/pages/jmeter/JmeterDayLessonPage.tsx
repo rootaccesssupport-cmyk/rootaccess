@@ -192,9 +192,12 @@ export const JmeterDayLessonPage: React.FC = () => {
               <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
               <span className="text-amber-400 font-semibold">Day {dayNumber} of 10</span>
             </div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 {dayData.badge}
+              </span>
+              <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                Beginner Friendly • No Complex Math
               </span>
               <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight">
                 Day {dayNumber}: {dayData.title}
@@ -389,6 +392,80 @@ export const JmeterDayLessonPage: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Beginner-Friendly "In Plain English" Card */}
+            {dayData.beginnerFriendlyAnalogy && (
+              <div className="bg-gradient-to-br from-amber-950/30 via-slate-900/90 to-slate-950 border-2 border-amber-500/30 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/20 pb-4">
+                  <div className="flex items-center gap-2.5">
+                    <span className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                      <Lightbulb className="w-5 h-5" />
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-300 border border-amber-400/20">
+                          Beginner Friendly
+                        </span>
+                        <span className="text-xs text-slate-400">Learn by Everyday Analogy</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mt-0.5">
+                        {dayData.beginnerFriendlyAnalogy.headline}
+                      </h3>
+                    </div>
+                  </div>
+                  <span className="text-xs font-medium text-amber-400/90 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20 self-start sm:self-auto">
+                    Plain English Guide
+                  </span>
+                </div>
+
+                {/* The Story & Real Life Analogy */}
+                <div className="space-y-2">
+                  <div className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                    The Everyday Analogy:
+                  </div>
+                  <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-sans bg-slate-950/60 p-5 rounded-xl border border-slate-800/80">
+                    {dayData.beginnerFriendlyAnalogy.story}
+                  </p>
+                </div>
+
+                {/* The Golden Rule Takeaway */}
+                <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
+                  <Zap className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-bold text-amber-300 uppercase tracking-wide block mb-0.5">
+                      The Golden Takeaway for Beginners:
+                    </span>
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                      {dayData.beginnerFriendlyAnalogy.keyLesson}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Plain English Dictionary for This Day */}
+                {dayData.beginnerFriendlyAnalogy.plainEnglishTerms && (
+                  <div className="space-y-3 pt-2">
+                    <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-amber-400" />
+                      <span>JMeter Words Made Simple (Plain-English Glossary):</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {dayData.beginnerFriendlyAnalogy.plainEnglishTerms.map((term, tIdx) => (
+                        <div key={tIdx} className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                          <span className="text-xs font-mono font-bold text-amber-400 block">
+                            {term.term}
+                          </span>
+                          <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                            {term.plainMeaning}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Visual Explanation Diagram Card */}
             <div className="bg-gradient-to-br from-slate-900/90 to-slate-950 border border-amber-500/20 rounded-2xl p-6 sm:p-8 shadow-lg">
@@ -604,6 +681,14 @@ export const JmeterDayLessonPage: React.FC = () => {
               <p className="text-sm text-slate-300 leading-relaxed">
                 {dayData.guidedDemonstration.description}
               </p>
+
+              {/* Beginner-Friendly Tip */}
+              <div className="flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-slate-200">
+                <Lightbulb className="w-5 h-5 text-amber-400 shrink-0" />
+                <div>
+                  <strong className="text-amber-300">Beginner Friendly Tip:</strong> Don&apos;t worry about memorizing technical jargon. Just follow each numbered step below in order to see how each action controls JMeter!
+                </div>
+              </div>
             </div>
 
             {/* Walkthrough Steps */}
@@ -682,6 +767,14 @@ export const JmeterDayLessonPage: React.FC = () => {
               <p className="text-sm text-slate-300 leading-relaxed">
                 {dayData.practicalLab.subtitle}
               </p>
+
+              {/* Beginner-Friendly Lab Tip */}
+              <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-xs text-slate-200">
+                <Sparkles className="w-5 h-5 text-emerald-400 shrink-0" />
+                <div>
+                  <strong className="text-emerald-300">Interactive Simulation:</strong> You can click buttons, change values, and slide controls freely. Nothing can break here—experiment and watch how JMeter responds!
+                </div>
+              </div>
 
               {/* Instruction Steps */}
               <div className="pt-4 border-t border-slate-800/80">
@@ -775,6 +868,14 @@ export const JmeterDayLessonPage: React.FC = () => {
               <h2 className="text-2xl font-bold text-white">
                 {dayData.independentChallenge.title}
               </h2>
+
+              {/* Beginner-Friendly Challenge Tip */}
+              <div className="flex items-center gap-3 p-4 bg-sky-500/10 border border-sky-500/20 rounded-xl text-xs text-slate-200">
+                <Zap className="w-5 h-5 text-sky-400 shrink-0" />
+                <div>
+                  <strong className="text-sky-300">Need a helping hand?</strong> You don&apos;t have to memorize solutions. Read the problem scenario below, and click the &quot;Reveal Solution Hint&quot; button anytime if you want guidance!
+                </div>
+              </div>
             </div>
 
             {/* Scenario & Goal */}

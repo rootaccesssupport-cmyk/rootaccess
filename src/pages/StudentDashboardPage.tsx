@@ -144,10 +144,10 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     category: 'Performance Testing',
     badge: '10-Day Practical Intensive',
     duration: '10 Days (15 Hours)',
-    level: 'Beginner to Intermediate',
+    level: 'Beginner Friendly (Zero Coding Required)',
     description:
-      'Master performance testing from the ground up: concurrency saturation models, realistic workload simulation, dynamic REST API correlation, CSV parameterization, non-GUI CLI pipelines, and full-scale bottleneck root-cause analysis.',
-    tags: ['Apache JMeter', 'Performance Testing', 'Concurrency', 'REST APIs', 'Correlation', 'Non-GUI CLI', 'Capstone'],
+      'Learn performance testing with Apache JMeter through real-world everyday analogies, interactive browser simulators, and easy step-by-step test plan builders. Perfect for complete beginners!',
+    tags: ['Beginner Friendly', 'Apache JMeter', 'Everyday Analogies', 'REST APIs', 'CSV Data', 'Reports & Certificate'],
     courseUrl: '/courses/jmeter-performance-testing/day-1',
     syllabusUrl: '/courses/jmeter-performance-testing',
     iconName: 'Gauge',
