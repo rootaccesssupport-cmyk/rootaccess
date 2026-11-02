@@ -166,7 +166,7 @@ export const CourseCertificatePage: React.FC = () => {
               {/* Course Title */}
               <div className="space-y-1">
                 <h2 className="text-lg sm:text-2xl font-bold text-indigo-700">
-                  Manual QA in 5 Days: Industry-Based Interview Preparation
+                  Manual Testing
                 </h2>
                 <p className="text-xs text-slate-500">
                   Covering STLC, Test Case Design, Defect Lifecycle, Jira Standards &amp; Agile QA

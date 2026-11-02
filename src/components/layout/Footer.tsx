@@ -51,7 +51,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/courses/manual-qa-fundamentals" className="hover:text-white transition-colors">
-                  Manual QA in 5 Days
+                  Manual Testing
                 </Link>
               </li>
               <li>

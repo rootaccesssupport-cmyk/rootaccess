@@ -49,8 +49,8 @@ export const HomePage: React.FC = () => {
     },
     {
       slug: 'manual-qa-fundamentals',
-      title: 'Manual QA & Test Design',
-      courseName: 'Manual QA in 5 Days: Interview Preparation',
+      title: 'Manual Testing',
+      courseName: 'Fundamentals & Defect Lifecycle',
       tag: 'Core Quality Foundation',
       badge: '5-Day Intensive • Live Now',
       icon: <FileText className="w-5 h-5 text-indigo-600" />,
@@ -168,7 +168,7 @@ export const HomePage: React.FC = () => {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-all shadow-2xs"
               >
                 <FileText className="w-4 h-4 text-indigo-600" />
-                <span>Manual QA in 5 Days</span>
+                <span>Manual Testing</span>
               </Link>
               <a
                 href="#tracks"

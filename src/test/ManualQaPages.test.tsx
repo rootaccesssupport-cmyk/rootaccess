@@ -47,7 +47,7 @@ describe('Manual QA UI Pages Rendering & Integration', () => {
   it('renders the Course Hub page with 5-day roadmap and metadata when enrolled', async () => {
     renderAppAt('/manual-qa', true);
 
-    expect(await screen.findByText('Manual QA in 5 Days')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /manual testing/i })).toBeInTheDocument();
     expect(
       screen.getByText(/Learn Software Testing Through Practical Exercises/i)
     ).toBeInTheDocument();

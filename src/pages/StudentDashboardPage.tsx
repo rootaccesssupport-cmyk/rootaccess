@@ -59,7 +59,7 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
   {
     id: 'manual-qa',
     slug: 'manual-qa-fundamentals',
-    title: 'Manual QA in 5 Days: Interview Preparation',
+    title: 'Manual Testing',
     category: 'Manual QA & Testing',
     badge: 'Flagship Intensive',
     duration: '5 Days (8 Hours)',

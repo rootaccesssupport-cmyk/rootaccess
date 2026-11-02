@@ -44,7 +44,7 @@ export interface MockProduct {
 
 const INITIAL_PRODUCTS: MockProduct[] = [
   { id: 101, name: 'Playwright Automation Masterclass', category: 'Testing', price: 649, stock: 150, description: '20-Day browser automation with pure JS', rating: 4.9 },
-  { id: 102, name: 'Manual QA in 5 Days: Interview Prep', category: 'Testing', price: 299, stock: 200, description: 'End-to-end test case design and Jira defect lifecycle', rating: 4.8 },
+  { id: 102, name: 'Manual Testing', category: 'Testing', price: 299, stock: 200, description: 'End-to-end test case design and Jira defect lifecycle', rating: 4.8 },
   { id: 103, name: 'SQL & Database Audits for QA', category: 'Database', price: 299, stock: 180, description: 'Relational query verification, joins, and data migration', rating: 4.9 },
   { id: 104, name: 'API Testing & Postman Pack', category: 'API', price: 299, stock: 120, description: 'REST architecture, Chai assertions, and automation', rating: 4.9 },
   { id: 105, name: 'QA Tech Interview Mastery', category: 'Career', price: 1499, stock: 50, description: 'STAR method, situational questions, and portfolio reviews', rating: 4.7 },

@@ -2,7 +2,7 @@ import type { ManualQaDayUnit } from '../types/manualQa';
 
 export const COURSE_METADATA = {
   id: 'manual-qa-5-days',
-  title: 'Manual QA in 5 Days',
+  title: 'Manual Testing',
   subtitle: 'Learn Software Testing Through Practical Exercises and Industry-Based Interview Preparation.',
   commitment: '2–3 hours per day, approximately 10–15 hours total.',
   targetAudience: [

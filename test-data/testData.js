@@ -18,8 +18,8 @@ export const homeTestData = {
       expectedUrlSnippet: '/courses/playwright-automation',
     },
     {
-      title: 'Manual QA & Test Design',
-      courseName: 'Manual QA in 5 Days: Interview Preparation',
+      title: 'Manual Testing',
+      courseName: 'Fundamentals & Defect Lifecycle',
       expectedUrlSnippet: '/courses/manual-qa-fundamentals',
     },
     {

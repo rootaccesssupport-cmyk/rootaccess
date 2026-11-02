@@ -257,7 +257,7 @@ export const ManualQaDayLessonPage: React.FC = () => {
   if (!isEnrolled && dayNumber > 1) {
     return (
       <CourseEnrollmentGate
-        courseTitle="Manual QA in 5 Days: Interview Preparation"
+        courseTitle="Manual Testing"
         courseSlug="manual-qa-fundamentals"
         description={`Day 1 is open for free exploration. To access Day ${dayNumber} interactive lessons, practical scenarios, Jira defect simulator, and verified certification, please enroll.`}
         bulletPoints={[

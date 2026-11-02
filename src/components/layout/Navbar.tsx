@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
     }
     if (pathname.includes('manual-qa') || pathname.includes('manual-testing')) {
       return {
-        title: 'Manual QA in 5 Days',
+        title: 'Manual Testing',
         icon: CheckCircle2,
         colorIcon: 'text-indigo-600',
         badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',

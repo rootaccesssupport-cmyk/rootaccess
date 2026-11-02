@@ -39,7 +39,7 @@ describe('HomePage Component (Phase 2)', () => {
   it('displays all core QA curriculum modules', () => {
     renderComponent(null);
 
-    expect(screen.getAllByText('Manual QA & Test Design').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Manual Testing').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('SQL for Software Testers').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('API Testing with Postman').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Automation Testing Foundations').length).toBeGreaterThanOrEqual(1);
@@ -89,7 +89,7 @@ describe('HomePage Component (Phase 2)', () => {
     renderComponent(null);
 
     expect(screen.getByText('Playwright Automation with JavaScript + AI')).toBeInTheDocument();
-    expect(screen.getByText('Manual QA in 5 Days: Interview Preparation')).toBeInTheDocument();
+    expect(screen.getByText('Fundamentals & Defect Lifecycle')).toBeInTheDocument();
 
     const curriculumBtns = screen.getAllByRole('link', { name: /explore curriculum/i });
     expect(curriculumBtns.length).toBeGreaterThanOrEqual(2);

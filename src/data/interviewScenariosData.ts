@@ -22,7 +22,7 @@ export interface CourseInterviewScenario {
 export const COURSE_INTERVIEW_SCENARIOS: Record<string, CourseInterviewScenario> = {
   'manual-qa-fundamentals': {
     courseSlug: 'manual-qa-fundamentals',
-    courseTitle: 'Manual QA in 5 Days: Industry-Based Interview Preparation',
+    courseTitle: 'Manual Testing',
     category: 'Manual QA & Testing',
     featuredScenario: {
       scenarioNumber: 14,

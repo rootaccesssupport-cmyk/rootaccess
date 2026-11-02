@@ -247,7 +247,7 @@ export const COURSE_RATINGS_DATA: Record<string, CourseRatingSummary> = {
   // 9 x 5★, 10 x 4★, 1 x 3★ = 88 / 20 = 4.4
   'manual-qa-fundamentals': {
     courseSlug: 'manual-qa-fundamentals',
-    courseTitle: 'Manual QA in 5 Days: Interview Preparation',
+    courseTitle: 'Manual Testing',
     averageRating: 4.4,
     totalRatings: 20,
     distribution: {
