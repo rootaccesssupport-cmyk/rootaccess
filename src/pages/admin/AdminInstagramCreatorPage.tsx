@@ -85,6 +85,13 @@ export const AdminInstagramCreatorPage: React.FC = () => {
     try {
       const topic = await instagramCreatorService.getRecommendedTopic();
       setRecommendedTopic(topic);
+      // Automatically open draft so the Image Generator is visible on page load
+      setActiveDraft((current) => {
+        if (!current) {
+          return instagramCreatorService.createDraftFromTemplate(topic);
+        }
+        return current;
+      });
     } catch (err) {
       console.error('Failed to load recommended topic:', err);
     }
@@ -310,11 +317,25 @@ export const AdminInstagramCreatorPage: React.FC = () => {
             </p>
           </div>
 
-          {/* AI Settings Trigger */}
-          <div className="flex items-center gap-3">
+          {/* Top Quick Actions Strip */}
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => {
+                if (!activeDraft) {
+                  setActiveDraft(instagramCreatorService.createDraftFromTemplate(recommendedTopic));
+                }
+                const studioEl = document.getElementById('image-studio-section');
+                studioEl?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-extrabold text-white transition-all shadow-md shadow-rose-600/30 cursor-pointer"
+            >
+              <ImageIcon className="w-4 h-4 text-white" />
+              <span>🎨 Image Generator Studio</span>
+            </button>
+
             <button
               onClick={() => setAiSettingsOpen(true)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition-colors cursor-pointer"
               title="Configure AI Provider (Gemini / OpenAI)"
             >
               <Settings className="w-3.5 h-3.5 text-slate-400" />
@@ -364,14 +385,15 @@ export const AdminInstagramCreatorPage: React.FC = () => {
           isRegenerating={isRegeneratingTopic}
         />
 
-        {/* 2. ACTIVE CONTENT PACKAGE VIEWER / EDITOR */}
-        {activeDraft && (
-          <div className="space-y-4">
+        {/* 2. ACTIVE IMAGE GENERATOR & CONTENT STUDIO */}
+        {activeDraft ? (
+          <div id="image-studio-section" className="space-y-4 pt-2 scroll-mt-20">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-rose-500" />
-                <h3 className="text-sm font-extrabold text-white uppercase tracking-wider">
-                  Active Content Studio &amp; Inspector
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+                <h3 className="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-rose-400" />
+                  <span>Instagram Post Image Generator &amp; Content Studio</span>
                 </h3>
               </div>
 
@@ -379,7 +401,7 @@ export const AdminInstagramCreatorPage: React.FC = () => {
                 onClick={() => setActiveDraft(null)}
                 className="text-xs text-slate-400 hover:text-white underline cursor-pointer"
               >
-                Close Editor
+                Close Studio
               </button>
             </div>
 
@@ -390,6 +412,25 @@ export const AdminInstagramCreatorPage: React.FC = () => {
               onDuplicateDraft={handleDuplicateDraft}
               onRegenerateSection={handleRegenerateSection}
             />
+          </div>
+        ) : (
+          <div className="bg-slate-900 border border-rose-500/30 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
+                <ImageIcon className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Instagram Image Generator Ready</h3>
+                <p className="text-xs text-slate-400 mt-0.5">Click below to open today's recommended topic or pick any topic from the bank.</p>
+              </div>
+            </div>
+            <button
+              onClick={handleGenerateToday}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-xs font-extrabold text-white transition-all shadow-lg shadow-rose-600/30 cursor-pointer shrink-0"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Open Image Generator Studio</span>
+            </button>
           </div>
         )}
 

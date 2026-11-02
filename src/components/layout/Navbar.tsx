@@ -18,7 +18,7 @@ import {
   BookOpen,
   ShieldCheck,
   Briefcase,
-  Camera,
+  Image as ImageIcon,
   Sparkles,
 } from 'lucide-react';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
@@ -274,10 +274,10 @@ export const Navbar: React.FC = () => {
                     <Link
                       to="/admin/instagram-creator"
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 transition-colors shadow-2xs"
-                      title="Instagram Creator & Content Engine"
+                      title="Instagram Image Generator & Content Studio"
                     >
-                      <Camera className="w-3.5 h-3.5 text-rose-200" />
-                      <span>Instagram Creator</span>
+                      <ImageIcon className="w-3.5 h-3.5 text-rose-200" />
+                      <span>Image Generator</span>
                     </Link>
                   </div>
                 )}
@@ -445,8 +445,8 @@ export const Navbar: React.FC = () => {
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 p-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 transition-colors"
                     >
-                      <Camera className="w-3.5 h-3.5 text-rose-200" />
-                      <span>Instagram</span>
+                      <ImageIcon className="w-3.5 h-3.5 text-rose-200" />
+                      <span>Image Generator</span>
                     </Link>
                   </div>
                 </div>

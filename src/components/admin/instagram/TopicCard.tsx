@@ -113,9 +113,9 @@ export const TopicCard: React.FC<TopicCardProps> = ({
             {isGenerating ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
             ) : (
-              <Sparkles className="w-4 h-4 text-rose-200" />
+              <ImageIcon className="w-4 h-4 text-rose-200" />
             )}
-            <span>Generate Today's Content</span>
+            <span>Generate Image Post</span>
           </button>
 
           <div className="flex items-center gap-2 w-full">

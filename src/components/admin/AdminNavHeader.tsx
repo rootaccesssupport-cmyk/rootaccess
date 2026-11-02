@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShieldCheck, CreditCard, Camera, Sparkles } from 'lucide-react';
+import { ShieldCheck, CreditCard, Image as ImageIcon, Sparkles } from 'lucide-react';
 
 export const AdminNavHeader: React.FC = () => {
   const location = useLocation();
   const pathname = location.pathname;
 
   const isEnrollments = pathname.includes('/admin/enrollments');
-  const isInstagram = pathname.includes('/admin/instagram-creator');
+  const isInstagram = pathname.includes('/admin/instagram-creator') || pathname.includes('/admin/image-generator');
   const isAiCourse = pathname.includes('/admin/ai-course-manager');
 
   return (
@@ -55,10 +55,10 @@ export const AdminNavHeader: React.FC = () => {
                   : 'text-slate-400 hover:text-white hover:bg-slate-900'
               }`}
             >
-              <Camera className="w-3.5 h-3.5 text-rose-400" />
-              <span>Instagram Creator</span>
+              <ImageIcon className="w-3.5 h-3.5 text-rose-400" />
+              <span>Image Generator</span>
               <span className="px-1.5 py-0.2 text-[9px] font-extrabold bg-rose-500/20 text-rose-300 rounded-full border border-rose-500/30">
-                AI + QA
+                New
               </span>
             </Link>
 

@@ -128,9 +128,25 @@ export const App: React.FC = () => {
               }
             />
 
-            {/* Protected Route: Admin Instagram Creator */}
+            {/* Protected Route: Admin Instagram Creator & Image Generator */}
             <Route
               path="/admin/instagram-creator"
+              element={
+                <ProtectedRoute>
+                  <AdminInstagramCreatorPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/image-generator"
+              element={
+                <ProtectedRoute>
+                  <AdminInstagramCreatorPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/instagram"
               element={
                 <ProtectedRoute>
                   <AdminInstagramCreatorPage />
