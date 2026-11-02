@@ -10,6 +10,7 @@ import {
   Sliders,
 } from 'lucide-react';
 import { apiSimulator, ApiResponse } from '../../services/apiSimulatorService';
+import { renderFormattedInline } from '../common/LessonContentRenderer';
 
 interface PostmanInteractiveStudioProps {
   initialMethod?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -324,7 +325,7 @@ export const PostmanInteractiveStudio: React.FC<PostmanInteractiveStudioProps> =
             <div className="font-bold">
               {verificationFeedback.success ? 'Verification Passed!' : 'Verification Notice'}
             </div>
-            <div className="text-xs opacity-90 mt-0.5">{verificationFeedback.message}</div>
+            <div className="text-xs opacity-90 mt-0.5">{renderFormattedInline(verificationFeedback.message, 'amber')}</div>
           </div>
         </div>
       )}
@@ -438,7 +439,7 @@ export const PostmanInteractiveStudio: React.FC<PostmanInteractiveStudioProps> =
             <span className="font-semibold text-slate-300">
               Hint ({activeHintIndex + 1}/{hints.length}):
             </span>
-            <span>{hints[activeHintIndex]}</span>
+            <span>{renderFormattedInline(hints[activeHintIndex], 'amber')}</span>
           </div>
           {hints.length > 1 && (
             <button

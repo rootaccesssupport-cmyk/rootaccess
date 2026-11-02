@@ -12,6 +12,7 @@ import {
   Terminal,
 } from 'lucide-react';
 import { sqlSimulator, SqlQueryResult, SQL_SCHEMAS } from '../../services/sqlSimulatorService';
+import { renderFormattedInline } from '../common/LessonContentRenderer';
 
 interface SqlInteractiveSandboxProps {
   initialSql?: string;
@@ -207,7 +208,7 @@ export const SqlInteractiveSandbox: React.FC<SqlInteractiveSandboxProps> = ({
             <div className="font-bold">
               {verificationFeedback.success ? 'Verification Passed!' : 'Verification Notice'}
             </div>
-            <div className="text-xs opacity-90 mt-0.5">{verificationFeedback.message}</div>
+            <div className="text-xs opacity-90 mt-0.5">{renderFormattedInline(verificationFeedback.message, 'emerald')}</div>
           </div>
         </div>
       )}
@@ -281,7 +282,7 @@ export const SqlInteractiveSandbox: React.FC<SqlInteractiveSandboxProps> = ({
             <span className="font-semibold text-slate-300">
               Hint ({activeHintIndex + 1}/{hints.length}):
             </span>
-            <span>{hints[activeHintIndex]}</span>
+            <span>{renderFormattedInline(hints[activeHintIndex], 'emerald')}</span>
           </div>
           {hints.length > 1 && (
             <button

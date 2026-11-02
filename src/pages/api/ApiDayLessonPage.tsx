@@ -16,6 +16,7 @@ import {
   Lock,
   ChevronDown,
   ChevronUp,
+  Lightbulb,
 } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -23,6 +24,7 @@ import { useProgress } from '../../context/ProgressContext';
 import { CourseEnrollmentGate } from '../../components/common/CourseEnrollmentGate';
 import { API_DAYS_DATA, API_COURSE_METADATA } from '../../data/apiCurriculumData';
 import { PostmanInteractiveStudio } from '../../components/api/PostmanInteractiveStudio';
+import { LessonContentRenderer, renderFormattedInline } from '../../components/common/LessonContentRenderer';
 
 export const ApiDayLessonPage: React.FC = () => {
   const { dayNumber: dayParam } = useParams<{ dayNumber?: string }>();
@@ -301,12 +303,12 @@ export const ApiDayLessonPage: React.FC = () => {
                     {dayData.topics[currentTopicIdx].title}
                   </h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    {dayData.topics[currentTopicIdx].summary}
+                    {renderFormattedInline(dayData.topics[currentTopicIdx].summary, 'amber')}
                   </p>
                 </div>
 
-                <div className="prose prose-slate max-w-none text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
-                  {dayData.topics[currentTopicIdx].explanation}
+                <div className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  <LessonContentRenderer content={dayData.topics[currentTopicIdx].explanation} accentColor="amber" />
                 </div>
 
                 {/* Code Snippet */}
@@ -323,16 +325,28 @@ export const ApiDayLessonPage: React.FC = () => {
                 )}
 
                 {/* Key Takeaways */}
-                <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-100 space-y-2">
+                <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-100 space-y-3">
                   <div className="font-bold text-xs text-amber-950 flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-amber-600" />
                     <span>QA Practitioner Key Takeaways</span>
                   </div>
-                  <ul className="space-y-1 list-disc pl-4 text-xs text-amber-900">
+                  <ul className="space-y-1.5 list-disc pl-4 text-xs text-amber-900">
                     {dayData.topics[currentTopicIdx].takeaways.map((takeaway, tIdx) => (
-                      <li key={tIdx}>{takeaway}</li>
+                      <li key={tIdx} className="leading-relaxed">
+                        {renderFormattedInline(takeaway, 'amber')}
+                      </li>
                     ))}
                   </ul>
+
+                  {dayData.topics[currentTopicIdx].interviewTip && (
+                    <div className="pt-2 border-t border-amber-200/60 flex items-start gap-2 text-xs text-amber-950">
+                      <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                      <div className="leading-relaxed">
+                        <strong className="text-amber-900">Interview Tip:</strong>{' '}
+                        {renderFormattedInline(dayData.topics[currentTopicIdx].interviewTip!, 'amber')}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Topic Navigation footer */}
@@ -406,12 +420,12 @@ export const ApiDayLessonPage: React.FC = () => {
                 )}
               </div>
 
-              <h2 className="text-lg font-bold text-slate-900">{currentExercise.title}</h2>
+              <h2 className="text-lg font-bold text-slate-900">{renderFormattedInline(currentExercise.title, 'amber')}</h2>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {currentExercise.description}
+                {renderFormattedInline(currentExercise.description, 'amber')}
               </p>
-              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-800">
-                <strong>Task:</strong> {currentExercise.instruction}
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-800">
+                <strong>Task:</strong> {renderFormattedInline(currentExercise.instruction, 'amber')}
               </div>
             </div>
 
@@ -462,7 +476,7 @@ export const ApiDayLessonPage: React.FC = () => {
                           {iq.concept}
                         </span>
                         <h3 className="text-sm sm:text-base font-bold text-slate-900">
-                          {iq.question}
+                          {renderFormattedInline(iq.question, 'amber')}
                         </h3>
                       </div>
                       <div className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-slate-500">
@@ -472,17 +486,17 @@ export const ApiDayLessonPage: React.FC = () => {
 
                     {isExpanded && (
                       <div className="p-5 pt-0 border-t border-slate-100 space-y-4 text-xs sm:text-sm">
-                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-slate-800 leading-relaxed space-y-1.5">
+                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-slate-800 leading-relaxed space-y-2">
                           <div className="font-bold text-xs uppercase tracking-wider text-amber-700">
                             Model Senior QA Answer:
                           </div>
-                          <div>{iq.modelAnswer}</div>
+                          <LessonContentRenderer content={iq.modelAnswer} accentColor="amber" />
                         </div>
 
                         <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/80 text-amber-900 text-xs flex items-start gap-2">
                           <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                          <div>
-                            <strong>Staff QA Interview Rationale:</strong> {iq.seniorTip}
+                          <div className="leading-relaxed">
+                            <strong>Staff QA Interview Rationale:</strong> {renderFormattedInline(iq.seniorTip, 'amber')}
                           </div>
                         </div>
                       </div>
@@ -555,7 +569,7 @@ export const ApiDayLessonPage: React.FC = () => {
                       {qIdx + 1}
                     </span>
                     <h3 className="font-bold text-sm sm:text-base text-slate-900 leading-snug">
-                      {q.question}
+                      {renderFormattedInline(q.question, 'amber')}
                     </h3>
                   </div>
 
@@ -587,7 +601,7 @@ export const ApiDayLessonPage: React.FC = () => {
                             onChange={() => setQuizAnswers((prev) => ({ ...prev, [q.id]: optIdx }))}
                             className="mt-0.5 text-amber-600 focus:ring-0"
                           />
-                          <span className="leading-relaxed">{opt}</span>
+                          <span className="leading-relaxed">{renderFormattedInline(opt, 'amber')}</span>
                         </label>
                       );
                     })}
@@ -595,7 +609,7 @@ export const ApiDayLessonPage: React.FC = () => {
 
                   {quizSubmitted && (
                     <div className="pl-9 pt-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200 leading-relaxed">
-                      <strong>Explanation:</strong> {q.explanation}
+                      <strong>Explanation:</strong> {renderFormattedInline(q.explanation, 'amber')}
                     </div>
                   )}
                 </div>
