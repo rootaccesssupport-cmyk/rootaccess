@@ -115,7 +115,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
             </div>
             <h1 className="text-xl font-bold text-slate-900">Admin Access Only</h1>
             <p className="text-xs text-slate-600 leading-relaxed">
-              This portal is restricted to the RootAccess platform administrator (<span className="font-mono text-indigo-600">{ENROLLMENT_PAYMENT_CONFIG.adminEmail}</span>).
+              This portal is restricted to authorized RootAccess platform administrators.
             </p>
             <div className="pt-2">
               <Link

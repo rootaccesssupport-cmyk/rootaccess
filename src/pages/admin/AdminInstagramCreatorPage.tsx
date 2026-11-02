@@ -112,7 +112,7 @@ export const AdminInstagramCreatorPage: React.FC = () => {
               Administrator Access Required
             </h1>
             <p className="text-xs text-slate-400 mb-6 leading-relaxed">
-              The Instagram Creator dashboard is strictly restricted to authorized RootAccess administrators ({ENROLLMENT_PAYMENT_CONFIG.adminEmail}).
+              The Instagram Creator dashboard is strictly restricted to authorized RootAccess administrators.
             </p>
             <Link
               to="/app"

@@ -240,7 +240,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Enrollment Request Received!</h3>
                 <p className="text-xs text-slate-600 mt-1 max-w-sm mx-auto leading-relaxed">
-                  Your request to enroll in <strong>{courseTitle}</strong> has been logged. Admin (<span className="font-mono text-indigo-700">{ENROLLMENT_PAYMENT_CONFIG.adminEmail}</span>) will verify your WhatsApp / UPI payment and unlock full course access for you.
+                  Your request to enroll in <strong>{courseTitle}</strong> has been logged. Admin will verify your WhatsApp / UPI payment and unlock full course access for you.
                 </p>
               </div>
 
