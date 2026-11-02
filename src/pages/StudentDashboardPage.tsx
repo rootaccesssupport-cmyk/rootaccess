@@ -87,22 +87,6 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     colorTheme: 'purple',
   },
   {
-    id: 'devops-academy',
-    slug: 'devops-engineering',
-    title: 'DevOps Engineering: Fundamentals to Production Projects',
-    category: 'DevOps & Cloud',
-    badge: 'Cloud & DevOps Academy',
-    duration: '36 Days (48 Hours)',
-    level: 'Beginner to Advanced',
-    description:
-      'Master the software delivery lifecycle, Linux internals, terminal commands, process triage, log analysis, and incident troubleshooting with live terminal simulations and virtual sandboxes.',
-    tags: ['Linux Internals', 'Bash CLI', 'Filesystem & Permissions', 'Processes', 'CI/CD Pipelines', 'Incident Triage'],
-    courseUrl: '/courses/devops-engineering/day-1',
-    syllabusUrl: '/courses/devops-engineering',
-    iconName: 'Terminal',
-    colorTheme: 'sky',
-  },
-  {
     id: 'sql-qa',
     slug: 'sql-for-qa-engineers',
     title: 'SQL & Backend Database Audits for QA',
@@ -156,7 +140,6 @@ const COURSE_CATEGORIES = [
   'All Courses',
   'Manual QA & Testing',
   'Test Automation',
-  'DevOps & Cloud',
   'Database & SQL',
   'API Testing',
   'Career & Interview',
@@ -611,7 +594,7 @@ export const StudentDashboardPage: React.FC = () => {
                     Your learning journey starts here.
                   </p>
                   <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-xl leading-relaxed">
-                    Explore our hands-on engineering academies—from <strong>DevOps &amp; Cloud Infrastructure</strong> to <strong>Test Automation &amp; Software Quality</strong>. Practical workplace simulations built for everyone in tech.
+                    Explore our hands-on engineering academies—from <strong>Software Quality &amp; Defect Audits</strong> to <strong>Playwright Test Automation &amp; Databases</strong>. Practical workplace simulations built for everyone in tech.
                   </p>
                 </div>
 
@@ -808,7 +791,7 @@ export const StudentDashboardPage: React.FC = () => {
                   <div>
                     <h3 className="text-lg font-bold text-slate-900">No Enrolled Courses Yet</h3>
                     <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-md mx-auto">
-                      Explore our course catalog to find hands-on tracks in Manual QA, Playwright Automation, DevOps Engineering, and SQL.
+                      Explore our course catalog to find hands-on tracks in Manual QA, Playwright Automation, API Testing, and SQL.
                     </p>
                   </div>
                   <button
@@ -1104,7 +1087,7 @@ export const StudentDashboardPage: React.FC = () => {
                     No Active Enrolled Courses Found
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1.5 max-w-md mx-auto leading-relaxed">
-                    Daily technical interview scenarios and evaluation rubrics are customized exclusively to your active enrolled tracks (Manual QA, Playwright Automation, DevOps, SQL, or API Testing).
+                    Daily technical interview scenarios and evaluation rubrics are customized exclusively to your active enrolled tracks (Manual QA, Playwright Automation, SQL, or API Testing).
                   </p>
                 </div>
                 <button

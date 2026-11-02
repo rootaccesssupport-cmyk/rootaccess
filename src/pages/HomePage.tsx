@@ -33,19 +33,6 @@ export const HomePage: React.FC = () => {
 
   const tracks = [
     {
-      slug: 'devops-engineering',
-      title: 'DevOps & Cloud Engineering',
-      courseName: 'DevOps Engineering — From Fundamentals to Practical Projects',
-      tag: 'Infrastructure & CI/CD',
-      badge: '36-Day Academy • Days 1–3 Live Now',
-      icon: <Terminal className="w-5 h-5 text-indigo-600" />,
-      description: 'Build real-world DevOps fluency: software delivery lifecycles, Linux filesystem architecture (FHS), permissions, process monitoring, log forensics, and automated CI/CD canary rollouts.',
-      skills: ['Delivery Lifecycle', 'Linux Navigation & FHS', 'Permissions & Ownership', 'Process Management', 'Log Forensics', 'Incident Triage'],
-      link: '/courses/devops-engineering',
-      actionText: 'Explore Curriculum',
-      isFeatured: true,
-    },
-    {
       slug: 'playwright-automation',
       title: 'Automation Testing Foundations',
       courseName: 'Playwright Automation with JavaScript + AI',
@@ -115,19 +102,19 @@ export const HomePage: React.FC = () => {
     },
     {
       question: 'Is RootAccess only for QA and testers, or is it for everyone in tech?',
-      answer: 'RootAccess is built for everyone in tech! Whether you are an aspiring software engineer, test automation developer, DevOps engineer, cloud practitioner, IT specialist, student, or career switcher, our platform covers the entire engineering spectrum: software delivery lifecycles, Linux infrastructure, browser test automation, database querying, API engineering, and production incident management.',
+      answer: 'RootAccess is built for everyone in tech! Whether you are an aspiring software tester, QA engineer, test automation developer, student, or career switcher, our platform covers core practical engineering: browser test automation with JavaScript & AI, manual testing fundamentals, database querying with SQL, API testing with Postman, and workplace defect workflows.',
     },
     {
       question: 'What is the Early Access / Partial Launch model?',
-      answer: 'RootAccess is launching in structured, production-tested milestones. Implemented days (such as DevOps Days 1–3, Playwright Days 1–4, and Manual QA Days 1–5) are 100% interactive, fully playable, and available to enrolled accounts today. As subsequent days are finalized and tested, they unlock automatically on your student dashboard.',
+      answer: 'RootAccess is launching in structured, production-tested milestones. Implemented days (such as Playwright Automation and Manual QA Days 1–5) are 100% interactive, fully playable, and available to enrolled accounts today. As subsequent modules are finalized and tested, they unlock automatically on your student dashboard.',
     },
     {
       question: 'How does course enrollment work?',
-      answer: 'Anyone can create a free account to explore course syllabi, roadmaps, and lesson previews. To access hands-on interactive lessons, simulated Linux terminals, scenario missions, and certification assessments, simply enroll in the course from the course page or lesson gate.',
+      answer: 'Anyone can create a free account to explore course syllabi, roadmaps, and lesson previews. To access hands-on interactive lessons, code sandboxes, scenario missions, and certification assessments, simply enroll in the course from the course page or lesson gate.',
     },
     {
       question: 'How is RootAccess different from typical video courses?',
-      answer: 'Most platforms offer passive video watching where learners quickly forget what they saw. RootAccess focuses on simulated workplace tasks: interacting with simulated Linux terminal sandboxes, running live test automation, diagnosing real production 502 outages, and solving architectural scenario challenges.',
+      answer: 'Most platforms offer passive video watching where learners quickly forget what they saw. RootAccess focuses on simulated workplace tasks: interacting with live code execution labs, running real browser automation, logging Jira defects against seeded bugs, and solving real-world interview scenario challenges.',
     },
   ];
 
@@ -157,7 +144,7 @@ export const HomePage: React.FC = () => {
 
             {/* Subtitle */}
             <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              RootAccess is built for everyone in tech—developers, QA engineers, DevOps practitioners, and career switchers. Master Linux administration, CI/CD pipelines, Test Automation, and Cloud Infrastructure through hands-on challenges and incident simulations instead of passive videos.
+              RootAccess is built for everyone in tech—software testers, test automation engineers, developers, and career switchers. Master Playwright browser automation, Manual QA, Jira defect logging, SQL database audits, and API testing through hands-on challenges and live simulations instead of passive videos.
             </p>
 
             {/* CTAs */}
@@ -180,18 +167,18 @@ export const HomePage: React.FC = () => {
                 </Link>
               )}
               <Link
-                to="/courses/devops-engineering"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-all shadow-2xs"
-              >
-                <Terminal className="w-4 h-4 text-indigo-600" />
-                <span>DevOps Academy (Days 1–3 Live)</span>
-              </Link>
-              <Link
                 to="/courses/playwright-automation"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl transition-all shadow-2xs"
               >
                 <Code2 className="w-4 h-4 text-purple-600" />
-                <span>Playwright JS (Days 1–4 Live)</span>
+                <span>Playwright JS Automation</span>
+              </Link>
+              <Link
+                to="/courses/manual-qa-fundamentals"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-all shadow-2xs"
+              >
+                <FileText className="w-4 h-4 text-indigo-600" />
+                <span>Manual QA in 5 Days</span>
               </Link>
               <a
                 href="#tracks"

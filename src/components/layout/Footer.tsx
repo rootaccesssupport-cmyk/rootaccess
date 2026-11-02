@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
               <span className="sr-only">RootAccess</span>
             </div>
             <p className="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">
-              A practical tech career platform for everyone—developers, QA engineers, DevOps professionals, and career switchers. Master real-world engineering skills, solve incident simulations, and build verifiable workplace expertise.
+              A practical tech career platform for everyone—developers, QA engineers, test automation developers, and career switchers. Master real-world engineering skills, solve incident simulations, and build verifiable workplace expertise.
             </p>
             <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
               <Mail className="w-3.5 h-3.5 text-indigo-400" />
@@ -33,13 +33,8 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/courses/devops-engineering" className="hover:text-white transition-colors text-indigo-400 font-medium">
-                  DevOps Academy (Days 1–3 Live)
-                </Link>
-              </li>
-              <li>
                 <Link to="/courses/playwright-automation" className="hover:text-white transition-colors text-purple-400 font-medium">
-                  Playwright JS (Days 1–4 Live)
+                  Playwright JS Automation
                 </Link>
               </li>
               <li>

@@ -159,11 +159,11 @@ describe('StudentDashboardPage Component (Phase 3)', () => {
     const catalogTab = screen.getByRole('button', { name: /explore all courses/i });
     fireEvent.click(catalogTab);
 
-    // Search for "DevOps"
+    // Search for "SQL"
     const searchInput = screen.getByPlaceholderText(/search courses, skills, or topics/i);
-    fireEvent.change(searchInput, { target: { value: 'DevOps' } });
+    fireEvent.change(searchInput, { target: { value: 'SQL' } });
 
-    expect(screen.getByText('DevOps Engineering: Fundamentals to Production Projects')).toBeInTheDocument();
+    expect(screen.getByText('SQL & Backend Database Audits for QA')).toBeInTheDocument();
     expect(screen.queryByText('Playwright Automation with JavaScript + AI')).not.toBeInTheDocument();
 
     // Clear search

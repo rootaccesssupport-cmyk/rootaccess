@@ -20,6 +20,13 @@ export const LoginPage: React.FC = () => {
   // If user arrived from password reset success or redirection
   const successStateMessage = (location.state as any)?.message;
 
+  const isMountedRef = React.useRef(true);
+  React.useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -44,6 +51,7 @@ export const LoginPage: React.FC = () => {
       });
 
       if (!result.success) {
+        if (!isMountedRef.current) return;
         // Handle common Supabase auth errors cleanly
         if (result.error?.toLowerCase().includes('invalid login credentials')) {
           setErrorMessage('Invalid email or password. Please check your credentials and try again.');
@@ -57,9 +65,13 @@ export const LoginPage: React.FC = () => {
         navigate(destination, { replace: true });
       }
     } catch (err: any) {
-      setErrorMessage(err.message || 'An unexpected error occurred during login.');
+      if (isMountedRef.current) {
+        setErrorMessage(err.message || 'An unexpected error occurred during login.');
+      }
     } finally {
-      setIsSubmitting(false);
+      if (isMountedRef.current) {
+        setIsSubmitting(false);
+      }
     }
   };
 
