@@ -64,11 +64,6 @@ export const Footer: React.FC = () => {
                   API Testing with Postman
                 </Link>
               </li>
-              <li>
-                <Link to="/courses/qa-interview-mastery" className="hover:text-white transition-colors">
-                  QA Technical Interview Prep
-                </Link>
-              </li>
             </ul>
           </div>
 

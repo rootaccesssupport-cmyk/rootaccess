@@ -37,6 +37,7 @@ import { COURSE_INTERVIEW_SCENARIOS } from '../data/interviewScenariosData';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../data/enrollmentPaymentConfig';
 import { CourseEnrollmentModal } from '../components/enrollment/CourseEnrollmentModal';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
+import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
 
 interface CatalogCourse {
   id: string;
@@ -119,22 +120,6 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     iconName: 'Send',
     colorTheme: 'amber',
   },
-  {
-    id: 'interview-prep',
-    slug: 'qa-interview-mastery',
-    title: 'QA Technical Interview Prep & Defect Portfolio',
-    category: 'Career & Interview',
-    badge: 'Career Accelerator',
-    duration: '5 Hours',
-    level: 'All Levels',
-    description:
-      'Polish your QA portfolio, practice situational interview scenarios, and master technical question banks with verified senior QA evaluation rubrics.',
-    tags: ['STAR Method', 'Bug Portfolio', 'Top 50 QA Questions', 'Mock Interviews', 'Evaluation Rubrics'],
-    courseUrl: '/courses/qa-interview-mastery',
-    syllabusUrl: '/courses/qa-interview-mastery',
-    iconName: 'Briefcase',
-    colorTheme: 'rose',
-  },
 ];
 
 const COURSE_CATEGORIES = [
@@ -143,7 +128,6 @@ const COURSE_CATEGORIES = [
   'Test Automation',
   'Database & SQL',
   'API Testing',
-  'Career & Interview',
 ];
 
 export const StudentDashboardPage: React.FC = () => {
@@ -737,6 +721,9 @@ export const StudentDashboardPage: React.FC = () => {
                             <p className="text-xs text-slate-600 mt-1 line-clamp-2">
                               {course.description}
                             </p>
+                            <div className="pt-2">
+                              <CourseRatingDisplay courseSlug={course.slug} variant="compact" />
+                            </div>
                           </div>
 
                           <div className="space-y-1.5 pt-2">
@@ -761,7 +748,7 @@ export const StudentDashboardPage: React.FC = () => {
                             >
                               Syllabus
                             </Link>
-                            {['manual-qa-fundamentals', 'playwright-automation', 'qa-interview-mastery'].includes(course.slug) && (
+                            {['manual-qa-fundamentals', 'playwright-automation'].includes(course.slug) && (
                               <Link
                                 to="/simulator"
                                 className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-2 py-0.5 rounded-lg border border-rose-200 transition-colors"
@@ -1042,6 +1029,11 @@ export const StudentDashboardPage: React.FC = () => {
                               {tag}
                             </span>
                           ))}
+                        </div>
+
+                        {/* STUDENT RATINGS (20 Members, Average 4.2-4.5, Min 3 Stars) */}
+                        <div className="pt-2">
+                          <CourseRatingDisplay courseSlug={course.slug} variant="compact" />
                         </div>
 
                         {/* COURSE PRICING & LAUNCH OFFER */}

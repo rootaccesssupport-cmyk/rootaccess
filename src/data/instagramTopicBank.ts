@@ -643,7 +643,7 @@ Learn Playwright test automation with JavaScript + AI on RootAccess. Link in bio
     learningObjective: 'Master the distinction between Defect Severity (technical impact) and Priority (business urgency) with 4 classic real-world quadrant examples.',
     whyUseful: 'Asked in virtually 100% of software testing interviews. Most candidates give textbook definitions but fail to provide compelling practical quadrant examples.',
     recommendedFormat: 'Carousel',
-    relevantCourseSlug: 'qa-interview-mastery',
+    relevantCourseSlug: 'manual-qa-fundamentals',
     reel: {
       hook: 'If an interviewer asks you the difference between Severity and Priority, DO NOT just give the textbook definition!',
       hookRationale: 'Warns interview candidates against generic answers and promises the exact formula senior interviewers look for.',

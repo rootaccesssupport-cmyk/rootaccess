@@ -32,7 +32,8 @@ export const DefectSimulatorPage: React.FC = () => {
   const isEnrolledInQA =
     isCourseEnrolled('manual-qa-fundamentals') ||
     isCourseEnrolled('playwright-automation') ||
-    isCourseEnrolled('qa-interview-mastery');
+    isCourseEnrolled('sql-for-qa-engineers') ||
+    isCourseEnrolled('api-testing-postman');
 
   const defaultCustomerName = profile?.full_name || user?.user_metadata?.full_name || (user?.email ? user.email.split('@')[0] : 'QA Student');
 

@@ -27,7 +27,6 @@ export const ENROLLMENT_PAYMENT_CONFIG = {
     'sql-for-qa-engineers': { inr: 299, originalInr: 599, label: 'SQL', isLaunchOffer: true },
     'api-testing-postman': { inr: 299, originalInr: 599, label: 'API Testing', isLaunchOffer: true },
     'devops-engineering': { inr: 3499, originalInr: 6999, label: 'DevOps Engineering Academy', isLaunchOffer: false },
-    'qa-interview-mastery': { inr: 1499, originalInr: 2999, label: 'QA Technical Interview Mastery', isLaunchOffer: false },
   } as Record<string, CoursePriceInfo>,
 
   getWhatsAppPaymentUrl: (courseSlug: string, courseTitle: string, userEmail: string, userName: string) => {

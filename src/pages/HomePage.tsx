@@ -22,6 +22,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
+import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
@@ -80,18 +81,6 @@ export const HomePage: React.FC = () => {
       description: 'Master RESTful APIs, HTTP status codes, Bearer JWT authentication, dynamic Postman environment variables, Chai test assertions, and an e-commerce defect audit capstone.',
       skills: ['HTTP & Status Codes', 'PUT vs PATCH & SLAs', 'Bearer JWT & RBAC', 'Postman Automation', 'Chai pm.* Scripts', 'E-Commerce Capstone'],
       link: '/courses/api-testing-postman',
-      actionText: 'Explore Curriculum',
-    },
-    {
-      slug: 'qa-interview-mastery',
-      title: 'Interview & Resume Strategy',
-      courseName: 'Tech Interview Mastery & Scenario Playbook',
-      tag: 'Career Launch',
-      badge: 'Career Blueprint • Live Now',
-      icon: <Briefcase className="w-5 h-5 text-rose-600" />,
-      description: 'Tackle real behavioral and technical interview questions, build an authentic engineering portfolio, and learn how to present projects to hiring managers.',
-      skills: ['Mock Tech Interviews', 'Scenario Questions', 'Resume Optimization', 'Project Portfolio', 'Recruiter Outreach'],
-      link: '/courses/qa-interview-mastery',
       actionText: 'Explore Curriculum',
     },
   ];
@@ -294,6 +283,11 @@ export const HomePage: React.FC = () => {
                             {skill}
                           </span>
                         ))}
+                      </div>
+
+                      {/* STUDENT RATINGS (20 Members, Average 4.2-4.5, Min 3 Stars) */}
+                      <div className="pt-3 border-t border-slate-100 mb-2">
+                        <CourseRatingDisplay courseSlug={track.slug} variant="compact" />
                       </div>
 
                       {/* PRICING & LAUNCH OFFER */}

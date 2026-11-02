@@ -193,35 +193,4 @@ export const COURSE_INTERVIEW_SCENARIOS: Record<string, CourseInterviewScenario>
       },
     ],
   },
-
-  'qa-interview-mastery': {
-    courseSlug: 'qa-interview-mastery',
-    courseTitle: 'QA Technical Interview Prep & Defect Portfolio',
-    category: 'Career & Interview',
-    featuredScenario: {
-      scenarioNumber: 10,
-      title: 'Tell me about a time you found a critical edge-case bug late in the release cycle that developers didn\'t consider. How did you advocate for the fix without delaying the release unnecessarily?',
-      description: 'Evaluates your STAR storytelling methodology, engineering judgment, risk mitigation, and communication with leadership.',
-      rubricPoints: [
-        'Situation: Clearly state the business context (e.g. international checkout rollout) and the edge case (e.g. non-Latin character encoding in shipping address).',
-        'Task: Quantify the potential user impact (e.g. delivery failures for 15% of European orders) and the release deadline constraint.',
-        'Action: Demonstrated root cause with reproducible logs, proposed a targeted patch to the encoding utility rather than refactoring the whole flow, and ran quick automated regression smoke tests.',
-        'Result: The patch was merged in 45 minutes, verified in staging, release deployed on schedule with zero customer address failures reported.',
-      ],
-    },
-    drills: [
-      {
-        title: 'Scenario #1: Estimating QA in Agile Sprints',
-        question: 'How do you calculate your QA estimation when developers give a story 5 points?',
-        modelResponse: 'QA effort is not a direct percentage of dev points. Assess: (1) acceptance criteria complexity, (2) regression scope across affected modules, (3) test data setup and third-party dependencies, and (4) automation test script writing. If a 5-point story has 15 edge cases, QA might need more time than dev.',
-        badge: 'Agile QA',
-      },
-      {
-        title: 'Scenario #2: Handling Undocumented Requirements',
-        question: 'What do you do if you are asked to test a feature that has no written requirements or acceptance criteria?',
-        modelResponse: 'Use Exploratory Testing Charters. Schedule a 15-minute alignment sync with Product Manager and developer to document the core user persona, critical happy path, error states, and out-of-scope behaviors. Document these as acceptance criteria in the user story before testing begins.',
-        badge: 'Quality Leadership',
-      },
-    ],
-  },
 };

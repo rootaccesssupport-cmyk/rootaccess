@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useManualQa } from '../context/ManualQaContext';
 import { CourseEnrollmentModal } from '../components/enrollment/CourseEnrollmentModal';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
+import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
 import {
   BookOpen,
   Database,
@@ -138,7 +139,7 @@ export const CourseDetailPage: React.FC = () => {
               </Link>
             )}
 
-            {['manual-qa-fundamentals', 'playwright-automation', 'qa-interview-mastery', 'manual-testing'].includes(course.slug) && (
+            {['manual-qa-fundamentals', 'playwright-automation', 'manual-testing'].includes(course.slug) && (
               <Link
                 to="/simulator"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
@@ -177,6 +178,10 @@ export const CourseDetailPage: React.FC = () => {
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 {course.description}
               </p>
+
+              <div className="pt-1">
+                <CourseRatingDisplay courseSlug={course.slug} variant="banner" />
+              </div>
 
               <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500 pt-2">
                 <div className="flex items-center gap-1.5">
@@ -445,7 +450,7 @@ export const CourseDetailPage: React.FC = () => {
           </div>
 
           {/* Conditional Practical Lab: Workplace Defect Simulator (QA Courses Only) or Course Practice */}
-          {['manual-qa-fundamentals', 'playwright-automation', 'qa-interview-mastery', 'manual-testing'].includes(course.slug) ? (
+          {['manual-qa-fundamentals', 'playwright-automation', 'manual-testing'].includes(course.slug) ? (
             <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-xs space-y-4 relative overflow-hidden">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 rounded-xl bg-white/10 text-rose-400 flex items-center justify-center border border-white/10">
@@ -499,6 +504,9 @@ export const CourseDetailPage: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* VERIFIED STUDENT RATINGS & REVIEWS SECTION (20 MEMBERS) */}
+        <CourseRatingDisplay courseSlug={course.slug} variant="section" />
       </main>
 
       <CourseEnrollmentModal

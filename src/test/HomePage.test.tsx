@@ -43,7 +43,6 @@ describe('HomePage Component (Phase 2)', () => {
     expect(screen.getAllByText('SQL for Software Testers').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('API Testing with Postman').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Automation Testing Foundations').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Interview & Resume Strategy').length).toBeGreaterThanOrEqual(1);
   });
 
   it('provides accessible call-to-actions linking to /signup and /login', () => {
