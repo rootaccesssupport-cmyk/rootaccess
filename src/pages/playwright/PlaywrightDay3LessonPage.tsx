@@ -55,14 +55,26 @@ export const PlaywrightDay3LessonPage: React.FC = () => {
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
+  const PLAYWRIGHT_DAY_3_SCAFFOLD_CODE = `// ============================================================================
+// RootAccess Day 3 Practical Assignment: First Playwright Automation Script
+// ============================================================================
+const { test, expect } = require('@playwright/test');
+
+test.describe('E-Commerce Authentication & Cart Suite', () => {
+  test('verify successful login and product navigation', async ({ page }) => {
+    // TODO: Navigate to target URL
+    // TODO: Fill login credentials
+    // TODO: Click submit and verify URL / dashboard header
+  });
+
+  // TODO: Add negative login test scenario
+});
+`;
+
   const [projectSetupConfirmed, setProjectSetupConfirmed] = useState<boolean>(true);
-  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_3_STARTER_CODE);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(
-    PLAYWRIGHT_DAY_3_STARTER_EXPLANATION
-  );
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(
-    PLAYWRIGHT_DAY_3_STARTER_OUTPUT
-  );
+  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_3_SCAFFOLD_CODE);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<PlaywrightDay3AssignmentRubric | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 
@@ -151,9 +163,9 @@ export const PlaywrightDay3LessonPage: React.FC = () => {
 
   // Assignment Handlers
   const handleResetStarterCode = () => {
-    setAssignmentCode(PLAYWRIGHT_DAY_3_STARTER_CODE);
-    setAssignmentExplanation(PLAYWRIGHT_DAY_3_STARTER_EXPLANATION);
-    setAssignmentExpectedOutput(PLAYWRIGHT_DAY_3_STARTER_OUTPUT);
+    setAssignmentCode(PLAYWRIGHT_DAY_3_SCAFFOLD_CODE);
+    setAssignmentExplanation('');
+    setAssignmentExpectedOutput('');
     setProjectSetupConfirmed(true);
     setAssignmentEvaluation(null);
     setIsAssignmentSubmitted(false);

@@ -21,6 +21,7 @@ import {
   GraduationCap,
   ExternalLink,
   Gauge,
+  Smartphone,
 } from 'lucide-react';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
@@ -106,6 +107,18 @@ export const HomePage: React.FC = () => {
       description: 'Learn performance testing from zero. Beginner-friendly with everyday real-life analogies, interactive browser simulators, easy test plan builders, CSV parameterization, and zero complex math.',
       skills: ['Everyday Analogies', 'Test Plan Builder', 'REST API Testing', 'CSV Parameterization', 'JSON Token Correlation', 'CLI & HTML Reports'],
       link: '/courses/jmeter-performance-testing',
+      actionText: 'Explore Curriculum',
+    },
+    {
+      slug: 'appium-mobile-automation',
+      title: 'Appium Mobile Automation with Java',
+      courseName: 'Appium Mobile Automation with Java: Zero to Practical',
+      tag: 'Mobile Test Automation',
+      badge: '14-Day Practical Course • Live Now',
+      icon: <Smartphone className="w-5 h-5 text-emerald-600" />,
+      description: 'Master Android mobile automation from zero. Learn Appium 2.x, UiAutomator2, Java Client 9+, touch gestures, explicit waits, TestNG suites, and enterprise Page Object Model frameworks.',
+      skills: ['Appium 2.x & Android', 'Java & TestNG', 'Accessibility ID & UiSelector', 'Mobile Gestures (W3C)', 'Explicit Synchronization', 'Page Object Model (POM)', 'CI/CD & ExtentReports'],
+      link: '/courses/appium-mobile-automation',
       actionText: 'Explore Curriculum',
     },
   ];

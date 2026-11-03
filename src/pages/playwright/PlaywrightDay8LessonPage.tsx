@@ -51,13 +51,20 @@ export const PlaywrightDay8LessonPage: React.FC = () => {
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
-  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_8_STARTER_CODE);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(
-    PLAYWRIGHT_DAY_8_STARTER_EXPLANATION
-  );
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(
-    PLAYWRIGHT_DAY_8_STARTER_OUTPUT
-  );
+  const PLAYWRIGHT_DAY_8_SCAFFOLD_CODE = `// tests/day-8-api.spec.js
+// Day 8 Assignment: API Mocking & Network Interception
+const { test, expect } = require('@playwright/test');
+
+test.describe('Day 8 Practical Lab - Network & Mocking', () => {
+  test('verify route mocking and network interception', async ({ page }) => {
+    // TODO: Write test implementation for page.route() and request assertions
+  });
+});
+`;
+
+  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_8_SCAFFOLD_CODE);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<PlaywrightDay8AssignmentRubric | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 

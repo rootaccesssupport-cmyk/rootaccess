@@ -293,6 +293,18 @@ describe('Playwright Automation with JavaScript + AI — Days 9 to 20 Curriculum
 
       expect(screen.getByRole('heading', { level: 2, name: /Day 14 Practical Engineering Lab/i })).toBeInTheDocument();
 
+      // Populate solution code, explanation, and output into assignment form
+      const codeArea = screen.getByDisplayValue(/Write your Playwright automation solution below/i);
+      fireEvent.change(codeArea, { target: { value: PLAYWRIGHT_DAY_14_STARTER_CODE } });
+
+      const textareas = screen.getAllByRole('textbox');
+      if (textareas[1]) {
+        fireEvent.change(textareas[1], { target: { value: PLAYWRIGHT_DAY_14_STARTER_EXPLANATION } });
+      }
+      if (textareas[2]) {
+        fireEvent.change(textareas[2], { target: { value: PLAYWRIGHT_DAY_14_STARTER_OUTPUT } });
+      }
+
       const evalBtn = screen.getByRole('button', { name: /Evaluate Assignment/i });
       fireEvent.click(evalBtn);
 

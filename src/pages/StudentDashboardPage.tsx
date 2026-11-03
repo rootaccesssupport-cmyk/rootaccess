@@ -28,6 +28,7 @@ import {
   ExternalLink,
   GraduationCap,
   Gauge,
+  Smartphone,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -52,7 +53,7 @@ interface CatalogCourse {
   tags: string[];
   courseUrl: string;
   syllabusUrl: string;
-  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug' | 'Sparkles' | 'Gauge';
+  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug' | 'Sparkles' | 'Gauge' | 'Smartphone';
   colorTheme: 'indigo' | 'purple' | 'sky' | 'emerald' | 'amber' | 'rose';
 }
 
@@ -153,12 +154,29 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     iconName: 'Gauge',
     colorTheme: 'amber',
   },
+  {
+    id: 'appium-mobile',
+    slug: 'appium-mobile-automation',
+    title: 'Appium Mobile Automation with Java',
+    category: 'Test Automation',
+    badge: '14-Day Practical Course',
+    duration: '14 Days (18 Hours)',
+    level: 'Beginner to Intermediate',
+    description:
+      'Master Android mobile automation from zero. Learn Appium 2.x, UiAutomator2, Java Client 9+, gestures, waits, TestNG, and enterprise Page Object Model frameworks.',
+    tags: ['Appium 2.x', 'Android Testing', 'Java & TestNG', 'W3C Gestures', 'Page Object Model', 'CI/CD & Capstone'],
+    courseUrl: '/courses/appium-mobile-automation/day-1',
+    syllabusUrl: '/courses/appium-mobile-automation',
+    iconName: 'Smartphone',
+    colorTheme: 'emerald',
+  },
 ];
 
 const COURSE_CATEGORIES = [
   'All Courses',
   'Manual QA & Testing',
   'Test Automation',
+  'Mobile Automation',
   'Performance Testing',
   'Database & SQL',
   'API Testing',
@@ -401,6 +419,8 @@ export const StudentDashboardPage: React.FC = () => {
         return <Sparkles className="w-5 h-5 text-purple-600" />;
       case 'Gauge':
         return <Gauge className="w-5 h-5 text-amber-500" />;
+      case 'Smartphone':
+        return <Smartphone className="w-5 h-5 text-emerald-600" />;
       default:
         return <BookOpen className="w-5 h-5 text-indigo-600" />;
     }

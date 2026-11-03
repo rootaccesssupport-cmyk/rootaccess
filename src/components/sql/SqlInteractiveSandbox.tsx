@@ -24,7 +24,7 @@ interface SqlInteractiveSandboxProps {
 }
 
 export const SqlInteractiveSandbox: React.FC<SqlInteractiveSandboxProps> = ({
-  initialSql = 'SELECT * FROM customers LIMIT 5;',
+  initialSql = '',
   onSuccess,
   validator,
   hints = [],
@@ -178,15 +178,6 @@ export const SqlInteractiveSandbox: React.FC<SqlInteractiveSandboxProps> = ({
         />
         <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
           <span>Shortcuts: Press <kbd className="px-1 py-0.5 bg-slate-800 rounded text-slate-400">Ctrl+Enter</kbd> or <kbd className="px-1 py-0.5 bg-slate-800 rounded text-slate-400">Cmd+Enter</kbd> to run</span>
-          {solutionSql && (
-            <button
-              onClick={handleCopySolution}
-              className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
-            >
-              {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-              <span>{copied ? 'Copied Solution' : 'Load Solution Code'}</span>
-            </button>
-          )}
         </div>
       </div>
 

@@ -163,11 +163,21 @@ describe('Playwright Automation with JavaScript — Day 3 Implementation', () =>
     expect(screen.getByRole('heading', { level: 2, name: /Build and Run Your First Playwright Test/i })).toBeInTheDocument();
     expect(screen.getByText(/Assignment Rubric Requirements \(10 Criteria\)/i)).toBeInTheDocument();
 
+    // Populate solution code, explanation, and output into assignment form
+    const codeArea = screen.getByPlaceholderText(/Paste your tests\/first-test\.spec\.js code here/i);
+    fireEvent.change(codeArea, { target: { value: PLAYWRIGHT_DAY_3_STARTER_CODE } });
+
+    const outputArea = screen.getByPlaceholderText(/Paste your terminal test output/i);
+    fireEvent.change(outputArea, { target: { value: PLAYWRIGHT_DAY_3_STARTER_OUTPUT } });
+
+    const explanationArea = screen.getByPlaceholderText(/Explain the roles of test, expect, page/i);
+    fireEvent.change(explanationArea, { target: { value: PLAYWRIGHT_DAY_3_STARTER_EXPLANATION } });
+
     // Click Evaluate & Submit Assignment
     const evaluateBtn = screen.getByRole('button', { name: /Evaluate & Submit Assignment/i });
     fireEvent.click(evaluateBtn);
 
-    // Verify evaluation passes with starter code
+    // Verify evaluation passes
     expect(screen.getByText(/Assignment Approved! All 10 Criteria Satisfied/i)).toBeInTheDocument();
     expect(screen.getByText(/Score: 10\/10/i)).toBeInTheDocument();
   });

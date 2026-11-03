@@ -1926,6 +1926,407 @@ Coupon is accepted. Total calculation shows: $35.00 - $50.00 = -$15.00.
       ],
     },
   },
+  {
+    id: 'course-appium-mobile-automation',
+    slug: 'appium-mobile-automation',
+    trackId: 'track-mobile-automation',
+    trackName: 'Mobile Automation & Appium',
+    title: 'Appium Mobile Automation with Java',
+    description: 'Master practical Android automation from zero with Appium 2.x, UiAutomator2, Java Client 9+, mobile gestures, explicit waits, TestNG suites, and enterprise Page Object Model frameworks.',
+    iconName: 'Smartphone',
+    badge: 'Mobile Automation',
+    estimatedHours: 18,
+    learningOutcomes: [
+      'Understand Appium 2.x client-server architecture and W3C WebDriver communication',
+      'Configure the Android automation toolchain: JDK 17/21, Node.js, Appium 2.x, Android SDK & ADB',
+      'Write robust Android mobile automation tests in Java using modern UiAutomator2Options and AndroidDriver',
+      'Inspect mobile apps and select rock-solid locator strategies (Accessibility ID, Resource ID, UiSelector)',
+      'Automate native touch gestures: swipe, vertical scroll, long press, and hardware navigation keys',
+      'Eliminate flaky mobile tests using explicit WebDriverWait and ExpectedConditions instead of Thread.sleep',
+      'Automate Hybrid mobile applications by seamlessly switching contexts between NATIVE_APP and WEBVIEW',
+      'Build an enterprise-grade Page Object Model (POM) test automation framework with TestNG',
+      'Implement data-driven testing using TestNG @DataProvider and external configuration properties',
+      'Capture automated failure screenshots, analyze raw Appium server logs, and produce clean HTML reports',
+      'Complete an end-to-end Capstone Project automating an Android e-commerce shopping flow',
+    ],
+    lessons: [
+      {
+        id: 'appium-day-1',
+        slug: 'day-1',
+        title: 'Day 1: Mobile Automation Overview & Appium Fundamentals',
+        durationMinutes: 45,
+        difficulty: 'Beginner',
+        summary: 'Understand Native, Hybrid, and Mobile Web apps, Appium 2.x architecture, and W3C WebDriver communication.',
+        sections: [
+          {
+            title: '1. App Types & Appium 2.x Client-Server Architecture',
+            content: 'Learn how Appium routes W3C WebDriver JSON commands over HTTP to the UiAutomator2 driver and on-device instrumentation server without modifying application binaries.',
+          },
+        ],
+        keyTakeaways: [
+          'Appium does not require modifying or recompiling APKs.',
+          'Native Android apps use Accessibility and Resource IDs, not CSS selectors.',
+        ],
+        practicalChecklist: [
+          'Classify 4 real-world apps into Native, Hybrid, and Web',
+          'Map out the 5-stage Appium command pipeline',
+        ],
+      },
+      {
+        id: 'appium-day-2',
+        slug: 'day-2',
+        title: 'Day 2: Environment Setup & Toolchain Configuration',
+        durationMinutes: 50,
+        difficulty: 'Beginner',
+        summary: 'Configure Java JDK, Node.js, Appium 2.x, UiAutomator2 driver, Android Studio/SDK, and master ADB commands.',
+        sections: [
+          {
+            title: '1. Android SDK, PATH & ADB Diagnostics',
+            content: 'Set up JAVA_HOME and ANDROID_HOME, install the UiAutomator2 driver via npm, and use ADB to query devices, packages, and activities.',
+          },
+        ],
+        keyTakeaways: [
+          'Appium 2.x requires explicitly installing drivers via `appium driver install uiautomator2`.',
+          'Use `adb shell dumpsys` to find appPackage and appActivity.',
+        ],
+        practicalChecklist: [
+          'Run environment diagnostics and fix missing environment variables',
+          'Query connected emulator with `adb devices`',
+        ],
+      },
+      {
+        id: 'appium-day-3',
+        slug: 'day-3',
+        title: 'Day 3: First Appium Test with Java & UiAutomator2Options',
+        durationMinutes: 50,
+        difficulty: 'Beginner',
+        summary: 'Configure Maven pom.xml, use modern type-safe UiAutomator2Options, and manage AndroidDriver session lifecycles.',
+        sections: [
+          {
+            title: '1. UiAutomator2Options & Driver Session Teardown',
+            content: 'Replace deprecated DesiredCapabilities with UiAutomator2Options and manage clean session initialization and teardown with TestNG.',
+          },
+        ],
+        keyTakeaways: [
+          'Always use UiAutomator2Options in Appium 2.x for compile-time safety.',
+          'Call `driver.quit()` in `@AfterMethod(alwaysRun = true)` to avoid locked ports.',
+        ],
+        practicalChecklist: [
+          'Configure Maven dependencies for java-client 9.x and TestNG',
+          'Instantiate AndroidDriver using URI.create().toURL()',
+        ],
+      },
+      {
+        id: 'appium-day-4',
+        slug: 'day-4',
+        title: 'Day 4: Mobile Element Locators & Appium Inspector',
+        durationMinutes: 55,
+        difficulty: 'Intermediate',
+        summary: 'Inspect Android view trees with Appium Inspector and master Accessibility ID, Resource ID, and UiSelector.',
+        sections: [
+          {
+            title: '1. AppiumBy Locators & XPath Performance Pitfalls',
+            content: 'Learn why Accessibility ID is the mobile gold standard and why deep XPath causes severe latency on mobile devices.',
+          },
+        ],
+        keyTakeaways: [
+          'Accessibility ID maps to Android content-desc and is cross-platform.',
+          'Avoid absolute XPath; use UiSelector or relative Resource IDs.',
+        ],
+        practicalChecklist: [
+          'Inspect mock Android view tree in the locator studio',
+          'Write UiSelector queries with textStartsWith and childSelector',
+        ],
+      },
+      {
+        id: 'appium-day-5',
+        slug: 'day-5',
+        title: 'Day 5: Element Interactions, Form Entry & Assertions',
+        durationMinutes: 50,
+        difficulty: 'Beginner',
+        summary: 'Automate mobile inputs, dismiss virtual soft keyboards, query element states, and apply TestNG Assertions.',
+        sections: [
+          {
+            title: '1. Mobile Form Entry & State Assertions',
+            content: 'Master click, sendKeys, clear, hideKeyboard, and validate UI transitions with Hard and Soft Assertions.',
+          },
+        ],
+        keyTakeaways: [
+          'Dismiss virtual soft keyboards before tapping buttons at the bottom of the screen.',
+          'Use SoftAssert to validate multiple fields without halting test execution prematurely.',
+        ],
+        practicalChecklist: [
+          'Automate user login form entry with valid and invalid credentials',
+          'Assert error banner text matches expected business rules',
+        ],
+      },
+      {
+        id: 'appium-day-6',
+        slug: 'day-6',
+        title: 'Day 6: Waits & Synchronisation Strategies',
+        durationMinutes: 55,
+        difficulty: 'Intermediate',
+        summary: 'Eliminate test flakiness by replacing Thread.sleep with explicit WebDriverWait and ExpectedConditions.',
+        sections: [
+          {
+            title: '1. WebDriverWait, ExpectedConditions & StaleElement Handling',
+            content: 'Handle asynchronous API delays, modal loading spinners, and prevent StaleElementReferenceException during screen transitions.',
+          },
+        ],
+        keyTakeaways: [
+          'Never use Thread.sleep in production automation suites.',
+          'Use invisibilityOfElementLocated to wait for loading spinners to dismiss.',
+        ],
+        practicalChecklist: [
+          'Diagnose 3 flaky test scenarios and apply targeted ExpectedConditions',
+          'Implement safe click with automatic stale element retry',
+        ],
+      },
+      {
+        id: 'appium-day-7',
+        slug: 'day-7',
+        title: 'Day 7: Mobile Gestures & Touch Actions',
+        durationMinutes: 60,
+        difficulty: 'Intermediate',
+        summary: 'Implement swipe, scroll, long press using the W3C Actions API and Android UiScrollable.',
+        sections: [
+          {
+            title: '1. W3C Actions API & Android Hardware Keys',
+            content: 'Build PointerInput Sequences for touch gestures and send native Android hardware key events like BACK and HOME.',
+          },
+        ],
+        keyTakeaways: [
+          'TouchAction is removed in Java Client 9.x; use W3C PointerInput and Sequence.',
+          'UiScrollable scrollIntoView is the fastest way to scroll to off-screen elements on Android.',
+        ],
+        practicalChecklist: [
+          'Configure vertical swipe coordinate vectors in the gesture visualizer',
+          'Automate swipe-to-remove action in a shopping cart',
+        ],
+      },
+      {
+        id: 'appium-day-8',
+        slug: 'day-8',
+        title: 'Day 8: Android Contexts & Application States',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Automate Hybrid applications with WebView context switching, test app backgrounding, and handle system alerts.',
+        sections: [
+          {
+            title: '1. Context Switching & App Background Lifecycles',
+            content: 'Discover active WebViews, switch to WEBVIEW to query HTML DOM with CSS, and simulate app backgrounding with runAppInBackground.',
+          },
+        ],
+        keyTakeaways: [
+          'Use driver.context("WEBVIEW_...") to automate hybrid web content.',
+          'driver.runAppInBackground tests session preservation and memory survival.',
+        ],
+        practicalChecklist: [
+          'Switch contexts in a hybrid checkout flow and fill out web inputs',
+          'Verify user cart is retained after backgrounding app for 5 seconds',
+        ],
+      },
+      {
+        id: 'appium-day-9',
+        slug: 'day-9',
+        title: 'Day 9: TestNG Suite Organization & Execution',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Structure test suites using testng.xml, manage annotation lifecycles, and configure smoke/regression groups.',
+        sections: [
+          {
+            title: '1. TestNG Lifecycle & XML Suite Configuration',
+            content: 'Sequence @BeforeSuite through @AfterMethod, define testng.xml suites with parameter injection, and understand mobile parallel execution.',
+          },
+        ],
+        keyTakeaways: [
+          'Always set `alwaysRun = true` on @AfterMethod to ensure driver cleanup.',
+          'Mobile parallel execution requires unique systemPort capabilities per device.',
+        ],
+        practicalChecklist: [
+          'Construct a multi-class testng.xml suite filtering by smoke group',
+          'Pass platformVersion parameter from XML into Java BaseTest',
+        ],
+      },
+      {
+        id: 'appium-day-10',
+        slug: 'day-10',
+        title: 'Day 10: Page Object Model (POM) Design Pattern',
+        durationMinutes: 55,
+        difficulty: 'Advanced',
+        summary: 'Build an enterprise POM architecture with BasePage, BaseTest, private By locators, and fluent method chaining.',
+        sections: [
+          {
+            title: '1. Enterprise POM Architecture & Fluent Chaining',
+            content: 'Encapsulate locators and user actions inside modular Page Classes, keeping assertions strictly in test methods for maximum maintainability.',
+          },
+        ],
+        keyTakeaways: [
+          'Keep locators private and expose user actions as public methods.',
+          'Fluent methods return `this` for same-page actions and next Page Object on navigation.',
+        ],
+        practicalChecklist: [
+          'Build LoginPage, ProductsPage, and CartPage classes',
+          'Compose a clean, readable fluent test method with zero raw findElement calls',
+        ],
+      },
+      {
+        id: 'appium-day-11',
+        slug: 'day-11',
+        title: 'Day 11: Data-Driven Mobile Automation',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary: 'Implement TestNG @DataProvider for parameterized test runs and externalize configurations into properties files.',
+        sections: [
+          {
+            title: '1. Parameterized Test Data & ConfigReader Utility',
+            content: 'Run test methods across multiple credential datasets and externalize device/server settings with config.properties.',
+          },
+        ],
+        keyTakeaways: [
+          '@DataProvider returns Object[][] and executes test once per row.',
+          'Externalize environment settings to allow CLI overrides in CI/CD.',
+        ],
+        practicalChecklist: [
+          'Build a 4-scenario authentication DataProvider',
+          'Load config.properties with System.getProperty fallback',
+        ],
+      },
+      {
+        id: 'appium-day-12',
+        slug: 'day-12',
+        title: 'Day 12: Debugging, Screenshots & Test Reporting',
+        durationMinutes: 55,
+        difficulty: 'Intermediate',
+        summary: 'Analyze Appium server logs, capture failure screenshots via ITestListener, and produce HTML ExtentReports.',
+        sections: [
+          {
+            title: '1. Log Analysis, Screenshot Listeners & ExtentReports',
+            content: 'Decode HTTP server transactions, automatically capture screenshots on assertion failures, and generate executive HTML dashboards.',
+          },
+        ],
+        keyTakeaways: [
+          'Appium server logs reveal the exact W3C HTTP exchange with the device.',
+          'Use ITestListener onTestFailure to capture screenshots automatically.',
+        ],
+        practicalChecklist: [
+          'Diagnose 3 simulated failures using server logs and stacktraces',
+          'Configure ExtentReports listener with screenshot attachments',
+        ],
+      },
+      {
+        id: 'appium-day-13',
+        slug: 'day-13',
+        title: 'Day 13: Framework Integration, CI/CD & Reliability',
+        durationMinutes: 60,
+        difficulty: 'Advanced',
+        summary: 'Build a DriverFactory with ThreadLocal<AndroidDriver>, configure Maven Surefire, and write GitHub Actions CI workflows.',
+        sections: [
+          {
+            title: '1. Thread-Safe Framework & Headless CI/CD Pipeline',
+            content: 'Ensure thread safety with ThreadLocal, run tests via Maven CLI, and configure headless Android emulators in GitHub Actions.',
+          },
+        ],
+        keyTakeaways: [
+          'Use ThreadLocal<AndroidDriver> and invoke remove() in teardown to prevent memory leaks.',
+          'Use macOS runners for hardware-accelerated Android emulators in GitHub Actions.',
+        ],
+        practicalChecklist: [
+          'Audit framework architecture for production readiness',
+          'Configure GitHub Actions mobile testing workflow YAML',
+        ],
+      },
+      {
+        id: 'appium-day-14',
+        slug: 'day-14',
+        title: 'Day 14: Final Capstone Project & Technical Interview Bank',
+        durationMinutes: 75,
+        difficulty: 'Advanced',
+        summary: 'Automate an End-to-End Android Shopping Application across 10 scenarios, review 20 interview questions, and earn certification.',
+        sections: [
+          {
+            title: '1. Android Shopping App E2E Capstone & Interview Mastery',
+            content: 'Automate login, product search, cart gestures, checkout, and verification; download the complete Maven project; and master 20 technical interview questions.',
+          },
+        ],
+        keyTakeaways: [
+          'The Capstone integrates all 10 core mobile automation competencies.',
+          'Complete the final assessment to unlock your verified course certificate.',
+        ],
+        practicalChecklist: [
+          'Execute the 10-step Capstone Shopping App simulation',
+          'Pass the Day 14 certification assessment and generate your verified certificate',
+        ],
+      },
+    ],
+    quiz: {
+      id: 'quiz-appium-course-final',
+      title: 'Appium Mobile Automation with Java Certification Quiz',
+      passingScorePercent: 80,
+      questions: [
+        {
+          id: 'q-appium-final-1',
+          question: 'Which component translates W3C WebDriver HTTP commands directly into Android Accessibility framework actions on the device?',
+          options: [
+            'UiAutomator2 Server APK running on the Android device',
+            'Chrome browser DevTools protocol',
+            'Maven Surefire runner plugin',
+            'Local TestNG XML parser',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'The on-device UiAutomator2 Server APK executes actions through the Android Accessibility framework.',
+        },
+        {
+          id: 'q-appium-final-2',
+          question: 'Which mobile locator strategy is recommended as the fastest and most stable across both Android and iOS?',
+          options: [
+            'Accessibility ID (AppiumBy.accessibilityId)',
+            'Absolute XPath (/hierarchy/android.widget...)',
+            'Screen coordinate taps (Point(x, y))',
+            'CSS Class name',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'Accessibility ID maps to content-desc on Android and accessibilityIdentifier on iOS with in-memory indexing.',
+        },
+        {
+          id: 'q-appium-final-3',
+          question: 'Why should a parallel mobile automation framework manage AndroidDriver using ThreadLocal<AndroidDriver>?',
+          options: [
+            'To ensure each parallel test thread maintains an isolated driver instance without race conditions',
+            'To make emulators run at double the clock speed',
+            'Because Java requires ThreadLocal for all variables',
+            'To automatically take screenshots',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'ThreadLocal allocates a separate driver reference per thread, preventing parallel threads from colliding.',
+        },
+        {
+          id: 'q-appium-final-4',
+          question: 'What is the proper way to scroll down to an off-screen element on Android without fragile coordinate swipes?',
+          options: [
+            'new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text("Target"))',
+            'driver.swipe(0, 0, 0, 0)',
+            'Thread.sleep(10000)',
+            'driver.pressKey(new KeyEvent(AndroidKey.DOWN))',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'UiScrollable scrollIntoView executes on-device scrolling until the target element is visible in the viewport.',
+        },
+        {
+          id: 'q-appium-final-5',
+          question: 'Which context identifier must you switch to in order to query HTML DOM elements inside a hybrid mobile application?',
+          options: [
+            'WEBVIEW_<package_name>',
+            'HTML_DOM_CONTEXT',
+            'CHROME_DEVTOOLS_REMOTE',
+            'EMULATOR_BROWSER',
+          ],
+          correctAnswerIndex: 0,
+          explanation: 'Appium generates a WEBVIEW_<package_name> context identifier for active Android WebViews.',
+        },
+      ],
+    },
+  },
 ];
 
 export const SIMULATED_BUGS: SimulatedBug[] = [

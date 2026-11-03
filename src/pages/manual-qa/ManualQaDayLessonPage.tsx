@@ -68,37 +68,31 @@ export const ManualQaDayLessonPage: React.FC = () => {
   const [scenarios, setScenarios] = useState<Day1ScenarioRow[]>([
     {
       id: 'TS_LOGIN_001',
-      testScenario: 'Valid registered email and correct password authentication',
+      testScenario: '',
       scenarioType: 'Positive',
-      purpose: 'Verify successful user sign-in and redirection to dashboard within 2 seconds',
+      purpose: '',
       priority: 'P1',
     },
     {
       id: 'TS_LOGIN_002',
-      testScenario: 'Registered email with incorrect password',
+      testScenario: '',
       scenarioType: 'Negative',
-      purpose: 'Verify generic security error message displayed and access denied',
+      purpose: '',
       priority: 'P1',
     },
     {
       id: 'TS_LOGIN_003',
-      testScenario: 'Empty email and empty password fields on submission',
+      testScenario: '',
       scenarioType: 'Input Validation',
-      purpose: 'Verify client-side validation prompts without triggering unnecessary server request',
+      purpose: '',
       priority: 'P2',
     },
   ]);
 
   // Day 1 BA Questions and Priority Justification
-  const [baQuestion1, setBaQuestion1] = useState(
-    'What is the specific account lockout policy after consecutive failed login attempts (e.g., number of attempts and lockout duration)?'
-  );
-  const [baQuestion2, setBaQuestion2] = useState(
-    'What is the session inactivity timeout window, and does "Remember Me" persist credentials across browser restarts?'
-  );
-  const [priorityExplanation, setPriorityExplanation] = useState(
-    '1. TS_LOGIN_001 (Valid login - P1): Primary revenue and user capability; system is unusable if registered users cannot access their accounts.\n2. TS_LOGIN_002 (Invalid password - P1): Essential authentication gatekeeper to prevent unauthorized account takeover.\n3. TS_LOGIN_003 (Empty fields - P2): High-frequency beginner interaction to ensure friendly input guidance and prevent unnecessary server traffic.'
-  );
+  const [baQuestion1, setBaQuestion1] = useState('');
+  const [baQuestion2, setBaQuestion2] = useState('');
+  const [priorityExplanation, setPriorityExplanation] = useState('');
 
   // Assignment submission feedback state
   const [assignmentSubmitting, setAssignmentSubmitting] = useState(false);
@@ -1312,6 +1306,7 @@ export const ManualQaDayLessonPage: React.FC = () => {
                     rows={2}
                     value={baQuestion1}
                     onChange={(e) => setBaQuestion1(e.target.value)}
+                    placeholder="e.g. Clarify account lockout duration after failed attempts..."
                     className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 leading-relaxed"
                   />
                 </div>
@@ -1321,6 +1316,7 @@ export const ManualQaDayLessonPage: React.FC = () => {
                     rows={2}
                     value={baQuestion2}
                     onChange={(e) => setBaQuestion2(e.target.value)}
+                    placeholder="e.g. Clarify session timeout policy and Remember Me behavior..."
                     className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 leading-relaxed"
                   />
                 </div>

@@ -52,13 +52,20 @@ export const PlaywrightDay5LessonPage: React.FC = () => {
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
-  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_5_STARTER_CODE);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(
-    PLAYWRIGHT_DAY_5_STARTER_EXPLANATION
-  );
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(
-    PLAYWRIGHT_DAY_5_STARTER_OUTPUT
-  );
+  const PLAYWRIGHT_DAY_5_SCAFFOLD_CODE = `// tests/day-5-assertions.spec.js
+// Day 5 Assignment: Web-First Assertions & Auto-Waiting
+const { test, expect } = require('@playwright/test');
+
+test.describe('Day 5 Practical Lab - Assertions', () => {
+  test('verify web-first assertions with auto-waiting', async ({ page }) => {
+    // TODO: Write test implementation using toBeVisible, toHaveText, toHaveCount
+  });
+});
+`;
+
+  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_5_SCAFFOLD_CODE);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<PlaywrightDay5AssignmentRubric | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 

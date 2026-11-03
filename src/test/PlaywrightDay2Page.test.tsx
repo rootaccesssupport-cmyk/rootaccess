@@ -4,7 +4,12 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { PlaywrightDay2LessonPage } from '../pages/playwright/PlaywrightDay2LessonPage';
 import { AuthProvider } from '../context/AuthContext';
 import { ProgressProvider } from '../context/ProgressContext';
-import { evaluateDay2Assignment, PLAYWRIGHT_DAY_2_STARTER_CODE } from '../data/playwrightDay2Data';
+import {
+  evaluateDay2Assignment,
+  PLAYWRIGHT_DAY_2_STARTER_CODE,
+  PLAYWRIGHT_DAY_2_STARTER_EXPLANATION,
+  PLAYWRIGHT_DAY_2_STARTER_OUTPUT,
+} from '../data/playwrightDay2Data';
 
 function renderPlaywrightDay2Page(isEnrolled: boolean = true) {
   if (isEnrolled) {
@@ -138,11 +143,21 @@ describe('Playwright Automation with JavaScript — Day 2 Implementation', () =>
     expect(screen.getByRole('heading', { level: 2, name: /Create a JavaScript Test Data Utility/i })).toBeInTheDocument();
     expect(screen.getByText(/Assignment Rubric Requirements \(10 Criteria\)/i)).toBeInTheDocument();
 
+    // Populate solution code, explanation, and output into assignment form
+    const codeArea = screen.getByPlaceholderText(/Paste your JavaScript test data utility code here/i);
+    fireEvent.change(codeArea, { target: { value: PLAYWRIGHT_DAY_2_STARTER_CODE } });
+
+    const explanationArea = screen.getByPlaceholderText(/Explain how your Playwright tests would import/i);
+    fireEvent.change(explanationArea, { target: { value: PLAYWRIGHT_DAY_2_STARTER_EXPLANATION } });
+
+    const outputArea = screen.getByPlaceholderText(/Paste the console output when node utils/i);
+    fireEvent.change(outputArea, { target: { value: PLAYWRIGHT_DAY_2_STARTER_OUTPUT } });
+
     // Click Evaluate & Submit Assignment
     const evaluateBtn = screen.getByRole('button', { name: /Evaluate & Submit Assignment/i });
     fireEvent.click(evaluateBtn);
 
-    // Verify evaluation passes with starter code
+    // Verify evaluation passes
     expect(screen.getByText(/Assignment Approved! All 10 Criteria Satisfied/i)).toBeInTheDocument();
     expect(screen.getByText(/Score: 10\/10/i)).toBeInTheDocument();
   });

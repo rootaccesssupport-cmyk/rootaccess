@@ -101,6 +101,12 @@ describe('Playwright Automation with JavaScript + AI — Day 8 Implementation', 
 
     expect(screen.getByRole('heading', { level: 2, name: /Practical Assignment: Enterprise Test Suite Architecture/i })).toBeInTheDocument();
 
+    // Populate valid solution code, output, and explanation into assignment form
+    const textareas = screen.getAllByRole('textbox');
+    fireEvent.change(textareas[0], { target: { value: PLAYWRIGHT_DAY_8_STARTER_CODE } });
+    fireEvent.change(textareas[1], { target: { value: PLAYWRIGHT_DAY_8_STARTER_OUTPUT } });
+    fireEvent.change(textareas[2], { target: { value: PLAYWRIGHT_DAY_8_STARTER_EXPLANATION } });
+
     // Click evaluate
     const evaluateBtn = screen.getByRole('button', { name: /Evaluate Assignment Submission/i });
     fireEvent.click(evaluateBtn);

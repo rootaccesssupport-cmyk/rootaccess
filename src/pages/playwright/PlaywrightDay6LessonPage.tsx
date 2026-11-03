@@ -53,13 +53,20 @@ export const PlaywrightDay6LessonPage: React.FC = () => {
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
-  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_6_STARTER_CODE);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(
-    PLAYWRIGHT_DAY_6_STARTER_EXPLANATION
-  );
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(
-    PLAYWRIGHT_DAY_6_STARTER_OUTPUT
-  );
+  const PLAYWRIGHT_DAY_6_SCAFFOLD_CODE = `// tests/day-6-forms.spec.js
+// Day 6 Assignment: Form Actions, Checkboxes, Dialogs & Selects
+const { test, expect } = require('@playwright/test');
+
+test.describe('Day 6 Practical Lab - Forms & Dialogs', () => {
+  test('verify form controls and modal handling', async ({ page }) => {
+    // TODO: Write test implementation for filling forms, checking inputs, and handling dialogs
+  });
+});
+`;
+
+  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_6_SCAFFOLD_CODE);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<PlaywrightDay6AssignmentRubric | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 

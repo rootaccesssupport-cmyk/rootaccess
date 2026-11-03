@@ -52,13 +52,20 @@ export const PlaywrightDay7LessonPage: React.FC = () => {
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
-  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_7_STARTER_CODE);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(
-    PLAYWRIGHT_DAY_7_STARTER_EXPLANATION
-  );
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(
-    PLAYWRIGHT_DAY_7_STARTER_OUTPUT
-  );
+  const PLAYWRIGHT_DAY_7_SCAFFOLD_CODE = `// tests/day-7-multi-page.spec.js
+// Day 7 Assignment: Popups, Multiple Tabs, iFrames & File Uploads
+const { test, expect } = require('@playwright/test');
+
+test.describe('Day 7 Practical Lab - Windows, Frames & Uploads', () => {
+  test('verify tab switching and frame interactions', async ({ page }) => {
+    // TODO: Write test implementation for waitForEvent('popup'), frameLocator, setInputFiles
+  });
+});
+`;
+
+  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_7_SCAFFOLD_CODE);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<PlaywrightDay7AssignmentRubric | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 

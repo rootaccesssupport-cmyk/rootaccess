@@ -190,6 +190,12 @@ describe('Playwright Automation with JavaScript + AI — Day 4 Implementation', 
     fireEvent.click(screen.getByRole('button', { name: /Practical Assignment/i }));
     expect(screen.getByRole('heading', { level: 2, name: /Build a Resilient Locator Practice Test Suite/i })).toBeInTheDocument();
 
+    // Populate valid solution code, output, and explanation into assignment form
+    const textareas = screen.getAllByRole('textbox');
+    fireEvent.change(textareas[0], { target: { value: PLAYWRIGHT_DAY_4_STARTER_CODE } });
+    fireEvent.change(textareas[1], { target: { value: PLAYWRIGHT_DAY_4_STARTER_OUTPUT } });
+    fireEvent.change(textareas[2], { target: { value: PLAYWRIGHT_DAY_4_STARTER_EXPLANATION } });
+
     // Click evaluate
     const evalBtn = screen.getByRole('button', { name: /Evaluate Assignment Submission/i });
     fireEvent.click(evalBtn);

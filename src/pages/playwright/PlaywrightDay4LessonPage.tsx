@@ -55,13 +55,20 @@ export const PlaywrightDay4LessonPage: React.FC = () => {
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
-  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_4_STARTER_CODE);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(
-    PLAYWRIGHT_DAY_4_STARTER_EXPLANATION
-  );
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(
-    PLAYWRIGHT_DAY_4_STARTER_OUTPUT
-  );
+  const PLAYWRIGHT_DAY_4_SCAFFOLD_CODE = `// tests/day-4-locators.spec.js
+// Day 4 Assignment: Advanced Locators & Filtering
+const { test, expect } = require('@playwright/test');
+
+test.describe('Day 4 Practical Lab - Locators & Filtering', () => {
+  test('locate elements using user-facing locators and filtering', async ({ page }) => {
+    // TODO: Write test implementation using getByRole, getByText, filter()
+  });
+});
+`;
+
+  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_4_SCAFFOLD_CODE);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<PlaywrightDay4AssignmentRubric | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 

@@ -47,7 +47,7 @@ export const FinalProjectPage: React.FC = () => {
     );
   }
 
-  // Seeded starter test cases for high quality learner experience
+  // Starter test cases
   const [testCases, setTestCases] = useState<
     Array<{
       id: string;
@@ -58,21 +58,8 @@ export const FinalProjectPage: React.FC = () => {
       expected: string;
     }>
   >([
-    { id: 'TC_CHK_01', module: 'Cart', title: 'Verify standard checkout with valid in-stock items', type: 'positive', testData: '2 items in cart', expected: 'Proceeds to shipping address screen' },
-    { id: 'TC_CHK_02', module: 'Cart', title: 'Verify checkout blocked when cart subtotal is zero', type: 'negative', testData: '0 items', expected: 'Displays "Cart is empty" banner' },
-    { id: 'TC_CHK_03', module: 'Cart', title: 'Verify out-of-stock item flags alert and prevents checkout', type: 'negative', testData: 'Item qty > stock', expected: 'Inline warning "Reduce quantity to proceed"' },
-    { id: 'TC_CHK_04', module: 'Address', title: 'Verify valid US domestic shipping address submission', type: 'positive', testData: 'Valid street, city, zip 94103', expected: 'Address validated and saves to order' },
-    { id: 'TC_CHK_05', module: 'Address', title: 'Verify invalid postal code format rejection', type: 'negative', testData: 'ZIP "941"', expected: 'Validation error: "Enter valid 5-digit ZIP"' },
-    { id: 'TC_CHK_06', module: 'Promo', title: 'Verify valid active 15% discount coupon applies properly', type: 'positive', testData: 'Code "SAVE15"', expected: 'Subtotal reduced by exactly 15%' },
-    { id: 'TC_CHK_07', module: 'Promo', title: 'Verify expired coupon code rejection', type: 'negative', testData: 'Code "SUMMER2020"', expected: 'Error: "Coupon has expired"' },
-    { id: 'TC_CHK_08', module: 'Promo', title: 'Verify coupon with minimum spend condition below threshold', type: 'negative', testData: '$40 cart with $50 min code', expected: 'Error: "Add $10 more to use coupon"' },
-    { id: 'TC_CHK_09', module: 'Payment', title: 'Verify successful credit card payment with 3DS OTP auth', type: 'positive', testData: 'Valid Visa, valid OTP', expected: 'Payment authorized, order ID created' },
-    { id: 'TC_CHK_10', module: 'Payment', title: 'Verify payment rejection for expired card date', type: 'negative', testData: 'MM/YY past date', expected: 'Error: "Card has expired"' },
-    { id: 'TC_CHK_11', module: 'Payment', title: 'Verify incorrect CVV security code validation', type: 'negative', testData: 'CVV "00"', expected: 'Error: "Invalid CVV code"' },
-    { id: 'TC_CHK_12', module: 'Payment', title: 'Verify insufficient bank balance card rejection', type: 'negative', testData: 'Decline code 51', expected: 'Error: "Card declined due to insufficient funds"' },
-    { id: 'TC_CHK_13', module: 'Confirmation', title: 'Verify order confirmation screen displays order ID and receipt', type: 'positive', testData: 'Authorized transaction', expected: 'Displays order #, summary, and email confirmation note' },
-    { id: 'TC_CHK_14', module: 'Confirmation', title: 'Verify stock inventory decrements upon order completion', type: 'positive', testData: 'DB audit', expected: 'Inventory count reduces by order quantity' },
-    { id: 'TC_CHK_15', module: 'Confirmation', title: 'Verify confirmation email received with line items', type: 'positive', testData: 'Transactional email audit', expected: 'Receipt sent to registered email' },
+    { id: 'TC_CHK_01', module: 'Cart', title: '', type: 'positive', testData: '', expected: '' },
+    { id: 'TC_CHK_02', module: 'Payment', title: '', type: 'negative', testData: '', expected: '' },
   ]);
 
   // Bug reports state
@@ -87,33 +74,17 @@ export const FinalProjectPage: React.FC = () => {
     }>
   >([
     {
-      title: '[Cart] Negative quantity bypass allows negative subtotal order generation',
-      severity: 'Critical',
-      priority: 'P1',
-      steps: '1. Add any item to cart\n2. Open dev tools / manual input and set qty to -3\n3. Click Proceed to Checkout',
-      actual: 'System calculates -$150.00 subtotal and completes checkout as customer credit balance.',
-      expected: 'Server and client must validate qty >= 1 and reject negative numbers with HTTP 400.',
-    },
-    {
-      title: '[Payment] Expired credit card submission displays uncaught 500 error screen',
+      title: '',
       severity: 'Major',
       priority: 'P2',
-      steps: '1. Proceed to payment page\n2. Enter credit card with expiration date 01/22\n3. Click Complete Payment',
-      actual: 'Page crashes to blank white screen with raw JSON 500 internal server error.',
-      expected: 'Gateway response caught gracefully; user shown inline message "Card expired. Please use a valid card."',
+      steps: '',
+      actual: '',
+      expected: '',
     },
   ]);
 
   // Executive summary report
-  const [summaryReport, setSummaryReport] = useState(
-    'ROOTACCESS QA TEST SUMMARY REPORT\n' +
-      'Project: E-Commerce Checkout & Payment Gateway\n' +
-      'Sprint: Release Candidate 1.0\n' +
-      'Total Planned Test Cases: 15 | Executed: 15 | Passed: 13 | Failed: 2\n' +
-      'Defects Logged: 1 Critical (Cart negative quantity), 1 Major (Expired card 500 crash)\n' +
-      'Test Environment: Staging Web (Chrome 122, Safari 17.2, Mobile Responsive)\n' +
-      'Recommendation: CONDITIONAL SIGN-OFF. Hotfix required for P1 Cart defect before public launch.'
-  );
+  const [summaryReport, setSummaryReport] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -477,6 +448,7 @@ export const FinalProjectPage: React.FC = () => {
               rows={7}
               value={summaryReport}
               onChange={(e) => setSummaryReport(e.target.value)}
+              placeholder="Enter your executive test summary report here (e.g. Project name, test objectives, execution metrics, open defects, and sign-off recommendation)..."
               className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-mono leading-relaxed focus:outline-none focus:border-indigo-500"
             />
           </div>

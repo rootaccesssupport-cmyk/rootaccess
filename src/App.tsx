@@ -58,6 +58,8 @@ import { AdminAiCourseManagerPage } from './pages/admin/AdminAiCourseManagerPage
 import { JmeterDayLessonPage } from './pages/jmeter/JmeterDayLessonPage';
 import { JmeterCourseCertificatePage } from './pages/jmeter/JmeterCourseCertificatePage';
 import { AdminJmeterCourseManagerPage } from './pages/admin/AdminJmeterCourseManagerPage';
+import { AppiumDayLessonPage } from './pages/appium/AppiumDayLessonPage';
+import { AppiumCourseCertificatePage } from './pages/appium/AppiumCourseCertificatePage';
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
 import { AdminInstagramCreatorPage } from './pages/admin/AdminInstagramCreatorPage';
 import { CareersPage } from './pages/CareersPage';
@@ -917,6 +919,144 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <JmeterCourseCertificatePage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Appium Mobile Automation with Java (14 Days) */}
+            <Route
+              path="/courses/appium-mobile-automation/day-1"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-2"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-3"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-4"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-5"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-6"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-7"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-8"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-9"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-10"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-11"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-12"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-13"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-14"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day/:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/day-:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <AppiumDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/appium-mobile-automation/certificate"
+              element={
+                <ProtectedRoute>
+                  <AppiumCourseCertificatePage />
                 </ProtectedRoute>
               }
             />

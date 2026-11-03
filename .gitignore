@@ -36,3 +36,8 @@ playwright-report/
 blob-report/
 playwright/.cache/
 .auth/
+
+# Build and Video outputs
+output/
+*.tsbuildinfo
+

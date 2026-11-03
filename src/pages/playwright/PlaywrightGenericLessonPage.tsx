@@ -78,9 +78,11 @@ export const PlaywrightGenericLessonPage: React.FC<PlaywrightGenericLessonPagePr
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
-  const [assignmentCode, setAssignmentCode] = useState<string>(starterCode);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(starterExplanation);
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(starterOutput);
+  const genericScaffoldCode = `// tests/day-${dayNumber}_automation.spec.js\n// Day ${dayNumber} Practical Lab: Write your Playwright automation solution below\nconst { test, expect } = require('@playwright/test');\n\ntest.describe('Day ${dayNumber} Practical Lab', () => {\n  test('implement automation scenario', async ({ page }) => {\n    // TODO: Write your Playwright test automation implementation here\n  });\n});\n`;
+
+  const [assignmentCode, setAssignmentCode] = useState<string>(genericScaffoldCode);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<any | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 
@@ -869,7 +871,13 @@ export const PlaywrightGenericLessonPage: React.FC<PlaywrightGenericLessonPagePr
                     Test Implementation Code (Pure JavaScript .js)
                   </label>
                   <button
-                    onClick={() => setAssignmentCode(starterCode)}
+                    onClick={() => {
+                      setAssignmentCode(genericScaffoldCode);
+                      setAssignmentExplanation('');
+                      setAssignmentExpectedOutput('');
+                      setAssignmentEvaluation(null);
+                      setIsAssignmentSubmitted(false);
+                    }}
                     className="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer"
                   >
                     <RotateCcw className="w-3 h-3" /> Reset Starter Code

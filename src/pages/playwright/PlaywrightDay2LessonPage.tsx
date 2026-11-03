@@ -54,13 +54,30 @@ export const PlaywrightDay2LessonPage: React.FC = () => {
   const [exerciseSubmitted, setExerciseSubmitted] = useState<Record<string, boolean>>({});
 
   // Milestone 3: Practical Assignment
-  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_2_STARTER_CODE);
-  const [assignmentExplanation, setAssignmentExplanation] = useState<string>(
-    PLAYWRIGHT_DAY_2_STARTER_EXPLANATION
-  );
-  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>(
-    PLAYWRIGHT_DAY_2_STARTER_OUTPUT
-  );
+  const PLAYWRIGHT_DAY_2_SCAFFOLD_CODE = `// ============================================================================
+// RootAccess Day 2 Practical Assignment: JavaScript Test Data Utility
+// ============================================================================
+
+// 1. Declare an array with at least 5 login test scenario objects
+const loginScenarios = [
+  // TODO: Add 5 scenario objects with id, username, scenarioType, expectedResult
+];
+
+// 2. Summary function that formats each scenario's details
+function getScenarioSummary(scenario) {
+  // TODO: Return formatted string distinguishing positive and negative flows
+}
+
+// 3. Loop through all scenarios and print their summaries
+// TODO: Write a loop to print getScenarioSummary for each scenario
+
+// 4. Asynchronous helper function that awaits a simulated Promise
+// TODO: Define async function to load data and handle errors
+`;
+
+  const [assignmentCode, setAssignmentCode] = useState<string>(PLAYWRIGHT_DAY_2_SCAFFOLD_CODE);
+  const [assignmentExplanation, setAssignmentExplanation] = useState<string>('');
+  const [assignmentExpectedOutput, setAssignmentExpectedOutput] = useState<string>('');
   const [assignmentEvaluation, setAssignmentEvaluation] = useState<PlaywrightDay2AssignmentRubric | null>(null);
   const [isAssignmentSubmitted, setIsAssignmentSubmitted] = useState<boolean>(false);
 
@@ -149,9 +166,9 @@ export const PlaywrightDay2LessonPage: React.FC = () => {
 
   // Assignment Handlers
   const handleResetStarterCode = () => {
-    setAssignmentCode(PLAYWRIGHT_DAY_2_STARTER_CODE);
-    setAssignmentExplanation(PLAYWRIGHT_DAY_2_STARTER_EXPLANATION);
-    setAssignmentExpectedOutput(PLAYWRIGHT_DAY_2_STARTER_OUTPUT);
+    setAssignmentCode(PLAYWRIGHT_DAY_2_SCAFFOLD_CODE);
+    setAssignmentExplanation('');
+    setAssignmentExpectedOutput('');
     setAssignmentEvaluation(null);
     setIsAssignmentSubmitted(false);
   };

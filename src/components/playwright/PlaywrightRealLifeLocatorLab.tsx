@@ -146,7 +146,7 @@ export const PlaywrightRealLifeLocatorLab: React.FC<PlaywrightRealLifeLocatorLab
 
   // 1. Locators Mode State
   const [activeMissionIndex, setActiveMissionIndex] = useState<number>(0);
-  const [locatorInput, setLocatorInput] = useState<string>("page.getByRole('button', { name: 'Save Profile' })");
+  const [locatorInput, setLocatorInput] = useState<string>('');
   const [matchCount, setMatchCount] = useState<number | null>(null);
   const [evalStatus, setEvalStatus] = useState<'idle' | 'success' | 'strict-violation' | 'no-match' | 'error'>('idle');
   const [evalFeedback, setEvalFeedback] = useState<string>('');
@@ -731,7 +731,7 @@ export const PlaywrightRealLifeLocatorLab: React.FC<PlaywrightRealLifeLocatorLab
                   key={mission.id}
                   onClick={() => {
                     setActiveMissionIndex(idx);
-                    setLocatorInput(mission.expectedSelectorExample);
+                    setLocatorInput('');
                     setEvalStatus('idle');
                     setEvalFeedback('');
                     setMatchCount(null);
@@ -782,16 +782,6 @@ export const PlaywrightRealLifeLocatorLab: React.FC<PlaywrightRealLifeLocatorLab
               >
                 <HelpCircle className="w-3.5 h-3.5" />
                 <span>{showHint ? 'Hide Hint' : 'Show Hint'}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setLocatorInput(currentMission.expectedSelectorExample);
-                  evaluateLocatorExpression(currentMission.expectedSelectorExample);
-                }}
-                className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs"
-              >
-                <span>Load Solution</span>
               </button>
             </div>
           </div>
@@ -1063,7 +1053,7 @@ export const PlaywrightRealLifeLocatorLab: React.FC<PlaywrightRealLifeLocatorLab
                     Save Profile
                   </button>
                   <span className="text-[11px] text-slate-500 font-mono">
-                    target: page.getByRole('button', &#123; name: 'Save Profile' &#125;)
+                    Save Action Button
                   </span>
                 </div>
               </div>
