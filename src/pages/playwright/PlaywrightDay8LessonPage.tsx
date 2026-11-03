@@ -27,9 +27,6 @@ import { CourseEnrollmentGate } from '../../components/common/CourseEnrollmentGa
 import { useProgress } from '../../context/ProgressContext';
 import {
   PLAYWRIGHT_DAY_8_DATA,
-  PLAYWRIGHT_DAY_8_STARTER_CODE,
-  PLAYWRIGHT_DAY_8_STARTER_EXPLANATION,
-  PLAYWRIGHT_DAY_8_STARTER_OUTPUT,
   evaluateDay8Assignment,
 } from '../../data/playwrightDay8Data';
 import type { PlaywrightDay8AssignmentRubric } from '../../types/playwrightCourse';

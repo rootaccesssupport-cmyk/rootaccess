@@ -7,8 +7,6 @@ import {
   Database,
   Table,
   Lightbulb,
-  Copy,
-  Check,
   Terminal,
 } from 'lucide-react';
 import { sqlSimulator, SqlQueryResult, SQL_SCHEMAS } from '../../services/sqlSimulatorService';
@@ -28,7 +26,7 @@ export const SqlInteractiveSandbox: React.FC<SqlInteractiveSandboxProps> = ({
   onSuccess,
   validator,
   hints = [],
-  solutionSql,
+  solutionSql: _solutionSql,
   exerciseTitle,
 }) => {
   const [query, setQuery] = useState(initialSql);
@@ -37,7 +35,6 @@ export const SqlInteractiveSandbox: React.FC<SqlInteractiveSandboxProps> = ({
   const [verificationFeedback, setVerificationFeedback] = useState<{ success: boolean; message: string } | null>(null);
   const [showSchemas, setShowSchemas] = useState(false);
   const [activeHintIndex, setActiveHintIndex] = useState(0);
-  const [copied, setCopied] = useState(false);
 
   const handleRun = () => {
     setIsRunning(true);
@@ -69,14 +66,6 @@ export const SqlInteractiveSandbox: React.FC<SqlInteractiveSandboxProps> = ({
   const handleResetDb = () => {
     sqlSimulator.resetDatabase();
     handleRun();
-  };
-
-  const handleCopySolution = () => {
-    if (solutionSql) {
-      setQuery(solutionSql);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
   };
 
   return (

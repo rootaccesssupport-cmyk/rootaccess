@@ -48,9 +48,9 @@ export interface PlaywrightGenericLessonPageProps {
 export const PlaywrightGenericLessonPage: React.FC<PlaywrightGenericLessonPageProps> = ({
   dayNumber,
   data,
-  starterCode,
-  starterExplanation,
-  starterOutput,
+  starterCode: _starterCode,
+  starterExplanation: _starterExplanation,
+  starterOutput: _starterOutput,
   evaluateAssignment,
   prevLessonId,
   currentLessonId,
