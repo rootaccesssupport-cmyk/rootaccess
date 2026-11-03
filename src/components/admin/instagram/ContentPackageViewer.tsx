@@ -102,7 +102,7 @@ Code Snippet / Core Takeaway:
 ${draft.imagePost?.codeSnippet || draft.reel.codeSnippet || 'N/A'}
 
 Call to Action:
-${draft.imagePost?.callToAction || 'Follow @RootAccess.tech • Learn by Doing'}
+${draft.imagePost?.callToAction || 'Follow @RootAccess • Learn by Doing'}
 
 ----------------------------------------
 2. CAROUSEL SLIDES

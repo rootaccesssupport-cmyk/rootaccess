@@ -36,6 +36,43 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
   onRegenerateSection,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const logoLightRef = useRef<HTMLImageElement | null>(null);
+  const logoDarkRef = useRef<HTMLImageElement | null>(null);
+  const [logosReady, setLogosReady] = useState(false);
+
+  // Preload official RootAccess logo images (/logo.png & /logo-white.png)
+  useEffect(() => {
+    let mounted = true;
+    let count = 0;
+    const checkDone = () => {
+      count++;
+      if (mounted && count >= 2) {
+        setLogosReady(true);
+      }
+    };
+
+    const imgLight = new Image();
+    imgLight.crossOrigin = 'anonymous';
+    imgLight.src = '/logo.png';
+    imgLight.onload = checkDone;
+    imgLight.onerror = checkDone;
+    logoLightRef.current = imgLight;
+
+    const imgDark = new Image();
+    imgDark.crossOrigin = 'anonymous';
+    imgDark.src = '/logo-white.png';
+    imgDark.onload = checkDone;
+    imgDark.onerror = checkDone;
+    logoDarkRef.current = imgDark;
+
+    if (imgLight.complete && imgDark.complete) {
+      setLogosReady(true);
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Initialize image package data
   const initialPackage = draft.imagePost || {
@@ -66,7 +103,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
       { label: 'C', text: 'Option C: Causes flaky timeout during CI test' },
       { label: 'D', text: 'Option D: Deprecated syntax in modern engines' },
     ],
-    callToAction: 'Follow @RootAccess.tech • Learn by Doing',
+    callToAction: 'Follow @RootAccess • Learn by Doing',
   };
 
   const [activeMode, setActiveMode] = useState<'post' | 'carousel'>('post');
@@ -87,7 +124,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
   const [bullet1, setBullet1] = useState(initialPackage.bulletPoints?.[0] || 'Understand the underlying mechanism step-by-step');
   const [bullet2, setBullet2] = useState(initialPackage.bulletPoints?.[1] || 'Avoid silent regression and assertion false-positives');
   const [bullet3, setBullet3] = useState(initialPackage.bulletPoints?.[2] || 'Practice hands-on test engineering on RootAccess');
-  const [callToAction, setCallToAction] = useState(initialPackage.callToAction || 'Follow @RootAccess.tech • Learn by Doing');
+  const [callToAction, setCallToAction] = useState(initialPackage.callToAction || 'Follow @RootAccess • Learn by Doing');
 
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
@@ -148,7 +185,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
     }
   };
 
-  // Helper to wrap text onto canvas
+  // Helper to wrap text onto canvas with explicit newline handling
   const drawWrappedText = (
     ctx: CanvasRenderingContext2D,
     text: string,
@@ -158,31 +195,56 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
     lineHeight: number,
     maxLines: number = 6
   ): number => {
-    const words = text.split(' ');
-    let line = '';
+    if (!text) return y;
+    ctx.textBaseline = 'top';
+
+    const paragraphs = text.split('\n');
     let currentY = y;
     let linesDrawn = 0;
 
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      const testWidth = metrics.width;
+    for (let p = 0; p < paragraphs.length; p++) {
+      const paragraph = paragraphs[p].trim();
+      if (!paragraph) {
+        currentY += Math.round(lineHeight * 0.5);
+        continue;
+      }
 
-      if (testWidth > maxWidth && n > 0) {
-        ctx.fillText(line.trim(), x, currentY);
-        line = words[n] + ' ';
+      const words = paragraph.split(/\s+/);
+      let line = '';
+
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line ? `${line} ${words[n]}` : words[n];
+        const testWidth = ctx.measureText(testLine).width;
+
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(line, x, currentY);
+          line = words[n];
+          currentY += lineHeight;
+          linesDrawn++;
+          if (linesDrawn >= maxLines) {
+            let truncated = line;
+            while (truncated.length > 0 && ctx.measureText(truncated + '...').width > maxWidth) {
+              truncated = truncated.slice(0, -1);
+            }
+            ctx.fillText(truncated + '...', x, currentY);
+            return currentY + lineHeight;
+          }
+        } else {
+          line = testLine;
+        }
+      }
+
+      if (line) {
+        ctx.fillText(line, x, currentY);
         currentY += lineHeight;
         linesDrawn++;
-        if (linesDrawn >= maxLines) {
-          ctx.fillText(line.trim() + '...', x, currentY);
-          return currentY + lineHeight;
+        if (linesDrawn >= maxLines && p < paragraphs.length - 1) {
+          return currentY;
         }
-      } else {
-        line = testLine;
       }
     }
-    ctx.fillText(line.trim(), x, currentY);
-    return currentY + lineHeight;
+
+    return currentY;
   };
 
   // Helper to draw rounded rectangle
@@ -334,63 +396,93 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
       ctx.stroke();
 
       // ==========================================
-      // HEADER BAR: ROOTACCESS BRANDING + TAG
+      // HEADER BAR: ROOTACCESS OFFICIAL BRANDING + TAG
       // ==========================================
-      const headerY = 96;
+      const headerY = 88;
+      let logoRightEdge = 74;
 
-      // Brand Logo square
-      drawRoundedRect(ctx, 74, headerY - 26, 32, 32, 6, '#e11d48');
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 20px monospace';
-      ctx.fillText('>', 83, headerY - 3);
+      // Draw official RootAccess Logo Image
+      const logoImg = isLight ? logoLightRef.current : logoDarkRef.current;
+      if (logoImg && logoImg.complete && logoImg.naturalWidth > 0 && logoImg.naturalHeight > 0) {
+        // Natural aspect ratio is 605 x 168 (~3.601)
+        const logoH = 34;
+        const logoW = Math.round(logoH * (logoImg.naturalWidth / logoImg.naturalHeight));
+        ctx.drawImage(logoImg, 74, headerY - Math.round(logoH / 2), logoW, logoH);
+        logoRightEdge = 74 + logoW;
+      } else {
+        // High-fidelity vector brand fallback
+        const badgeSize = 34;
+        drawRoundedRect(ctx, 74, headerY - Math.round(badgeSize / 2), badgeSize, badgeSize, 8, '#e11d48');
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 18px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('</>', 74 + badgeSize / 2, headerY);
+        ctx.textAlign = 'left';
 
-      // Brand Title
-      ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-      ctx.font = '900 24px "Inter", -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText('ROOTACCESS', 120, headerY - 2);
+        // Wordmark
+        ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
+        ctx.font = '900 24px "Inter", -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('RootAccess', 74 + badgeSize + 12, headerY);
+        logoRightEdge = 74 + badgeSize + 12 + ctx.measureText('RootAccess').width;
+      }
 
-      // Tagline
-      ctx.fillStyle = '#e11d48';
-      ctx.font = 'bold 12px "Inter", sans-serif';
-      ctx.fillText('// LEARN BY DOING.', 295, headerY - 3);
-
-      // Right Side Tag (Category or Slide Number)
+      // Tag Text on the right (Category or Slide Number)
       const tagText = isCarousel
         ? `SLIDE ${slideIdx + 1} OF ${draft.carousel.slides.length || 5}`
         : categoryTag.toUpperCase();
 
-      ctx.font = 'bold 13px "Inter", sans-serif';
-      const tagMetrics = ctx.measureText(tagText);
-      const tagWidth = tagMetrics.width + 32;
+      ctx.font = 'bold 12px "Inter", sans-serif';
+      let displayTag = tagText;
+      let tagMetrics = ctx.measureText(displayTag);
+      while (displayTag.length > 8 && tagMetrics.width > 240) {
+        displayTag = displayTag.slice(0, -4) + '...';
+        tagMetrics = ctx.measureText(displayTag);
+      }
+      const tagWidth = tagMetrics.width + 28;
       const tagX = width - 74 - tagWidth;
 
       drawRoundedRect(
         ctx,
         tagX,
-        headerY - 28,
+        headerY - 16,
         tagWidth,
-        34,
-        17,
+        32,
+        16,
         isLight ? '#f1f5f9' : 'rgba(225, 29, 72, 0.12)',
         isLight ? '#cbd5e1' : 'rgba(225, 29, 72, 0.4)',
         1.5
       );
 
       ctx.fillStyle = isLight ? '#e11d48' : '#fda4af';
-      ctx.fillText(tagText, tagX + 16, headerY - 6);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(displayTag, tagX + tagWidth / 2, headerY);
+      ctx.textAlign = 'left';
+
+      // Tagline: Learn by Doing.
+      const taglineX = logoRightEdge + 16;
+      if (taglineX + 130 < tagX - 16) {
+        ctx.fillStyle = '#e11d48';
+        ctx.font = 'bold 12px "Inter", sans-serif';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('// LEARN BY DOING.', taglineX, headerY);
+      }
 
       // Horizontal separator line
       ctx.strokeStyle = isLight ? '#e2e8f0' : 'rgba(255, 255, 255, 0.08)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(74, headerY + 28);
-      ctx.lineTo(width - 74, headerY + 28);
+      ctx.moveTo(74, 118);
+      ctx.lineTo(width - 74, 118);
       ctx.stroke();
 
       // ==========================================
       // CONTENT RENDERING
       // ==========================================
-      let contentStartY = headerY + 70;
+      let contentStartY = 146;
+      ctx.textBaseline = 'top';
 
       if (isCarousel) {
         // CAROUSEL SLIDE MODE
@@ -405,37 +497,46 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
 
         // Slide Type Pill
         const typeBadge = currentSlide.slideType ? currentSlide.slideType.toUpperCase() : 'STEP';
+        ctx.font = 'bold 12px "Inter", monospace';
+        const badgeText = `● ${typeBadge}`;
+        const badgeWidth = ctx.measureText(badgeText).width + 32;
         drawRoundedRect(
           ctx,
           74,
           contentStartY,
-          160,
+          badgeWidth,
           32,
           8,
           '#e11d48',
           undefined
         );
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 13px "Inter", monospace';
-        ctx.fillText(`● ${typeBadge}`, 90, contentStartY + 21);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(badgeText, 74 + badgeWidth / 2, contentStartY + 16);
+        ctx.textAlign = 'left';
 
-        contentStartY += 65;
+        contentStartY += 46;
 
         // Slide Headline
         ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-        ctx.font = '900 44px "Inter", sans-serif';
-        contentStartY = drawWrappedText(ctx, currentSlide.headline, 74, contentStartY, width - 148, 56, 3);
-        contentStartY += 20;
+        ctx.font = '900 38px "Inter", sans-serif';
+        ctx.textBaseline = 'top';
+        contentStartY = drawWrappedText(ctx, currentSlide.headline, 74, contentStartY, width - 148, 48, 3);
+        contentStartY += 16;
 
         // Slide Body Text
         ctx.fillStyle = isLight ? '#475569' : '#cbd5e1';
-        ctx.font = '400 24px "Inter", sans-serif';
-        contentStartY = drawWrappedText(ctx, currentSlide.bodyText, 74, contentStartY, width - 148, 38, 4);
-        contentStartY += 30;
+        ctx.font = '400 22px "Inter", sans-serif';
+        ctx.textBaseline = 'top';
+        contentStartY = drawWrappedText(ctx, currentSlide.bodyText, 74, contentStartY, width - 148, 32, 3);
+        contentStartY += 22;
 
         // Code block if present on this slide
+        const dotsY = height - 96;
         if (currentSlide.codeSnippet) {
-          const terminalHeight = height > 1200 ? 340 : 260;
+          const availableTermHeight = dotsY - contentStartY - 24;
+          const terminalHeight = Math.max(130, Math.min(280, availableTermHeight));
           drawRoundedRect(
             ctx,
             74,
@@ -445,6 +546,126 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             18,
             isLight ? '#0f172a' : '#020408',
             'rgba(225, 29, 72, 0.35)',
+            2
+          );
+
+          // Terminal Header
+          ctx.fillStyle = isLight ? '#1e293b' : '#080c14';
+          ctx.fillRect(74, contentStartY, width - 148, 38);
+
+          // Traffic Dots
+          ctx.fillStyle = '#ef4444';
+          ctx.beginPath();
+          ctx.arc(104, contentStartY + 19, 5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#eab308';
+          ctx.beginPath();
+          ctx.arc(124, contentStartY + 19, 5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#22c55e';
+          ctx.beginPath();
+          ctx.arc(144, contentStartY + 19, 5, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Filename
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = 'bold 13px monospace';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('rootaccess_exercise.ts', 172, contentStartY + 19);
+
+          // Code lines
+          ctx.font = '19px "JetBrains Mono", "Fira Code", monospace';
+          ctx.textBaseline = 'top';
+          const codeLines = currentSlide.codeSnippet.split('\n');
+          let codeY = contentStartY + 50;
+          const codeLineH = 28;
+          const maxCodeLines = Math.floor((terminalHeight - 58) / codeLineH);
+          const maxLineWidth = (width - 74) - 146 - 24;
+
+          codeLines.slice(0, maxCodeLines).forEach((line, i) => {
+            // Line numbers
+            ctx.fillStyle = '#64748b';
+            ctx.fillText(`${(i + 1).toString().padStart(2, '0')}`, 104, codeY);
+
+            // Syntax coloring
+            if (line.trim().startsWith('//') || line.trim().startsWith('--')) {
+              ctx.fillStyle = '#94a3b8';
+            } else if (
+              line.includes('SELECT') ||
+              line.includes('FROM') ||
+              line.includes('WHERE') ||
+              line.includes('const') ||
+              line.includes('test(') ||
+              line.includes('await')
+            ) {
+              ctx.fillStyle = '#f43f5e';
+            } else {
+              ctx.fillStyle = '#e2e8f0';
+            }
+
+            let dispLine = line;
+            if (ctx.measureText(dispLine).width > maxLineWidth) {
+              while (dispLine.length > 0 && ctx.measureText(dispLine + '...').width > maxLineWidth) {
+                dispLine = dispLine.slice(0, -1);
+              }
+              dispLine += '...';
+            }
+
+            ctx.fillText(dispLine, 146, codeY);
+            codeY += codeLineH;
+          });
+        }
+
+        // Slide Progress Dots at bottom
+        const totalSlides = draft.carousel.slides.length || 5;
+        const totalDotsWidth = totalSlides * 24;
+        const startDotX = width / 2 - totalDotsWidth / 2;
+
+        for (let d = 0; d < totalSlides; d++) {
+          ctx.fillStyle = d === slideIdx ? '#e11d48' : isLight ? '#cbd5e1' : '#334155';
+          ctx.beginPath();
+          ctx.arc(startDotX + d * 24 + 12, dotsY, d === slideIdx ? 6 : 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Swipe CTA
+        ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
+        ctx.font = 'bold 13px "Inter", sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('SWIPE FOR NEXT ➔', width - 74, dotsY);
+        ctx.textAlign = 'left';
+      } else {
+        // SINGLE POST IMAGE MODE (5 Templates)
+        if (targetStyle === 'code_terminal') {
+          // 1. CODE TERMINAL TEMPLATE
+          // Headline
+          ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
+          ctx.font = '900 40px "Inter", sans-serif';
+          ctx.textBaseline = 'top';
+          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 50, 2);
+          contentStartY += 8;
+
+          // Subtitle
+          ctx.fillStyle = isLight ? '#475569' : '#94a3b8';
+          ctx.font = '500 20px "Inter", sans-serif';
+          ctx.textBaseline = 'top';
+          contentStartY = drawWrappedText(ctx, subtitle, 74, contentStartY, width - 148, 28, 2);
+          contentStartY += 20;
+
+          // Terminal Window
+          const termHeight = height - contentStartY - 100;
+          drawRoundedRect(
+            ctx,
+            74,
+            contentStartY,
+            width - 148,
+            termHeight,
+            20,
+            isLight ? '#0f172a' : '#020408',
+            'rgba(225, 29, 72, 0.4)',
             2
           );
 
@@ -468,118 +689,20 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
           ctx.arc(148, contentStartY + 22, 6, 0, Math.PI * 2);
           ctx.fill();
 
-          // Filename
-          ctx.fillStyle = '#94a3b8';
-          ctx.font = 'bold 14px monospace';
-          ctx.fillText('rootaccess_exercise.ts', 180, contentStartY + 27);
-
-          // Code lines
-          ctx.fillStyle = '#38bdf8';
-          ctx.font = '20px "JetBrains Mono", "Fira Code", monospace';
-          const codeLines = currentSlide.codeSnippet.split('\n');
-          let codeY = contentStartY + 80;
-          codeLines.slice(0, 7).forEach((line, i) => {
-            // Line numbers
-            ctx.fillStyle = '#64748b';
-            ctx.fillText(`${(i + 1).toString().padStart(2, '0')}`, 104, codeY);
-
-            // Syntax coloring
-            if (line.trim().startsWith('//') || line.trim().startsWith('--')) {
-              ctx.fillStyle = '#94a3b8';
-            } else if (
-              line.includes('SELECT') ||
-              line.includes('FROM') ||
-              line.includes('WHERE') ||
-              line.includes('const') ||
-              line.includes('test(') ||
-              line.includes('await')
-            ) {
-              ctx.fillStyle = '#f43f5e';
-            } else {
-              ctx.fillStyle = '#e2e8f0';
-            }
-            ctx.fillText(line, 146, codeY);
-            codeY += 32;
-          });
-        }
-
-        // Slide Progress Dots at bottom
-        const dotsY = height - 120;
-        const totalSlides = draft.carousel.slides.length || 5;
-        const totalDotsWidth = totalSlides * 24;
-        const startDotX = width / 2 - totalDotsWidth / 2;
-
-        for (let d = 0; d < totalSlides; d++) {
-          ctx.fillStyle = d === slideIdx ? '#e11d48' : isLight ? '#cbd5e1' : '#334155';
-          ctx.beginPath();
-          ctx.arc(startDotX + d * 24, dotsY, d === slideIdx ? 7 : 4, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // Swipe CTA
-        ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-        ctx.font = 'bold 15px "Inter", sans-serif';
-        ctx.fillText('SWIPE FOR NEXT ➔', width - 230, dotsY + 5);
-      } else {
-        // SINGLE POST IMAGE MODE (5 Templates)
-        if (targetStyle === 'code_terminal') {
-          // 1. CODE TERMINAL TEMPLATE
-          // Headline
-          ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-          ctx.font = '900 42px "Inter", sans-serif';
-          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 52, 2);
-          contentStartY += 10;
-
-          // Subtitle
-          ctx.fillStyle = isLight ? '#475569' : '#94a3b8';
-          ctx.font = '500 22px "Inter", sans-serif';
-          contentStartY = drawWrappedText(ctx, subtitle, 74, contentStartY, width - 148, 34, 2);
-          contentStartY += 24;
-
-          // Terminal Window
-          const termHeight = height - contentStartY - 160;
-          drawRoundedRect(
-            ctx,
-            74,
-            contentStartY,
-            width - 148,
-            termHeight,
-            20,
-            isLight ? '#0f172a' : '#020408',
-            'rgba(225, 29, 72, 0.4)',
-            2
-          );
-
-          // Terminal Header
-          ctx.fillStyle = isLight ? '#1e293b' : '#080c14';
-          ctx.fillRect(74, contentStartY, width - 148, 48);
-
-          // Traffic Dots
-          ctx.fillStyle = '#ef4444';
-          ctx.beginPath();
-          ctx.arc(104, contentStartY + 24, 7, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#eab308';
-          ctx.beginPath();
-          ctx.arc(128, contentStartY + 24, 7, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#22c55e';
-          ctx.beginPath();
-          ctx.arc(152, contentStartY + 24, 7, 0, Math.PI * 2);
-          ctx.fill();
-
           // Tab Title
           ctx.fillStyle = '#94a3b8';
-          ctx.font = 'bold 15px monospace';
-          ctx.fillText('solution_test.sql', 190, contentStartY + 30);
+          ctx.font = 'bold 14px monospace';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('solution_test.sql', 178, contentStartY + 22);
 
           // Lines of code
-          ctx.font = '22px "JetBrains Mono", monospace';
+          ctx.font = '20px "JetBrains Mono", monospace';
+          ctx.textBaseline = 'top';
           const lines = (codeSnippet || '-- Test Code').split('\n');
-          let codeLineY = contentStartY + 95;
-          const maxVisibleLines = Math.floor((termHeight - 110) / 36);
+          let codeLineY = contentStartY + 62;
+          const codeLineHeight = 32;
+          const maxVisibleLines = Math.floor((termHeight - 76) / codeLineHeight);
+          const maxCodeWidth = (width - 74) - 146 - 24;
 
           lines.slice(0, maxVisibleLines).forEach((line, index) => {
             // Line number
@@ -603,17 +726,30 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             } else {
               ctx.fillStyle = '#f8fafc';
             }
-            ctx.fillText(line, 150, codeLineY);
-            codeLineY += 36;
+
+            let displayCodeLine = line;
+            if (ctx.measureText(displayCodeLine).width > maxCodeWidth) {
+              while (displayCodeLine.length > 0 && ctx.measureText(displayCodeLine + '...').width > maxCodeWidth) {
+                displayCodeLine = displayCodeLine.slice(0, -1);
+              }
+              displayCodeLine += '...';
+            }
+
+            ctx.fillText(displayCodeLine, 146, codeLineY);
+            codeLineY += codeLineHeight;
           });
         } else if (targetStyle === 'mistake_vs_fix') {
           // 2. MISTAKE VS FIX TEMPLATE
           ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-          ctx.font = '900 42px "Inter", sans-serif';
-          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 52, 2);
-          contentStartY += 20;
+          ctx.font = '900 40px "Inter", sans-serif';
+          ctx.textBaseline = 'top';
+          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 50, 2);
+          contentStartY += 18;
 
-          const cardHeight = Math.min(260, (height - contentStartY - 200) / 2);
+          const remainingHeight = height - contentStartY - 100;
+          const cardGap = 20;
+          const cardHeight = Math.min(270, Math.floor((remainingHeight - cardGap) / 2));
+          const snippetMaxWidth = width - 148 - 48;
 
           // Card 1: Common Mistake (Red Border)
           drawRoundedRect(
@@ -628,27 +764,42 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             2
           );
 
-          // Label
-          drawRoundedRect(ctx, 98, contentStartY + 20, 200, 32, 8, '#e11d48');
+          // Label Pill
+          drawRoundedRect(ctx, 98, contentStartY + 18, 190, 32, 8, '#e11d48');
           ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 14px "Inter", sans-serif';
-          ctx.fillText('❌ COMMON MISTAKE', 110, contentStartY + 41);
+          ctx.font = 'bold 13px "Inter", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('❌ COMMON MISTAKE', 98 + 95, contentStartY + 34);
+          ctx.textAlign = 'left';
 
-          // Bad snippet
+          // Bad snippet lines
           ctx.fillStyle = isLight ? '#991b1b' : '#fca5a5';
-          ctx.font = '22px monospace';
-          const badLines = badSnippet.split('\n');
-          badLines.slice(0, 3).forEach((line, i) => {
-            ctx.fillText(line, 98, contentStartY + 95 + i * 34);
+          ctx.font = '20px monospace';
+          ctx.textBaseline = 'top';
+          const badLines = (badSnippet || '').split('\n');
+          let badY = contentStartY + 64;
+          const lineH = 30;
+          const maxSnippetLines = Math.floor((cardHeight - 74) / lineH);
+
+          badLines.slice(0, maxSnippetLines).forEach((line) => {
+            let disp = line;
+            if (ctx.measureText(disp).width > snippetMaxWidth) {
+              while (disp.length > 0 && ctx.measureText(disp + '...').width > snippetMaxWidth) {
+                disp = disp.slice(0, -1);
+              }
+              disp += '...';
+            }
+            ctx.fillText(disp, 98, badY);
+            badY += lineH;
           });
 
-          contentStartY += cardHeight + 28;
-
           // Card 2: RootAccess Fix (Green Border)
+          const card2Y = contentStartY + cardHeight + cardGap;
           drawRoundedRect(
             ctx,
             74,
-            contentStartY,
+            card2Y,
             width - 148,
             cardHeight,
             18,
@@ -657,31 +808,48 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             2
           );
 
-          // Label
-          drawRoundedRect(ctx, 98, contentStartY + 20, 200, 32, 8, '#10b981');
+          // Label Pill
+          drawRoundedRect(ctx, 98, card2Y + 18, 190, 32, 8, '#10b981');
           ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 14px "Inter", sans-serif';
-          ctx.fillText('✅ ROOTACCESS FIX', 115, contentStartY + 41);
+          ctx.font = 'bold 13px "Inter", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('✅ ROOTACCESS FIX', 98 + 95, card2Y + 34);
+          ctx.textAlign = 'left';
 
-          // Good snippet
+          // Good snippet lines
           ctx.fillStyle = isLight ? '#166534' : '#86efac';
-          ctx.font = '22px monospace';
-          const goodLines = goodSnippet.split('\n');
-          goodLines.slice(0, 3).forEach((line, i) => {
-            ctx.fillText(line, 98, contentStartY + 95 + i * 34);
+          ctx.font = '20px monospace';
+          ctx.textBaseline = 'top';
+          const goodLines = (goodSnippet || '').split('\n');
+          let goodY = card2Y + 64;
+
+          goodLines.slice(0, maxSnippetLines).forEach((line) => {
+            let disp = line;
+            if (ctx.measureText(disp).width > snippetMaxWidth) {
+              while (disp.length > 0 && ctx.measureText(disp + '...').width > snippetMaxWidth) {
+                disp = disp.slice(0, -1);
+              }
+              disp += '...';
+            }
+            ctx.fillText(disp, 98, goodY);
+            goodY += lineH;
           });
         } else if (targetStyle === 'cheat_sheet') {
           // 3. CHEAT SHEET TEMPLATE
           ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-          ctx.font = '900 44px "Inter", sans-serif';
-          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 54, 2);
-          contentStartY += 24;
+          ctx.font = '900 40px "Inter", sans-serif';
+          ctx.textBaseline = 'top';
+          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 50, 2);
+          contentStartY += 18;
 
           const bullets = [bullet1, bullet2, bullet3];
-          const itemHeight = Math.min(150, (height - contentStartY - 200) / 3);
+          const remainingHeight = height - contentStartY - 100;
+          const cardGap = 16;
+          const itemHeight = Math.min(150, Math.floor((remainingHeight - cardGap * 2) / 3));
 
           bullets.forEach((bullet, index) => {
-            const itemY = contentStartY + index * (itemHeight + 20);
+            const itemY = contentStartY + index * (itemHeight + cardGap);
 
             drawRoundedRect(
               ctx,
@@ -696,33 +864,55 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             );
 
             // Number badge circle
+            const circleRadius = 24;
+            const circleCenterX = 74 + 40;
+            const circleCenterY = itemY + itemHeight / 2;
             ctx.fillStyle = '#e11d48';
             ctx.beginPath();
-            ctx.arc(130, itemY + itemHeight / 2, 26, 0, Math.PI * 2);
+            ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 20px "Inter", sans-serif';
-            ctx.fillText(`0${index + 1}`, 118, itemY + itemHeight / 2 + 7);
+            ctx.font = 'bold 18px "Inter", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`0${index + 1}`, circleCenterX, circleCenterY);
+            ctx.textAlign = 'left';
 
             // Text
             ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
-            ctx.font = '600 24px "Inter", sans-serif';
-            drawWrappedText(ctx, bullet, 180, itemY + 45, width - 290, 34, 2);
+            ctx.font = '600 22px "Inter", sans-serif';
+            ctx.textBaseline = 'top';
+            const textX = circleCenterX + circleRadius + 22;
+            const textMaxWidth = (width - 74) - textX - 24;
+
+            // Measure height and vertically center
+            const estimatedLines = Math.min(3, Math.ceil(ctx.measureText(bullet).width / textMaxWidth) || 1);
+            const textBlockHeight = estimatedLines * 30;
+            const textStartY = Math.max(itemY + 14, itemY + (itemHeight - textBlockHeight) / 2);
+
+            drawWrappedText(ctx, bullet, textX, textStartY, textMaxWidth, 30, 3);
           });
         } else if (targetStyle === 'interview_quiz') {
           // 4. INTERVIEW QUIZ CHALLENGE
-          drawRoundedRect(ctx, 74, contentStartY, 260, 36, 18, '#e11d48');
+          ctx.font = 'bold 13px "Inter", sans-serif';
+          const badgeText = '⚡ QA INTERVIEW CHALLENGE';
+          const badgeWidth = ctx.measureText(badgeText).width + 36;
+          drawRoundedRect(ctx, 74, contentStartY, badgeWidth, 34, 17, '#e11d48');
           ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 14px "Inter", sans-serif';
-          ctx.fillText('⚡ QA INTERVIEW CHALLENGE', 92, contentStartY + 23);
-          contentStartY += 60;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(badgeText, 74 + badgeWidth / 2, contentStartY + 17);
+          ctx.textAlign = 'left';
+
+          contentStartY += 46;
 
           // Question headline
           ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-          ctx.font = '900 38px "Inter", sans-serif';
-          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 50, 3);
-          contentStartY += 30;
+          ctx.font = '900 36px "Inter", sans-serif';
+          ctx.textBaseline = 'top';
+          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 46, 3);
+          contentStartY += 20;
 
           // Options A, B, C, D
           const options = initialPackage.quizOptions || [
@@ -732,9 +922,12 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             { label: 'D', text: 'Deprecated in modern environments' },
           ];
 
-          const optHeight = 72;
+          const remainingHeight = height - contentStartY - 100;
+          const optGap = 12;
+          const optHeight = Math.min(76, Math.floor((remainingHeight - optGap * 3) / 4));
+
           options.forEach((opt, idx) => {
-            const optY = contentStartY + idx * (optHeight + 16);
+            const optY = contentStartY + idx * (optHeight + optGap);
 
             drawRoundedRect(
               ctx,
@@ -749,79 +942,122 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
             );
 
             // Option Letter Box
-            drawRoundedRect(ctx, 94, optY + 16, 40, 40, 8, opt.isCorrect ? '#10b981' : '#e11d48');
+            const boxSize = 36;
+            const boxY = optY + (optHeight - boxSize) / 2;
+            drawRoundedRect(ctx, 92, boxY, boxSize, boxSize, 8, opt.isCorrect ? '#10b981' : '#e11d48');
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 18px "Inter", sans-serif';
-            ctx.fillText(opt.label, 107, optY + 42);
+            ctx.font = 'bold 17px "Inter", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(opt.label, 92 + boxSize / 2, boxY + boxSize / 2);
+            ctx.textAlign = 'left';
 
-            // Option Text
+            // Option Text: Cleanly wrapped & vertically centered
             ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
-            ctx.font = '500 21px "Inter", sans-serif';
-            ctx.fillText(opt.text, 154, optY + 43);
+            ctx.font = '500 20px "Inter", sans-serif';
+            const optTextX = 92 + boxSize + 16;
+            const optTextMaxWidth = (width - 74) - optTextX - 20;
+
+            const optTextWidth = ctx.measureText(opt.text).width;
+            if (optTextWidth <= optTextMaxWidth) {
+              ctx.textBaseline = 'middle';
+              ctx.fillText(opt.text, optTextX, optY + optHeight / 2);
+            } else {
+              const textStartY = optY + (optHeight - 44) / 2;
+              ctx.textBaseline = 'top';
+              drawWrappedText(ctx, opt.text, optTextX, textStartY, optTextMaxWidth, 22, 2);
+            }
           });
         } else {
           // 5. BOLD HOOK POSTER
-          contentStartY += 40;
-
-          // Category Pill
+          ctx.font = 'bold 13px "Inter", sans-serif';
+          const catText = `● ${categoryTag.toUpperCase()}`;
+          const catPillWidth = Math.min(width - 148, ctx.measureText(catText).width + 36);
           drawRoundedRect(
             ctx,
             74,
             contentStartY,
-            300,
-            38,
-            19,
+            catPillWidth,
+            36,
+            18,
             'rgba(225, 29, 72, 0.15)',
             '#e11d48',
             2
           );
           ctx.fillStyle = '#fda4af';
-          ctx.font = 'bold 14px "Inter", sans-serif';
-          ctx.fillText(`● ${categoryTag.toUpperCase()}`, 96, contentStartY + 24);
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(catText, 74 + catPillWidth / 2, contentStartY + 18);
+          ctx.textAlign = 'left';
 
-          contentStartY += 80;
+          contentStartY += 52;
 
           // Giant Bold Title
           ctx.fillStyle = isLight ? '#0f172a' : '#ffffff';
-          ctx.font = '900 64px "Inter", sans-serif';
-          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, 76, 4);
-          contentStartY += 36;
+          const headlineLength = (headline || '').length;
+          const giantFontSize = headlineLength > 60 ? 46 : headlineLength > 35 ? 54 : 62;
+          const giantLineHeight = Math.round(giantFontSize * 1.25);
+          ctx.font = `900 ${giantFontSize}px "Inter", sans-serif`;
+          ctx.textBaseline = 'top';
+          contentStartY = drawWrappedText(ctx, headline, 74, contentStartY, width - 148, giantLineHeight, 4);
+          contentStartY += 24;
 
           // Accent Takeaway Card
-          drawRoundedRect(
-            ctx,
-            74,
-            contentStartY,
-            width - 148,
-            160,
-            20,
-            isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
-            'rgba(225, 29, 72, 0.4)',
-            2
-          );
+          const takeawayHeight = Math.min(180, height - contentStartY - 100);
+          if (takeawayHeight > 90) {
+            drawRoundedRect(
+              ctx,
+              74,
+              contentStartY,
+              width - 148,
+              takeawayHeight,
+              20,
+              isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.04)',
+              'rgba(225, 29, 72, 0.4)',
+              2
+            );
 
-          ctx.fillStyle = '#e11d48';
-          ctx.font = 'bold 16px "Inter", sans-serif';
-          ctx.fillText('WHY THIS MATTERS:', 104, contentStartY + 45);
+            ctx.fillStyle = '#e11d48';
+            ctx.font = 'bold 15px "Inter", sans-serif';
+            ctx.textBaseline = 'top';
+            ctx.fillText('WHY THIS MATTERS:', 100, contentStartY + 24);
 
-          ctx.fillStyle = isLight ? '#334155' : '#cbd5e1';
-          ctx.font = '400 22px "Inter", sans-serif';
-          drawWrappedText(ctx, subtitle, 104, contentStartY + 85, width - 208, 34, 2);
+            ctx.fillStyle = isLight ? '#334155' : '#cbd5e1';
+            ctx.font = '400 21px "Inter", sans-serif';
+            drawWrappedText(ctx, subtitle, 100, contentStartY + 56, width - 200, 30, 3);
+          }
         }
       }
 
       // ==========================================
-      // FOOTER BAR: CALL TO ACTION
+      // FOOTER BAR: CALL TO ACTION + OFFICIAL DOMAIN
       // ==========================================
-      const footerY = height - 74;
+      const footerY = height - 52;
 
-      ctx.fillStyle = isLight ? '#64748b' : '#94a3b8';
-      ctx.font = 'bold 15px "Inter", sans-serif';
-      ctx.fillText(callToAction, 74, footerY);
+      // Official Domain on the right
+      const domainText = 'rootaccess.co.in';
+      ctx.font = 'bold 14px "Inter", sans-serif';
+      const domainWidth = ctx.measureText(domainText).width;
+      const domainX = width - 74 - domainWidth;
 
       ctx.fillStyle = '#e11d48';
-      ctx.font = 'bold 15px "Inter", sans-serif';
-      ctx.fillText('rootaccess.tech', width - 210, footerY);
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'left';
+      ctx.fillText(domainText, domainX, footerY);
+
+      // Call to action on the left with guaranteed clearance so it NEVER overlaps
+      const maxCtaWidth = domainX - 74 - 28;
+      ctx.fillStyle = isLight ? '#64748b' : '#94a3b8';
+      ctx.font = 'bold 14px "Inter", sans-serif';
+
+      let displayCta = callToAction || 'Follow @RootAccess • Learn by Doing';
+      if (ctx.measureText(displayCta).width > maxCtaWidth) {
+        while (displayCta.length > 0 && ctx.measureText(displayCta + '...').width > maxCtaWidth) {
+          displayCta = displayCta.slice(0, -1);
+        }
+        displayCta += '...';
+      }
+      ctx.fillText(displayCta, 74, footerY);
     },
     [
       headline,
@@ -836,6 +1072,7 @@ export const InstagramImageGenerator: React.FC<InstagramImageGeneratorProps> = (
       callToAction,
       draft,
       initialPackage.quizOptions,
+      logosReady,
     ]
   );
 

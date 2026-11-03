@@ -224,7 +224,7 @@ export const AdminInstagramCreatorPage: React.FC = () => {
             'Prevent regression and assertion failures',
             'Learn by doing with RootAccess hands-on labs',
           ],
-          callToAction: 'Follow @RootAccess.tech • Learn by Doing',
+          callToAction: 'Follow @RootAccess • Learn by Doing',
         },
         reel: {
           hook: `Stop making this mistake with ${title}!`,
@@ -259,13 +259,13 @@ export const AdminInstagramCreatorPage: React.FC = () => {
               slideNumber: 3,
               slideType: 'cta',
               headline: 'Learn by Doing',
-              bodyText: 'Practice software testing on real systems at RootAccess.tech',
+              bodyText: 'Practice software testing on real systems at RootAccess.co.in',
               visualNote: 'Closing slide',
             },
           ],
         },
         caption: {
-          captionText: `Master ${title} in your software testing workflow! 🚀\n\nSave this post for your next test run and follow @RootAccess.tech for daily engineering insights.\n\n#SoftwareTesting #RootAccess #QAEngineering`,
+          captionText: `Master ${title} in your software testing workflow! 🚀\n\nSave this post for your next test run and follow @RootAccess for daily engineering insights.\n\n#SoftwareTesting #RootAccess #QAEngineering`,
           hashtags: ['#SoftwareTesting', '#QA', '#RootAccess', '#Engineering'],
           engagementQuestion: `Have you encountered bugs related to ${title}? Let us know in the comments!`,
           searchKeywords: [title, 'software testing', 'QA'],
@@ -273,7 +273,7 @@ export const AdminInstagramCreatorPage: React.FC = () => {
         },
         research: {
           verifiedFacts: [`${title} is a fundamental engineering concept tested in industry sprints.`],
-          officialDocSources: [{ title: 'Official Documentation', url: 'https://rootaccess.tech', dateChecked: '2025-01-01' }],
+          officialDocSources: [{ title: 'Official Documentation', url: 'https://rootaccess.co.in', dateChecked: '2025-01-01' }],
           isEvergreen: true,
         },
       };

@@ -83,7 +83,7 @@ export function buildDefaultImagePost(template: {
           { label: 'D', text: 'Option D: Deprecated API call' },
         ]
       : undefined,
-    callToAction: 'Follow @RootAccess.tech • Learn by Doing',
+    callToAction: 'Follow @RootAccess • Learn by Doing',
     aiImagePrompt: `Ultra-clean minimalist tech background, obsidian black metallic textures, subtle crimson neon laser accent line (#e11d48), dark glass-morphism terminal card, sharp typography focus, cinematic rim lighting, 8k resolution studio product photography, clean and approachable.`,
   };
 }
