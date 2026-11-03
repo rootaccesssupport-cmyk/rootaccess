@@ -74,29 +74,29 @@ export const JmeterCourseCertificatePage: React.FC = () => {
     if (!isDay10Done && !isProjectSubmitted) missing.push('Day 10: Capstone E-Commerce Performance Project');
 
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col font-sans text-slate-100">
+      <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
         <Navbar />
         <div className="flex-1 max-w-lg mx-auto px-4 py-16 flex items-center justify-center text-center">
-          <div className="bg-slate-900 rounded-3xl border border-slate-800 p-8 sm:p-10 shadow-2xl space-y-5">
-            <div className="w-14 h-14 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center mx-auto border border-amber-500/20 shadow-xs">
+          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-xs space-y-4">
+            <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto border border-amber-100 shadow-2xs">
               <Lock className="w-7 h-7" />
             </div>
 
-            <div className="space-y-1.5">
-              <h1 className="text-xl font-bold text-white tracking-tight">Verified Credential Locked</h1>
-              <p className="text-xs text-slate-400 leading-relaxed">
+            <div className="space-y-1">
+              <h1 className="text-xl font-bold text-slate-900">Verified Credential Locked</h1>
+              <p className="text-xs text-slate-500 leading-relaxed">
                 You must complete all 10 days of the Apache JMeter course and submit the Day 10 Capstone Performance Project to unlock this industry-recognized certificate.
               </p>
             </div>
 
-            <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 text-left space-y-2">
-              <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider block">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-left space-y-2">
+              <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
                 Pending Requirements ({missing.length}):
               </span>
-              <ul className="text-xs text-slate-300 space-y-1.5">
+              <ul className="text-xs text-slate-700 space-y-1.5">
                 {missing.map((req, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-amber-400 font-bold">•</span>
+                  <li key={i} className="flex items-start gap-1.5">
+                    <span className="text-amber-500 font-bold">•</span>
                     <span>{req}</span>
                   </li>
                 ))}
@@ -118,7 +118,7 @@ export const JmeterCourseCertificatePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
@@ -126,7 +126,7 @@ export const JmeterCourseCertificatePage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
           <Link
             to="/courses/jmeter-performance-testing/day-10"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Day 10 Workbench</span>
@@ -144,49 +144,49 @@ export const JmeterCourseCertificatePage: React.FC = () => {
         </div>
 
         {/* Printable Official Certificate */}
-        <div className="relative bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border-4 border-amber-500/40 rounded-3xl p-8 sm:p-14 shadow-2xl overflow-hidden print:border-amber-600 print:m-0 print:p-8">
-          {/* Watermark / Background Accent */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-amber-500/5 blur-3xl pointer-events-none"></div>
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-amber-500/5 blur-3xl pointer-events-none"></div>
+        <div className="relative bg-white border-8 border-slate-900 rounded-3xl p-8 sm:p-14 shadow-xl overflow-hidden print:border-slate-900 print:m-0 print:p-8">
+          {/* Subtle Corner Accents */}
+          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-50 rounded-bl-full pointer-events-none -z-0"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-amber-50 rounded-tr-full pointer-events-none -z-0"></div>
 
           <div className="relative z-10 space-y-8 text-center">
             {/* Header / Brand */}
             <div className="space-y-2">
-              <div className="flex items-center justify-center gap-2 text-amber-400">
+              <div className="flex items-center justify-center gap-2 text-amber-600">
                 <Activity className="w-6 h-6" />
-                <span className="text-sm font-mono font-bold uppercase tracking-widest">
+                <span className="text-sm font-mono font-bold uppercase tracking-widest text-slate-900">
                   RootAccess • Learn by Doing
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight uppercase">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight uppercase">
                 Certificate of Completion
               </h1>
-              <p className="text-xs font-mono uppercase tracking-widest text-slate-400">
-                Performance Engineering & Load Testing Specification
+              <p className="text-xs font-mono uppercase tracking-widest text-slate-500">
+                Performance Engineering &amp; Load Testing Specification
               </p>
             </div>
 
             {/* Recipient */}
             <div className="py-4 space-y-2">
-              <p className="text-xs text-slate-400 uppercase tracking-widest">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-semibold">
                 This is proudly presented to
               </p>
-              <div className="text-2xl sm:text-3xl font-extrabold text-amber-300 font-serif tracking-wide border-b-2 border-amber-500/30 inline-block px-8 pb-2">
+              <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-serif tracking-wide border-b-2 border-amber-500 inline-block px-8 pb-2">
                 {studentName}
               </div>
             </div>
 
             {/* Credential Statement */}
-            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
               for successfully completing the comprehensive 10-day hands-on curriculum in{' '}
-              <strong className="text-white">Apache JMeter: Performance Testing from Zero to Practical</strong>,
+              <strong className="text-slate-900 font-bold">Apache JMeter: Performance Testing from Zero to Practical</strong>,
               demonstrating industry-standard competencies in distributed test architecture, dynamic REST API correlation,
               CSV data parameterization, Non-GUI CLI pipelines, and full-scale bottleneck root-cause analysis.
             </p>
 
             {/* Verified Skills Grid */}
             <div className="pt-4 max-w-3xl mx-auto">
-              <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-3 font-semibold">
+              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block mb-3 font-semibold">
                 Verified Technical Competencies
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-left">
@@ -201,8 +201,8 @@ export const JmeterCourseCertificatePage: React.FC = () => {
                   'Non-GUI CLI Headless Runs',
                   'Root Cause Bottleneck RCA',
                 ].map((skill, sIdx) => (
-                  <div key={sIdx} className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-[11px] text-slate-300">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                  <div key={sIdx} className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-700 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
                     <span className="truncate">{skill}</span>
                   </div>
                 ))}
@@ -210,28 +210,28 @@ export const JmeterCourseCertificatePage: React.FC = () => {
             </div>
 
             {/* Signatures & Issue Metadata */}
-            <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-3xl mx-auto">
+            <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-3xl mx-auto">
               <div className="text-left space-y-1">
-                <div className="flex items-center gap-1.5 text-emerald-400 text-xs font-semibold">
-                  <ShieldCheck className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 text-emerald-700 text-xs font-semibold">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   <span>Officially Verified Credential</span>
                 </div>
-                <div className="text-[11px] font-mono text-slate-400">
-                  ID: <span className="text-slate-200">{certId}</span>
+                <div className="text-[11px] font-mono text-slate-500">
+                  ID: <span className="text-slate-800 font-medium">{certId}</span>
                 </div>
-                <div className="text-[11px] font-mono text-slate-400">
-                  Issued: <span className="text-slate-200">{issueDate}</span>
+                <div className="text-[11px] font-mono text-slate-500">
+                  Issued: <span className="text-slate-800 font-medium">{issueDate}</span>
                 </div>
               </div>
 
               <div className="text-center sm:text-right space-y-1">
-                <div className="text-sm font-bold text-white tracking-wide">
+                <div className="text-sm font-bold text-slate-900 tracking-wide">
                   RootAccess Academic Board
                 </div>
-                <p className="text-[11px] text-slate-400">
-                  Platform Verification & Quality Engineering
+                <p className="text-[11px] text-slate-500">
+                  Platform Verification &amp; Quality Engineering
                 </p>
-                <div className="text-[10px] font-mono text-amber-400/80">
+                <div className="text-[10px] font-mono text-amber-700">
                   verify.rootaccess.co.in/{certId}
                 </div>
               </div>

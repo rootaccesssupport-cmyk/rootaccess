@@ -271,7 +271,7 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-2">
-                {(ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user.email) || profile?.role === 'admin') && (
+                {!isInsideCourse && (ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user.email) || profile?.role === 'admin') && (
                   <div className="flex items-center gap-1.5">
                     <Link
                       to="/admin/enrollments"
@@ -436,7 +436,7 @@ export const Navbar: React.FC = () => {
                 )}
               </div>
 
-              {(ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user.email) || profile?.role === 'admin') && (
+              {!isInsideCourse && (ENROLLMENT_PAYMENT_CONFIG.isAdminEmail(user.email) || profile?.role === 'admin') && (
                 <div className="p-2.5 bg-rose-50/60 rounded-2xl border border-rose-100 space-y-1.5">
                   <div className="text-[10px] font-bold text-rose-800 uppercase tracking-wider px-1">
                     Admin Tools
