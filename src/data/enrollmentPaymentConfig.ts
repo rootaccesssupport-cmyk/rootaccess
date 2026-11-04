@@ -27,7 +27,7 @@ export const ENROLLMENT_PAYMENT_CONFIG = {
     'sql-for-qa-engineers': { inr: 299, originalInr: 599, label: 'SQL', isLaunchOffer: true },
     'api-testing-postman': { inr: 299, originalInr: 599, label: 'API Testing', isLaunchOffer: true },
     'ai-prompt-engineering': { inr: 299, originalInr: 599, label: 'AI Fundamentals & Prompt Engineering', isLaunchOffer: true },
-    'jmeter-performance-testing': { inr: 299, originalInr: 599, label: 'Apache JMeter: Performance Testing from Zero to Practical', isLaunchOffer: true },
+    'jmeter-performance-testing': { inr: 399, originalInr: 799, label: 'Apache JMeter: Performance Testing from Zero to Practical', isLaunchOffer: true },
     'appium-mobile-automation': { inr: 649, originalInr: 1599, label: 'Appium Mobile Automation with Java', isLaunchOffer: true },
     'devops-engineering': { inr: 3499, originalInr: 6999, label: 'DevOps Engineering Academy', isLaunchOffer: false },
   } as Record<string, CoursePriceInfo>,

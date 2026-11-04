@@ -136,8 +136,8 @@ export const JMETER_COURSE_METADATA = {
     'Learn performance testing with Apache JMeter in an easy, beginner-friendly way. No coding experience needed! Build test plans, simulate virtual users like customers in a coffee shop, configure HTTP requests, validate fast response times, parameterize test data with spreadsheets, and diagnose bottlenecks with confidence.',
   duration: '10 Days (15 Hours)',
   level: 'Beginner Friendly (Zero Coding Required)',
-  regularPriceInr: 599,
-  launchPriceInr: 299,
+  regularPriceInr: 799,
+  launchPriceInr: 399,
   learningOutcomes: [
     'Understand performance testing fundamentals and architectural trade-offs.',
     'Navigate Apache JMeter and master its test plan element hierarchy.',

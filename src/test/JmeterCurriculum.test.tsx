@@ -111,11 +111,11 @@ describe('RootAccess — Apache JMeter: Performance Testing from Zero to Practic
   });
 
   describe('2. Pricing & Enrollment Configuration', () => {
-    it('registers JMeter course pricing as ₹299 launch offer and ₹599 regular', () => {
+    it('registers JMeter course pricing as ₹399 launch offer and ₹799 regular', () => {
       const pricing = ENROLLMENT_PAYMENT_CONFIG.pricing['jmeter-performance-testing'];
       expect(pricing).toBeDefined();
-      expect(pricing.inr).toBe(299);
-      expect(pricing.originalInr).toBe(599);
+      expect(pricing.inr).toBe(399);
+      expect(pricing.originalInr).toBe(799);
       expect(pricing.isLaunchOffer).toBe(true);
       expect(pricing.label).toContain('Apache JMeter');
     });

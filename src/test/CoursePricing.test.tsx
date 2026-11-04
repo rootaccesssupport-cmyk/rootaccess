@@ -64,6 +64,18 @@ describe('Course Pricing Configuration & Calculations', () => {
     expect(details.isLaunchOffer).toBe(true);
   });
 
+  it('Apache JMeter Performance Testing has exact ₹799 regular and ₹399 launch price with 50% discount', () => {
+    const details = getCoursePriceDetails('jmeter-performance-testing');
+    expect(details.originalInr).toBe(799);
+    expect(details.inr).toBe(399);
+    expect(details.savings).toBe(400);
+    expect(details.discountPercent).toBe(50);
+    expect(details.formattedInr).toBe('₹399');
+    expect(details.formattedOriginalInr).toBe('₹799');
+    expect(details.formattedSavings).toBe('₹400');
+    expect(details.isLaunchOffer).toBe(true);
+  });
+
   it('DevOps Engineering pricing remains untouched at ₹3,499 / ₹6,999', () => {
     const details = getCoursePriceDetails('devops-engineering');
     expect(details.originalInr).toBe(6999);

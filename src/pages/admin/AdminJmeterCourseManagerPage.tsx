@@ -15,7 +15,7 @@ import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import { AdminNavHeader } from '../../components/admin/AdminNavHeader';
 import { useAuth } from '../../context/AuthContext';
-import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
+import { ENROLLMENT_PAYMENT_CONFIG, getCoursePriceDetails } from '../../data/enrollmentPaymentConfig';
 import {
   JMETER_DAYS_DATA,
   JMETER_COURSE_METADATA,
@@ -402,11 +402,11 @@ export const AdminJmeterCourseManagerPage: React.FC = () => {
               <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400">Launch Pricing:</span>
-                  <span className="text-emerald-400 font-bold">₹299</span>
+                  <span className="text-emerald-400 font-bold">{getCoursePriceDetails('jmeter-performance-testing').formattedInr}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400">Regular Pricing:</span>
-                  <span className="text-slate-400 line-through">₹599</span>
+                  <span className="text-slate-400 line-through">{getCoursePriceDetails('jmeter-performance-testing').formattedOriginalInr}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400">Total Duration:</span>
