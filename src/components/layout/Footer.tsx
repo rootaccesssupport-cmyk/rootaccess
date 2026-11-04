@@ -69,6 +69,11 @@ export const Footer: React.FC = () => {
                   AI &amp; Prompt Engineering (New)
                 </Link>
               </li>
+              <li>
+                <Link to="/courses/ai-agent-development" className="hover:text-white transition-colors text-cyan-400 font-medium">
+                  AI Agent Development (New)
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -22,6 +22,7 @@ import {
   ExternalLink,
   Gauge,
   Smartphone,
+  Bot,
 } from 'lucide-react';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
@@ -119,6 +120,19 @@ export const HomePage: React.FC = () => {
       description: 'Master Android mobile automation from zero. Learn Appium 2.x, UiAutomator2, Java Client 9+, touch gestures, explicit waits, TestNG suites, and enterprise Page Object Model frameworks.',
       skills: ['Appium 2.x & Android', 'Java & TestNG', 'Accessibility ID & UiSelector', 'Mobile Gestures (W3C)', 'Explicit Synchronization', 'Page Object Model (POM)', 'CI/CD & ExtentReports'],
       link: '/courses/appium-mobile-automation',
+      actionText: 'Explore Curriculum',
+    },
+    {
+      slug: 'ai-agent-development',
+      title: 'AI Agent Development for Beginners',
+      courseName: 'AI Agent Development: Build Your First Autonomous Agents',
+      tag: 'Agentic AI & Autonomous Systems',
+      badge: '7-Day Practical Course • Launch Offer',
+      icon: <Bot className="w-5 h-5 text-cyan-600" />,
+      description:
+        'Build practical AI agents from first principles. Master perception-decision-action loops, strict structured outputs, function calling with real tools, memory management, safety guardrails, and build a capstone QA AI Assistant.',
+      skills: ['ReAct Autonomous Loops', 'Strict JSON Schemas', 'Function Calling & Tools', 'Cycle Detection & Circuit Breakers', 'Long-Term Memory & RAG', 'Safety & HITL Guardrails', 'QA AI Assistant Capstone'],
+      link: '/courses/ai-agent-development',
       actionText: 'Explore Curriculum',
     },
   ];

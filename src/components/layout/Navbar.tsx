@@ -21,6 +21,7 @@ import {
   Image as ImageIcon,
   Sparkles,
   Gauge,
+  Bot,
 } from 'lucide-react';
 import { ENROLLMENT_PAYMENT_CONFIG } from '../../data/enrollmentPaymentConfig';
 
@@ -112,6 +113,15 @@ export const Navbar: React.FC = () => {
         colorIcon: 'text-amber-500',
         badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
         syllabusUrl: '/courses/jmeter-performance-testing',
+      };
+    }
+    if (pathname.includes('ai-agent-development')) {
+      return {
+        title: 'AI Agent Development',
+        icon: Bot,
+        colorIcon: 'text-cyan-600',
+        badgeColor: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+        syllabusUrl: '/courses/ai-agent-development',
       };
     }
     return {

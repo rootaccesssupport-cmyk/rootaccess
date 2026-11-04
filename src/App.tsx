@@ -60,6 +60,8 @@ import { JmeterCourseCertificatePage } from './pages/jmeter/JmeterCourseCertific
 import { AdminJmeterCourseManagerPage } from './pages/admin/AdminJmeterCourseManagerPage';
 import { AppiumDayLessonPage } from './pages/appium/AppiumDayLessonPage';
 import { AppiumCourseCertificatePage } from './pages/appium/AppiumCourseCertificatePage';
+import { AgenticDayLessonPage } from './pages/agentic/AgenticDayLessonPage';
+import { AgenticCourseCertificatePage } from './pages/agentic/AgenticCourseCertificatePage';
 import { AdminEnrollmentPortalPage } from './pages/admin/AdminEnrollmentPortalPage';
 import { AdminInstagramCreatorPage } from './pages/admin/AdminInstagramCreatorPage';
 import { CareersPage } from './pages/CareersPage';
@@ -1057,6 +1059,88 @@ export const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <AppiumCourseCertificatePage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* AI Agent Development for Beginners (7 Days) */}
+            <Route
+              path="/courses/ai-agent-development/day-1"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day-2"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day-3"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day-4"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day-5"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day-6"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day-7"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day/:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/day-:dayNumber"
+              element={
+                <ProtectedRoute>
+                  <AgenticDayLessonPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/courses/ai-agent-development/certificate"
+              element={
+                <ProtectedRoute>
+                  <AgenticCourseCertificatePage />
                 </ProtectedRoute>
               }
             />

@@ -2327,6 +2327,282 @@ Coupon is accepted. Total calculation shows: $35.00 - $50.00 = -$15.00.
       ],
     },
   },
+  {
+    id: 'course-ai-agent-development',
+    slug: 'ai-agent-development',
+    trackId: 'track-agentic-ai',
+    trackName: 'Agentic AI & Autonomous Systems',
+    title: 'AI Agent Development for Beginners',
+    description:
+      'Build your first autonomous AI agents through hands-on projects. Master perception-decision-action loops, strict structured outputs, function calling with real tools, memory management, safety guardrails, and build a capstone QA Automation AI Assistant.',
+    iconName: 'Bot',
+    badge: 'New • Launch Offer',
+    estimatedHours: 6,
+    learningOutcomes: [
+      'Master the core difference between passive chatbots and goal-driven autonomous agents',
+      'Implement the ReAct (Reasoning + Acting) loop in pure Python and TypeScript',
+      'Enforce deterministic structured JSON outputs and validate against schemas',
+      'Equip LLMs with external tools via function calling and handle errors gracefully',
+      'Implement short-term conversation memory buffers and long-term vector RAG retrieval',
+      'Safeguard agents against prompt injection and enforce Human-in-the-Loop approval gates',
+      'Build and deploy a complete QA AI Assistant that generates automated test suites',
+    ],
+    lessons: [
+      {
+        id: 'lesson-agentic-day-1',
+        slug: 'day-1',
+        title: 'Day 1: Introduction to Agentic AI & The ReAct Loop',
+        durationMinutes: 35,
+        difficulty: 'Beginner',
+        summary:
+          'Understand the fundamental shift from passive chatbots to goal-driven autonomous systems and explore the Perception-Decision-Action loop.',
+        sections: [
+          {
+            title: '1. What is an AI Agent?',
+            content:
+              'An AI Agent combines an LLM reasoning engine with tools, memory, and a feedback loop to take sequential real-world actions toward a goal.',
+          },
+          {
+            title: '2. The ReAct Framework',
+            content:
+              'Alternating between Thought, Action, and Observation grounds agent reasoning and eliminates pure hallucinations.',
+          },
+        ],
+        keyTakeaways: [
+          'Agents are proactive and goal-driven, whereas chatbots are passive text generators.',
+          'ReAct = Thought (Reasoning) + Action (Tool Execution) + Observation (Environment Feedback).',
+        ],
+        practicalChecklist: [
+          'Run the visual Agent Execution Loop in the studio',
+          'Inspect the state machine transition from PENDING to COMPLETED',
+          'Complete Day 1 Knowledge Check with score >= 80%',
+        ],
+      },
+      {
+        id: 'lesson-agentic-day-2',
+        slug: 'day-2',
+        title: 'Day 2: LLMs, Instructions & Structured Outputs',
+        durationMinutes: 40,
+        difficulty: 'Beginner',
+        summary:
+          'Learn why programmatic agents require strict, parseable JSON instead of conversational prose and enforce Pydantic/JSON schemas.',
+        sections: [
+          {
+            title: '1. Structured Outputs vs Freeform Text',
+            content:
+              'Downstream code cannot reliably parse conversational text. Structured outputs ensure schema conformance without parsing crashes.',
+          },
+        ],
+        keyTakeaways: [
+          'Set temperature to 0.0 for deterministic agent planning and tool calling.',
+          'Validating outputs against a schema prevents downstream runtime crashes.',
+        ],
+        practicalChecklist: [
+          'Design and validate JSON schemas in the Structured Output Validator',
+          'Verify error handling for malformed model outputs',
+          'Complete Day 2 Knowledge Check with score >= 80%',
+        ],
+      },
+      {
+        id: 'lesson-agentic-day-3',
+        slug: 'day-3',
+        title: 'Day 3: Tools & Function Calling',
+        durationMinutes: 45,
+        difficulty: 'Intermediate',
+        summary:
+          'Demystify function calling: how your host application intercepts model requests, executes code locally, and feeds observations back.',
+        sections: [
+          {
+            title: '1. Function Calling Protocol',
+            content:
+              'The model chooses the tool and parameters; your backend host application executes the real code and returns the observation.',
+          },
+        ],
+        keyTakeaways: [
+          'Never rely on LLMs for exact arithmetic; delegate math to a safe calculator tool.',
+          'Tool errors should be caught and returned as Observations so the model can self-correct.',
+        ],
+        practicalChecklist: [
+          'Configure tool schemas in the Function Calling Studio',
+          'Execute deterministic calculator and database lookup tools',
+          'Complete Day 3 Knowledge Check with score >= 80%',
+        ],
+      },
+      {
+        id: 'lesson-agentic-day-4',
+        slug: 'day-4',
+        title: 'Day 4: Build a Working AI Agent (The Agent Loop)',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary:
+          'Assemble the complete autonomous while loop in Python with hard iteration limits, cycle detection, and trajectory logging.',
+        sections: [
+          {
+            title: '1. The Core Agent While Loop',
+            content:
+              'A bounded state machine that loops through LLM calls, tool execution, and observation feedback until reaching the final answer.',
+          },
+        ],
+        keyTakeaways: [
+          'Always set a hard max_iterations cap (5 to 10) to protect against runaway billing.',
+          'Implement cycle detection to identify identical repeated tool calls.',
+        ],
+        practicalChecklist: [
+          'Step through multi-turn agent tasks in the Loop Workbench',
+          'Inspect trajectory traces and latency telemetry',
+          'Complete Day 4 Knowledge Check with score >= 80%',
+        ],
+      },
+      {
+        id: 'lesson-agentic-day-5',
+        slug: 'day-5',
+        title: 'Day 5: APIs, Knowledge & Memory',
+        durationMinutes: 45,
+        difficulty: 'Intermediate',
+        summary:
+          'Master short-term in-context memory buffers and long-term vector RAG retrieval with safe authenticated external API calls.',
+        sections: [
+          {
+            title: '1. Short-Term vs Long-Term Memory',
+            content:
+              'Short-term memory lives in the active prompt context; long-term memory resides in vector databases retrieved via semantic search.',
+          },
+        ],
+        keyTakeaways: [
+          'RAG provides agents with up-to-date, private domain knowledge without retraining models.',
+          'Never hardcode API keys in prompts; inject via secure environment variables.',
+        ],
+        practicalChecklist: [
+          'Query the sample QA documentation in the RAG & Memory Inspector',
+          'Observe cosine similarity ranking for retrieved passages',
+          'Complete Day 5 Knowledge Check with score >= 80%',
+        ],
+      },
+      {
+        id: 'lesson-agentic-day-6',
+        slug: 'day-6',
+        title: 'Day 6: Agent Workflows, Safety & Evaluation',
+        durationMinutes: 50,
+        difficulty: 'Intermediate',
+        summary:
+          'Explore multi-agent architectures (Planner, Executor, Critic), protect against prompt injection, and enforce Human-in-the-Loop gates.',
+        sections: [
+          {
+            title: '1. Multi-Agent Systems & Safety',
+            content:
+              'Specializing agents into Planner, Executor, and Critic roles increases accuracy. Guardrails isolate untrusted external data.',
+          },
+        ],
+        keyTakeaways: [
+          'Prompt injection happens when untrusted external text hijacks the agent control flow.',
+          'Sensitive, irreversible actions must always require Human-in-the-Loop sign-off.',
+        ],
+        practicalChecklist: [
+          'Test prompt injection defense in the Safety Guardrail Studio',
+          'Approve sensitive actions in the Human-in-the-Loop interceptor',
+          'Complete Day 6 Knowledge Check with score >= 80%',
+        ],
+      },
+      {
+        id: 'lesson-agentic-day-7',
+        slug: 'day-7',
+        title: 'Day 7: Final Project: The QA AI Assistant',
+        durationMinutes: 60,
+        difficulty: 'Intermediate',
+        summary:
+          'Build and run an autonomous QA testing agent that validates user stories, identifies ambiguities, and generates Jira test suites.',
+        sections: [
+          {
+            title: '1. QA AI Assistant Capstone',
+            content:
+              'Automate requirements validation, test case matrix generation (Positive, Negative, Boundary), and Jira Markdown formatting.',
+          },
+        ],
+        keyTakeaways: [
+          'The QA Assistant unites all agentic concepts into a practical engineering tool.',
+          'Automated requirement analysis catches ambiguities before development begins.',
+        ],
+        practicalChecklist: [
+          'Run the QA AI Assistant on a feature specification',
+          'Export Jira Markdown and JSON test suite',
+          'Submit capstone project and pass Day 7 final assessment to unlock certificate',
+        ],
+      },
+    ],
+    quiz: {
+      id: 'quiz-ai-agent-development',
+      title: 'AI Agent Development Certification Assessment',
+      passingScorePercent: 80,
+      questions: [
+        {
+          id: 'q-agent-cert-1',
+          question: 'What is the core execution loop mechanism used by autonomous agents?',
+          options: [
+            'Single-turn prompt and immediate text completion without tools',
+            'The Perception-Decision-Action loop (e.g. ReAct: Thought -> Action -> Observation)',
+            'Writing static CSS style sheets',
+            'Compiling C++ code into machine assembly',
+          ],
+          correctAnswerIndex: 1,
+          explanation:
+            'Autonomous agents iteratively perceive state, reason (Thought), execute tools (Action), and ingest feedback (Observation).',
+        },
+        {
+          id: 'q-agent-cert-2',
+          question:
+            'Why must agent tool parameters and outputs adhere to strict schemas (like Pydantic/JSON Schema)?',
+          options: [
+            'Because conversational text causes JSON decoding errors in downstream code',
+            'To make the font on screen look prettier',
+            'Because JSON is the only language that computers understand',
+            'To disable the internet connection',
+          ],
+          correctAnswerIndex: 0,
+          explanation:
+            'Downstream code cannot reliably parse freeform prose. Strict schemas guarantee type safety and prevent runtime crashes.',
+        },
+        {
+          id: 'q-agent-cert-3',
+          question: 'Who actually executes the tool function during LLM function calling?',
+          options: [
+            'The host application running on your own servers or client runtime',
+            'The foundation model server inside the cloud provider GPU cluster',
+            'The user keyboard driver',
+            'The web browser graphics card',
+          ],
+          correctAnswerIndex: 0,
+          explanation:
+            'The model outputs structured arguments; your host application intercepts and executes the real code.',
+        },
+        {
+          id: 'q-agent-cert-4',
+          question: 'How do you prevent an agent from entering infinite execution loops?',
+          options: [
+            'Set temperature to 1.5',
+            'Enforce a strict maximum iteration limit (max_iterations) and cycle detection in the host loop',
+            'Delete the system prompt',
+            'Remove all tools from the agent',
+          ],
+          correctAnswerIndex: 1,
+          explanation:
+            'Hard iteration caps and cycle detectors act as vital circuit breakers against infinite looping.',
+        },
+        {
+          id: 'q-agent-cert-5',
+          question: 'What is Human-in-the-Loop (HITL) in an agentic system?',
+          options: [
+            'A pattern that programmatically pauses the agent loop before executing high-risk or irreversible actions for human approval',
+            'A human typing prompts manually into a terminal 24 hours a day',
+            'A tool that tests human typing speed',
+            'A method to train neural networks on human brain scans',
+          ],
+          correctAnswerIndex: 0,
+          explanation:
+            'Human-in-the-Loop gates intercept critical actions (financial, data deletion, mass emails) for explicit human sign-off.',
+        },
+      ],
+    },
+  },
 ];
 
 export const SIMULATED_BUGS: SimulatedBug[] = [

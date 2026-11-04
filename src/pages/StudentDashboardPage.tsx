@@ -29,6 +29,7 @@ import {
   GraduationCap,
   Gauge,
   Smartphone,
+  Bot,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -53,7 +54,7 @@ interface CatalogCourse {
   tags: string[];
   courseUrl: string;
   syllabusUrl: string;
-  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug' | 'Sparkles' | 'Gauge' | 'Smartphone';
+  iconName: 'BookOpen' | 'Code2' | 'Terminal' | 'Database' | 'Send' | 'Briefcase' | 'Bug' | 'Sparkles' | 'Gauge' | 'Smartphone' | 'Bot';
   colorTheme: 'indigo' | 'purple' | 'sky' | 'emerald' | 'amber' | 'rose';
 }
 
@@ -170,6 +171,22 @@ const ALL_CATALOG_COURSES: CatalogCourse[] = [
     iconName: 'Smartphone',
     colorTheme: 'emerald',
   },
+  {
+    id: 'ai-agent-dev',
+    slug: 'ai-agent-development',
+    title: 'AI Agent Development for Beginners',
+    category: 'Agentic AI',
+    badge: '7-Day Practical Course',
+    duration: '7 Days (6 Hours)',
+    level: 'Beginner',
+    description:
+      'Build your first autonomous AI agents through hands-on projects. Master perception-decision-action loops, strict structured outputs, function calling with real tools, memory management, safety guardrails, and build a capstone QA Automation AI Assistant.',
+    tags: ['Agentic AI', 'ReAct Loops', 'Function Calling', 'JSON Schemas', 'RAG Memory', 'Guardrails & HITL', 'Capstone'],
+    courseUrl: '/courses/ai-agent-development/day-1',
+    syllabusUrl: '/courses/ai-agent-development',
+    iconName: 'Bot',
+    colorTheme: 'sky',
+  },
 ];
 
 const COURSE_CATEGORIES = [
@@ -181,6 +198,7 @@ const COURSE_CATEGORIES = [
   'Database & SQL',
   'API Testing',
   'AI & Productivity',
+  'Agentic AI',
 ];
 
 export const StudentDashboardPage: React.FC = () => {
@@ -421,6 +439,8 @@ export const StudentDashboardPage: React.FC = () => {
         return <Gauge className="w-5 h-5 text-amber-500" />;
       case 'Smartphone':
         return <Smartphone className="w-5 h-5 text-emerald-600" />;
+      case 'Bot':
+        return <Bot className="w-5 h-5 text-cyan-600" />;
       default:
         return <BookOpen className="w-5 h-5 text-indigo-600" />;
     }

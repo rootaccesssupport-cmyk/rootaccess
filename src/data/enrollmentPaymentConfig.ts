@@ -29,6 +29,7 @@ export const ENROLLMENT_PAYMENT_CONFIG = {
     'ai-prompt-engineering': { inr: 299, originalInr: 599, label: 'AI Fundamentals & Prompt Engineering', isLaunchOffer: true },
     'jmeter-performance-testing': { inr: 399, originalInr: 799, label: 'Apache JMeter: Performance Testing from Zero to Practical', isLaunchOffer: true },
     'appium-mobile-automation': { inr: 649, originalInr: 1599, label: 'Appium Mobile Automation with Java', isLaunchOffer: true },
+    'ai-agent-development': { inr: 299, originalInr: 599, label: 'AI Agent Development for Beginners', isLaunchOffer: true },
     'devops-engineering': { inr: 3499, originalInr: 6999, label: 'DevOps Engineering Academy', isLaunchOffer: false },
   } as Record<string, CoursePriceInfo>,
 

@@ -76,6 +76,18 @@ describe('Course Pricing Configuration & Calculations', () => {
     expect(details.isLaunchOffer).toBe(true);
   });
 
+  it('AI Agent Development for Beginners has exact ₹599 regular and ₹299 launch price with 50% discount', () => {
+    const details = getCoursePriceDetails('ai-agent-development');
+    expect(details.originalInr).toBe(599);
+    expect(details.inr).toBe(299);
+    expect(details.savings).toBe(300);
+    expect(details.discountPercent).toBe(50);
+    expect(details.formattedInr).toBe('₹299');
+    expect(details.formattedOriginalInr).toBe('₹599');
+    expect(details.formattedSavings).toBe('₹300');
+    expect(details.isLaunchOffer).toBe(true);
+  });
+
   it('DevOps Engineering pricing remains untouched at ₹3,499 / ₹6,999', () => {
     const details = getCoursePriceDetails('devops-engineering');
     expect(details.originalInr).toBe(6999);
