@@ -8,7 +8,7 @@
  * Duration: 7 Days (30–45 minutes daily)
  * Level: Beginner
  * Category: Agentic AI
- * Price: ₹299 (Launch Offer, Original ₹599)
+ * Price: ₹399 (Launch Offer, Original ₹799)
  */
 
 export interface AgentTopic {
@@ -111,8 +111,8 @@ export const AGENTIC_AI_COURSE_METADATA = {
   level: 'Beginner',
   duration: '7 Days',
   totalHours: 6,
-  priceInr: 299,
-  originalPriceInr: 599,
+  priceInr: 399,
+  originalPriceInr: 799,
   discountPercentage: 50,
   isLaunchOffer: true,
   summary:

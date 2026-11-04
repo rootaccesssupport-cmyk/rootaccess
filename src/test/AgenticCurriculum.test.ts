@@ -9,8 +9,8 @@ import { ENROLLMENT_PAYMENT_CONFIG, getCoursePriceDetails } from '../data/enroll
 describe('AI Agent Development Curriculum Data & Architecture', () => {
   it('contains course metadata with exact pricing and outcomes', () => {
     expect(AGENTIC_AI_COURSE_METADATA.courseSlug).toBe('ai-agent-development');
-    expect(AGENTIC_AI_COURSE_METADATA.priceInr).toBe(299);
-    expect(AGENTIC_AI_COURSE_METADATA.originalPriceInr).toBe(599);
+    expect(AGENTIC_AI_COURSE_METADATA.priceInr).toBe(399);
+    expect(AGENTIC_AI_COURSE_METADATA.originalPriceInr).toBe(799);
     expect(AGENTIC_AI_COURSE_METADATA.category).toBe('Agentic AI');
     expect(AGENTIC_AI_COURSE_METADATA.outcomes.length).toBeGreaterThanOrEqual(5);
   });
@@ -72,17 +72,17 @@ describe('AI Agent Development Curriculum Data & Architecture', () => {
     expect(course?.quiz?.questions).toHaveLength(5);
   });
 
-  it('has exact launch pricing (₹299 / ₹599) in enrollmentPaymentConfig.ts', () => {
+  it('has exact launch pricing (₹399 / ₹799) in enrollmentPaymentConfig.ts', () => {
     const pricing = ENROLLMENT_PAYMENT_CONFIG.pricing['ai-agent-development'];
     expect(pricing).toBeDefined();
-    expect(pricing.inr).toBe(299);
-    expect(pricing.originalInr).toBe(599);
+    expect(pricing.inr).toBe(399);
+    expect(pricing.originalInr).toBe(799);
     expect(pricing.isLaunchOffer).toBe(true);
 
     const details = getCoursePriceDetails('ai-agent-development');
-    expect(details.formattedInr).toBe('₹299');
-    expect(details.formattedOriginalInr).toBe('₹599');
-    expect(details.savings).toBe(300);
+    expect(details.formattedInr).toBe('₹399');
+    expect(details.formattedOriginalInr).toBe('₹799');
+    expect(details.savings).toBe(400);
     expect(details.discountPercent).toBe(50);
   });
 });
