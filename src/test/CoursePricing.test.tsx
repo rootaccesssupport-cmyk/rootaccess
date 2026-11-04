@@ -52,6 +52,18 @@ describe('Course Pricing Configuration & Calculations', () => {
     expect(details.isLaunchOffer).toBe(true);
   });
 
+  it('Appium Mobile Automation has exact ₹1,599 regular and ₹649 launch price with 59% discount', () => {
+    const details = getCoursePriceDetails('appium-mobile-automation');
+    expect(details.originalInr).toBe(1599);
+    expect(details.inr).toBe(649);
+    expect(details.savings).toBe(950);
+    expect(details.discountPercent).toBe(59);
+    expect(details.formattedInr).toBe('₹649');
+    expect(details.formattedOriginalInr).toBe('₹1,599');
+    expect(details.formattedSavings).toBe('₹950');
+    expect(details.isLaunchOffer).toBe(true);
+  });
+
   it('DevOps Engineering pricing remains untouched at ₹3,499 / ₹6,999', () => {
     const details = getCoursePriceDetails('devops-engineering');
     expect(details.originalInr).toBe(6999);

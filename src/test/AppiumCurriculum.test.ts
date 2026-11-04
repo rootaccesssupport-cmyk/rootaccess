@@ -13,8 +13,8 @@ describe('Appium Mobile Automation Curriculum Dataset & Configuration', () => {
     expect(APPIUM_COURSE_METADATA.title).toBe('Appium Mobile Automation with Java');
     expect(APPIUM_COURSE_METADATA.durationDays).toBe(14);
     expect(APPIUM_COURSE_METADATA.estimatedHours).toBe(18);
-    expect(APPIUM_COURSE_METADATA.pricing.originalInr).toBe(999);
-    expect(APPIUM_COURSE_METADATA.pricing.inr).toBe(499);
+    expect(APPIUM_COURSE_METADATA.pricing.originalInr).toBe(1599);
+    expect(APPIUM_COURSE_METADATA.pricing.inr).toBe(649);
     expect(APPIUM_COURSE_METADATA.pricing.isLaunchOffer).toBe(true);
     expect(APPIUM_COURSE_METADATA.competencies.length).toBe(10);
   });
@@ -92,8 +92,8 @@ describe('Appium Mobile Automation Curriculum Dataset & Configuration', () => {
   it('6. Enrollment payment config includes appium-mobile-automation', () => {
     const pricing = ENROLLMENT_PAYMENT_CONFIG.pricing['appium-mobile-automation'];
     expect(pricing).toBeDefined();
-    expect(pricing.inr).toBe(499);
-    expect(pricing.originalInr).toBe(999);
+    expect(pricing.inr).toBe(649);
+    expect(pricing.originalInr).toBe(1599);
     expect(pricing.isLaunchOffer).toBe(true);
     expect(pricing.label).toBe('Appium Mobile Automation with Java');
   });

@@ -7,7 +7,7 @@
  * Tagline: Learn by Doing.
  * Duration: 14 Days (30–60 minutes daily)
  * Level: Beginner to Intermediate
- * Price: ₹499 (Launch Offer, Original ₹999)
+ * Price: ₹649 (Launch Offer, Original ₹1,599)
  * Reference: Appium 2.x, Appium Java Client 9.x, Selenium 4.x, TestNG 7.x, Android SDK 34
  */
 
@@ -133,8 +133,8 @@ export const APPIUM_COURSE_METADATA: AppiumCourseMetadata = {
   durationDays: 14,
   estimatedHours: 18,
   pricing: {
-    inr: 499,
-    originalInr: 999,
+    inr: 649,
+    originalInr: 1599,
     isLaunchOffer: true,
   },
   competencies: [

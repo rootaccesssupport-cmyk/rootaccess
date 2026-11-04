@@ -28,7 +28,7 @@ export const ENROLLMENT_PAYMENT_CONFIG = {
     'api-testing-postman': { inr: 299, originalInr: 599, label: 'API Testing', isLaunchOffer: true },
     'ai-prompt-engineering': { inr: 299, originalInr: 599, label: 'AI Fundamentals & Prompt Engineering', isLaunchOffer: true },
     'jmeter-performance-testing': { inr: 299, originalInr: 599, label: 'Apache JMeter: Performance Testing from Zero to Practical', isLaunchOffer: true },
-    'appium-mobile-automation': { inr: 499, originalInr: 999, label: 'Appium Mobile Automation with Java', isLaunchOffer: true },
+    'appium-mobile-automation': { inr: 649, originalInr: 1599, label: 'Appium Mobile Automation with Java', isLaunchOffer: true },
     'devops-engineering': { inr: 3499, originalInr: 6999, label: 'DevOps Engineering Academy', isLaunchOffer: false },
   } as Record<string, CoursePriceInfo>,
 
