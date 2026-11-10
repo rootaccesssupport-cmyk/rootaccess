@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Lock, AlertTriangle, Sparkles, ArrowLeft, CheckCircle2, MessageCircle } from 'lucide-react';
+import { Lock, AlertTriangle, Sparkles, ArrowLeft, CheckCircle2, MessageCircle, Clock } from 'lucide-react';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { CourseEnrollmentModal } from '../enrollment/CourseEnrollmentModal';
@@ -15,6 +15,8 @@ interface CourseEnrollmentGateProps {
   backLink?: string;
   backLinkText?: string;
   accentColor?: 'indigo' | 'purple' | 'emerald';
+  isExpired?: boolean;
+  expiresAt?: string;
 }
 
 export const CourseEnrollmentGate: React.FC<CourseEnrollmentGateProps> = ({
@@ -26,6 +28,8 @@ export const CourseEnrollmentGate: React.FC<CourseEnrollmentGateProps> = ({
   backLink = '/app',
   backLinkText = 'Back to Syllabus',
   accentColor = 'indigo',
+  isExpired = false,
+  expiresAt,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -51,28 +55,45 @@ export const CourseEnrollmentGate: React.FC<CourseEnrollmentGateProps> = ({
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex items-center justify-center">
         <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-sm text-center max-w-xl space-y-6">
           <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto border shadow-2xs ${colorStyles.iconBg}`}
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto border shadow-2xs ${
+              isExpired ? 'bg-amber-50 text-amber-600 border-amber-200' : colorStyles.iconBg
+            }`}
           >
-            <Lock className="w-7 h-7" />
+            {isExpired ? <Clock className="w-7 h-7" /> : <Lock className="w-7 h-7" />}
           </div>
 
           <div className="space-y-2">
             <div className="flex flex-wrap items-center justify-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Enrollment &amp; Payment Required</span>
-              </span>
+              {isExpired ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>30-Day Access Period Expired</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  <span>Enrollment &amp; Payment Required</span>
+                </span>
+              )}
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Day 1 Free Preview Available</span>
               </span>
             </div>
+
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
               {courseTitle}
             </h1>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              {description} Day 1 is 100% free for all registered students. Days 2+ require active enrollment approved after UPI payment.
-            </p>
+
+            {isExpired ? (
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Your 30-day course access period {expiresAt ? `ended on ${expiresAt}` : 'has expired'}. All your completed milestones, assignments, and account records are <strong>safely preserved</strong>. Renew your access to resume interactive sandbox lessons.
+              </p>
+            ) : (
+              <p className="text-sm text-slate-600 leading-relaxed">
+                {description} Day 1 is 100% free for all registered students. Days 2+ require active enrollment approved after UPI payment.
+              </p>
+            )}
 
             <CoursePricingDisplay courseSlug={courseSlug} variant="gate" />
           </div>
@@ -80,7 +101,7 @@ export const CourseEnrollmentGate: React.FC<CourseEnrollmentGateProps> = ({
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-left space-y-2.5 text-slate-700">
             <div className="font-bold text-slate-900 flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>What full course enrollment unlocks:</span>
+              <span>What active course access unlocks:</span>
             </div>
             <ul className="space-y-1.5 list-disc pl-5 text-slate-600">
               {bulletPoints.map((point, idx) => (
@@ -95,7 +116,7 @@ export const CourseEnrollmentGate: React.FC<CourseEnrollmentGateProps> = ({
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
             >
               <MessageCircle className="w-4 h-4 fill-white" />
-              <span>Enroll &amp; Pay via UPI (WhatsApp)</span>
+              <span>{isExpired ? 'Renew 30-Day Access via UPI' : 'Enroll & Pay via UPI (WhatsApp)'}</span>
             </button>
             <Link
               to={backLink}

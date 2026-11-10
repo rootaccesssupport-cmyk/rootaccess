@@ -36,8 +36,9 @@ import {
 import type { PlaywrightDay4AssignmentRubric } from '../../types/playwrightCourse';
 
 export const PlaywrightDay4LessonPage: React.FC = () => {
-  const { isCourseEnrolled, markLessonComplete, isLessonCompleted } = useProgress();
-  const isEnrolled = isCourseEnrolled('playwright-automation');
+  const { isCourseAccessActive, getCourseAccessDetails, markLessonComplete, isLessonCompleted } = useProgress();
+  const isEnrolled = isCourseAccessActive('playwright-automation');
+  const accessDetails = getCourseAccessDetails('playwright-automation');
   const isDay3Completed = isLessonCompleted('lesson-playwright-day-3');
 
   // Navigation tab states
@@ -257,6 +258,8 @@ test.describe('Day 4 Practical Lab - Locators & Filtering', () => {
         backLink="/courses/playwright-automation"
         backLinkText="View Full 20-Day Course Curriculum"
         accentColor="purple"
+        isExpired={accessDetails.isExpired}
+        expiresAt={accessDetails.formattedExpiryDate}
       />
     );
   }

@@ -18,6 +18,7 @@ export const CoursePricingDisplay: React.FC<CoursePricingDisplayProps> = ({
   showLifetimeBadge = false,
 }) => {
   const details = getCoursePriceDetails(courseSlug);
+  const accessLabel = courseSlug === 'playwright-automation' ? '30 Days Access' : 'Lifetime Access';
   const alignClass =
     align === 'center'
       ? 'items-center text-center'
@@ -46,7 +47,7 @@ export const CoursePricingDisplay: React.FC<CoursePricingDisplayProps> = ({
             </span>
           )}
           <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-            Lifetime Access
+            {accessLabel}
           </span>
         </div>
 
@@ -123,7 +124,7 @@ export const CoursePricingDisplay: React.FC<CoursePricingDisplayProps> = ({
             )}
           </div>
           <span className="text-[11px] font-semibold text-slate-500">
-            Lifetime Access
+            {accessLabel}
           </span>
         </div>
       </div>
@@ -180,7 +181,7 @@ export const CoursePricingDisplay: React.FC<CoursePricingDisplayProps> = ({
         )}
         {showLifetimeBadge && (
           <span className="text-[10px] font-semibold text-slate-500 ml-1">
-            Lifetime Access
+            {accessLabel}
           </span>
         )}
       </div>

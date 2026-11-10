@@ -32,8 +32,9 @@ import {
 import type { PlaywrightDay8AssignmentRubric } from '../../types/playwrightCourse';
 
 export const PlaywrightDay8LessonPage: React.FC = () => {
-  const { isCourseEnrolled, markLessonComplete, isLessonCompleted } = useProgress();
-  const isEnrolled = isCourseEnrolled('playwright-automation');
+  const { isCourseAccessActive, getCourseAccessDetails, markLessonComplete, isLessonCompleted } = useProgress();
+  const isEnrolled = isCourseAccessActive('playwright-automation');
+  const accessDetails = getCourseAccessDetails('playwright-automation');
   const isDay7Completed = isLessonCompleted('lesson-playwright-day-7');
 
   // Navigation tab states
@@ -251,6 +252,9 @@ test.describe('Day 8 Practical Lab - Network & Mocking', () => {
           'Course completion certificate and WhatsApp study group access',
         ]}
         backLink="/courses/playwright-automation"
+        accentColor="purple"
+        isExpired={accessDetails.isExpired}
+        expiresAt={accessDetails.formattedExpiryDate}
       />
     );
   }

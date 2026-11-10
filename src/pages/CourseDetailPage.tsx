@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { COURSES } from '../data/curriculumData';
 import { useProgress } from '../context/ProgressContext';
@@ -7,6 +7,7 @@ import { useManualQa } from '../context/ManualQaContext';
 import { CourseEnrollmentModal } from '../components/enrollment/CourseEnrollmentModal';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 import { CourseRatingDisplay } from '../components/common/CourseRatingDisplay';
+import { campaignService, type CampaignStats } from '../services/campaignService';
 import {
   BookOpen,
   Database,
@@ -35,8 +36,15 @@ export const CourseDetailPage: React.FC = () => {
   const { courseSlug } = useParams<{ courseSlug: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { isLessonCompleted, getCourseProgress, isCourseEnrolled } = useProgress();
+  const {
+    isLessonCompleted,
+    getCourseProgress,
+    isCourseEnrolled,
+    isCourseAccessActive,
+    getCourseAccessDetails,
+  } = useProgress();
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const [campaignStats, setCampaignStats] = useState<CampaignStats | null>(null);
 
   const course = COURSES.find((c) => c.slug === courseSlug);
 
@@ -73,6 +81,16 @@ export const CourseDetailPage: React.FC = () => {
         (manualQaState.finalAssessmentPassed ? 10 : 0)
     );
   }, [manualQaCompletedDays, manualQaState]);
+
+  useEffect(() => {
+    if (course.slug === 'playwright-automation') {
+      campaignService.getFounding100Stats().then(setCampaignStats);
+    }
+  }, [course.slug]);
+
+  const isEnrolled = isCourseEnrolled(course.slug);
+  const isAccessActive = isCourseAccessActive(course.slug);
+  const accessDetails = getCourseAccessDetails(course.slug);
 
   const progress = getCourseProgress(course.slug);
   const trackPercent = isManualQa ? manualQaPercent : (progress.percent || 0);
@@ -159,6 +177,142 @@ export const CourseDetailPage: React.FC = () => {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+        {/* Playwright Founding 100 Launch Offer Banner */}
+        {course.slug === 'playwright-automation' && (
+          <div className="bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white border border-purple-800/40 shadow-xl relative overflow-hidden animate-fadeIn">
+            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div className="space-y-3 max-w-xl">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 shadow-sm">
+                    <Sparkles className="w-3.5 h-3.5 text-slate-950" />
+                    <span>FOUNDING 100 STUDENTS LAUNCH OFFER</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-800/60 text-purple-200 border border-purple-700/50">
+                    <Clock className="w-3 h-3 text-purple-300" />
+                    <span>30 Days Full Access</span>
+                  </span>
+                  {campaignStats?.isSoldOut && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500 text-white">
+                      <span>SOLD OUT</span>
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                  First 100 Students • Special ₹149 Introductory Access
+                </h2>
+                <p className="text-xs sm:text-sm text-purple-200 leading-relaxed">
+                  Master real-world Playwright browser automation in pure JavaScript with 20 daily hands-on milestones, simulated locator labs, and AI tooling. Offer limited to the first 100 verified paying learners with 30-day course access.
+                </p>
+
+                <div className="flex flex-wrap items-baseline gap-3 pt-1">
+                  <span className="text-3xl sm:text-4xl font-extrabold text-amber-300">₹149</span>
+                  <span className="text-base text-slate-400 line-through font-medium">₹649</span>
+                  <span className="text-sm text-slate-500 line-through font-medium">₹1,599</span>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    Save ₹1,450 (91% OFF)
+                  </span>
+                </div>
+              </div>
+
+              {/* Live Counter & Action Card */}
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/15 w-full lg:w-80 shrink-0 space-y-4">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-200 mb-1.5">
+                    <span>Verified Founding Enrolments</span>
+                    <span className="text-amber-300 font-mono text-sm">
+                      {campaignStats ? `${campaignStats.enrolledCount} / ${campaignStats.totalSeats}` : '0 / 100'}
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden border border-white/10">
+                    <div
+                      className={`h-full transition-all duration-700 ${
+                        campaignStats?.isSoldOut
+                          ? 'bg-rose-500'
+                          : 'bg-gradient-to-r from-amber-400 to-emerald-400'
+                      }`}
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          Math.round(
+                            ((campaignStats?.enrolledCount || 0) /
+                              (campaignStats?.totalSeats || 100)) *
+                              100
+                          )
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-purple-200 mt-1.5 font-medium">
+                    <span>
+                      {campaignStats?.isSoldOut
+                        ? 'Offer Sold Out!'
+                        : `${campaignStats?.remainingSeats ?? 100} Seats Remaining`}
+                    </span>
+                    <span>Starts at 0 • Live Verified</span>
+                  </div>
+                </div>
+
+                {isEnrolled && isAccessActive ? (
+                  <div className="p-3 bg-emerald-500/20 border border-emerald-400/30 rounded-xl text-center space-y-1">
+                    <div className="text-xs font-bold text-emerald-300 flex items-center justify-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <span>You Have Active Access!</span>
+                    </div>
+                    <p className="text-[11px] text-emerald-200 font-mono">
+                      {accessDetails.formattedCountdown}
+                    </p>
+                  </div>
+                ) : isEnrolled && !isAccessActive ? (
+                  <div className="space-y-2">
+                    <div className="p-2.5 bg-amber-500/20 border border-amber-400/30 rounded-xl text-center">
+                      <p className="text-xs font-semibold text-amber-200">
+                        30-Day Access Expired on {accessDetails.formattedExpiryDate}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsEnrollModalOpen(true)}
+                      className="w-full py-2.5 px-4 bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+                    >
+                      Renew Access via WhatsApp (₹149)
+                    </button>
+                  </div>
+                ) : campaignStats?.isSoldOut ? (
+                  <div className="space-y-2">
+                    <div className="p-2.5 bg-rose-500/20 border border-rose-400/30 rounded-xl text-center">
+                      <p className="text-xs font-bold text-rose-200">Founding 100 Offer Sold Out</p>
+                      <p className="text-[11px] text-slate-300 mt-0.5">
+                        Regular launch enrollment is available at ₹649.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsEnrollModalOpen(true)}
+                      className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+                    >
+                      Enroll at Standard Price (₹649)
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (!user) {
+                        navigate('/signup');
+                      } else {
+                        setIsEnrollModalOpen(true);
+                      }
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4 text-slate-950" />
+                    <span>CLAIM FOUNDING SEAT — ₹149</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Course Header Banner */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-50/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
@@ -225,12 +379,48 @@ export const CourseDetailPage: React.FC = () => {
                 </p>
               </div>
 
-              {!isCourseEnrolled(course.slug) ? (
+              {/* Access Status Case 1: Enrolled but Access Expired */}
+              {isEnrolled && !isAccessActive ? (
+                <div className="space-y-3">
+                  <div className="p-3 bg-amber-50 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2">
+                    <Clock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold">30-Day Access Expired</p>
+                      <p className="text-[11px] text-amber-800 mt-0.5">
+                        Your 30-day course access expired on {accessDetails.formattedExpiryDate}. All lesson progress is permanently saved. Renew access to resume Days 2+.
+                      </p>
+                    </div>
+                  </div>
+
+                  <CoursePricingDisplay courseSlug={course.slug} variant="detail" />
+
+                  <button
+                    onClick={() => setIsEnrollModalOpen(true)}
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+                  >
+                    <MessageCircle className="w-4 h-4 fill-white" />
+                    <span>Renew 30-Day Access (WhatsApp)</span>
+                  </button>
+
+                  <button
+                    onClick={() => navigate('/courses/playwright-automation/day-1')}
+                    className="w-full inline-flex items-center justify-center gap-2 py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-colors cursor-pointer"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-slate-700" />
+                    <span>Explore Free Day 1 Preview</span>
+                  </button>
+                </div>
+              ) : !isEnrolled ? (
+                /* Access Status Case 2: Not Enrolled */
                 <div className="space-y-3">
                   <div className="p-3 bg-amber-50 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2">
                     <Lock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-semibold">Full Track Enrollment (UPI)</p>
+                      <p className="font-semibold">
+                        {course.slug === 'playwright-automation'
+                          ? 'Founding 100 Enrollment (30 Days)'
+                          : 'Full Track Enrollment (UPI)'}
+                      </p>
                       <p className="text-[11px] text-amber-800 mt-0.5">
                         Day 1 is a free preview. Complete enrollment via WhatsApp / UPI to unlock all Days 2+ lessons, labs, and certification.
                       </p>
@@ -284,37 +474,51 @@ export const CourseDetailPage: React.FC = () => {
                   </button>
                 </div>
               ) : firstUnfinishedLesson ? (
-                <button
-                  onClick={() => {
-                    if (course.slug === 'playwright-automation') {
-                      navigate('/courses/playwright-automation/day-1');
-                    } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
-                      navigate('/manual-qa');
-                    } else if (course.slug === 'sql-for-qa-engineers') {
-                      navigate('/courses/sql-for-qa-engineers/day-1');
-                    } else if (course.slug === 'api-testing-postman') {
-                      navigate('/courses/api-testing-postman/day-1');
-                    } else if (course.slug === 'ai-prompt-engineering') {
-                      navigate('/courses/ai-prompt-engineering/day-1');
-                    } else if (course.slug === 'jmeter-performance-testing') {
-                      navigate('/courses/jmeter-performance-testing/day-1');
-                    } else if (course.slug === 'appium-mobile-automation') {
-                      navigate('/courses/appium-mobile-automation/day-1');
-                    } else if (course.slug === 'ai-agent-development') {
-                      navigate('/courses/ai-agent-development/day-1');
-                    } else {
-                      navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
-                    }
-                  }}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors"
-                >
-                  <Play className="w-4 h-4 fill-white" />
-                  <span>
-                    {progress.completedCount > 0
-                      ? 'Continue Learning'
-                      : 'Start Course'}
-                  </span>
-                </button>
+                /* Access Status Case 3: Enrolled & Access Active */
+                <div className="space-y-3">
+                  {course.slug === 'playwright-automation' && (
+                    <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-0.5">
+                      <span className="text-[10px] uppercase font-bold text-emerald-800 tracking-wider block">
+                        Active Access (Founding 100)
+                      </span>
+                      <span className="text-xs font-mono font-semibold text-emerald-700">
+                        {accessDetails.formattedCountdown}
+                      </span>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      if (course.slug === 'playwright-automation') {
+                        navigate('/courses/playwright-automation/day-1');
+                      } else if (course.slug === 'manual-qa-fundamentals' || course.slug === 'manual-testing') {
+                        navigate('/manual-qa');
+                      } else if (course.slug === 'sql-for-qa-engineers') {
+                        navigate('/courses/sql-for-qa-engineers/day-1');
+                      } else if (course.slug === 'api-testing-postman') {
+                        navigate('/courses/api-testing-postman/day-1');
+                      } else if (course.slug === 'ai-prompt-engineering') {
+                        navigate('/courses/ai-prompt-engineering/day-1');
+                      } else if (course.slug === 'jmeter-performance-testing') {
+                        navigate('/courses/jmeter-performance-testing/day-1');
+                      } else if (course.slug === 'appium-mobile-automation') {
+                        navigate('/courses/appium-mobile-automation/day-1');
+                      } else if (course.slug === 'ai-agent-development') {
+                        navigate('/courses/ai-agent-development/day-1');
+                      } else {
+                        navigate(`/courses/${course.slug}/lessons/${firstUnfinishedLesson.slug}`);
+                      }
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors"
+                  >
+                    <Play className="w-4 h-4 fill-white" />
+                    <span>
+                      {progress.completedCount > 0
+                        ? 'Continue Learning'
+                        : 'Start Course'}
+                    </span>
+                  </button>
+                </div>
               ) : (
                 <Link
                   to={`/courses/${course.slug}/quiz`}

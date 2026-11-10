@@ -35,8 +35,9 @@ import {
 import type { PlaywrightDay2AssignmentRubric } from '../../types/playwrightCourse';
 
 export const PlaywrightDay2LessonPage: React.FC = () => {
-  const { isCourseEnrolled, markLessonComplete, isLessonCompleted } = useProgress();
-  const isEnrolled = isCourseEnrolled('playwright-automation');
+  const { isCourseAccessActive, getCourseAccessDetails, markLessonComplete, isLessonCompleted } = useProgress();
+  const isEnrolled = isCourseAccessActive('playwright-automation');
+  const accessDetails = getCourseAccessDetails('playwright-automation');
   const isDay1Completed = isLessonCompleted('lesson-playwright-day-1');
 
   // Navigation tab states
@@ -322,6 +323,8 @@ function getScenarioSummary(scenario) {
         backLink="/courses/playwright-automation"
         backLinkText="View Full 20-Day Course Curriculum"
         accentColor="purple"
+        isExpired={accessDetails.isExpired}
+        expiresAt={accessDetails.formattedExpiryDate}
       />
     );
   }

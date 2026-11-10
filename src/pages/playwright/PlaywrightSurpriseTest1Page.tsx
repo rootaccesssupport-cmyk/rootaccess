@@ -23,8 +23,9 @@ import {
 } from '../../data/playwrightSurpriseTest1Data';
 
 export const PlaywrightSurpriseTest1Page: React.FC = () => {
-  const { isCourseEnrolled, isLessonCompleted, markLessonComplete } = useProgress();
-  const isEnrolled = isCourseEnrolled('playwright-automation');
+  const { isCourseAccessActive, getCourseAccessDetails, isLessonCompleted, markLessonComplete } = useProgress();
+  const isEnrolled = isCourseAccessActive('playwright-automation');
+  const accessDetails = getCourseAccessDetails('playwright-automation');
   const isDay6Completed = isLessonCompleted('lesson-playwright-day-6');
 
   // User responses
@@ -45,6 +46,9 @@ export const PlaywrightSurpriseTest1Page: React.FC = () => {
           'Course completion certificate and WhatsApp study group access',
         ]}
         backLink="/courses/playwright-automation"
+        accentColor="purple"
+        isExpired={accessDetails.isExpired}
+        expiresAt={accessDetails.formattedExpiryDate}
       />
     );
   }

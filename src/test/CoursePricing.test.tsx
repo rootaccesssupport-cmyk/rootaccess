@@ -4,16 +4,25 @@ import { getCoursePriceDetails } from '../data/enrollmentPaymentConfig';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 
 describe('Course Pricing Configuration & Calculations', () => {
-  it('Playwright Automation has exact ₹1,599 regular and ₹649 launch price with 59% discount', () => {
+  it('Playwright Automation has exact ₹149 Founding 100 launch price and ₹649 standard price', () => {
+    // 1. With Founding 100 active
     const details = getCoursePriceDetails('playwright-automation');
     expect(details.originalInr).toBe(1599);
-    expect(details.inr).toBe(649);
-    expect(details.savings).toBe(950);
-    expect(details.discountPercent).toBe(59);
-    expect(details.formattedInr).toBe('₹649');
+    expect(details.inr).toBe(149);
+    expect(details.savings).toBe(1450);
+    expect(details.discountPercent).toBe(91);
+    expect(details.formattedInr).toBe('₹149');
     expect(details.formattedOriginalInr).toBe('₹1,599');
-    expect(details.formattedSavings).toBe('₹950');
+    expect(details.formattedSavings).toBe('₹1,450');
     expect(details.isLaunchOffer).toBe(true);
+
+    // 2. Standard pricing when Founding 100 is excluded or sold out
+    const standardDetails = getCoursePriceDetails('playwright-automation', { isFounding100: false });
+    expect(standardDetails.originalInr).toBe(1599);
+    expect(standardDetails.inr).toBe(649);
+    expect(standardDetails.savings).toBe(950);
+    expect(standardDetails.discountPercent).toBe(59);
+    expect(standardDetails.formattedInr).toBe('₹649');
   });
 
   it('Manual Testing has exact ₹599 regular and ₹299 launch price with 50% discount', () => {
@@ -101,9 +110,9 @@ describe('CoursePricingDisplay Component', () => {
     render(<CoursePricingDisplay courseSlug="playwright-automation" variant="card" />);
 
     expect(screen.getByText('Launch Offer')).toBeInTheDocument();
-    expect(screen.getByText('₹649')).toBeInTheDocument();
+    expect(screen.getByText('₹149')).toBeInTheDocument();
     expect(screen.getByText('₹1,599')).toHaveClass('line-through');
-    expect(screen.getByText(/Save ₹950 \(59% off\)/)).toBeInTheDocument();
+    expect(screen.getByText(/Save ₹1,450 \(91% off\)/)).toBeInTheDocument();
   });
 
   it('renders gate variant with Lifetime Access and Launch Offer pill', () => {

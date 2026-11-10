@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useMemo, useCall
 import { useAuth } from './AuthContext';
 import { COURSES, SIMULATED_BUGS } from '../data/curriculumData';
 import type { ProgressState, QuizScoreRecord, BugReportSubmission } from '../types/curriculum';
+import { enrollmentService } from '../services/enrollmentService';
+import { campaignService, type AccessExpiryDetails } from '../services/campaignService';
 
 interface ProgressContextType {
   completedLessons: string[];
@@ -29,9 +31,12 @@ interface ProgressContextType {
   };
   enrolledCourses: string[];
   isCourseEnrolled: (courseSlug: string) => boolean;
+  isCourseAccessActive: (courseSlug: string) => boolean;
+  getCourseAccessDetails: (courseSlug: string) => AccessExpiryDetails;
   enrollInCourse: (courseSlug: string) => void;
   resetProgress: () => void;
 }
+
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
 
@@ -273,6 +278,50 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [state.enrolledCourses]
   );
 
+  const getCourseAccessDetails = useCallback(
+    (courseSlug: string): AccessExpiryDetails => {
+      const isEnrolled = isCourseEnrolled(courseSlug);
+      if (!isEnrolled) {
+        return campaignService.calculateAccessDetails(null, null);
+      }
+
+      if (user?.id) {
+        const access = enrollmentService.getStudentCourseAccess(user.id, courseSlug);
+        if (access) {
+          return campaignService.calculateAccessDetails(
+            access.activatedAt,
+            access.expiresAt,
+            access.durationDays || 30
+          );
+        }
+      }
+
+      // Default active if enrolled without restricted expiry
+      return {
+        isEnrolled: true,
+        isActive: true,
+        isExpired: false,
+        totalDurationDays: 30,
+        daysRemaining: 30,
+        hoursRemaining: 0,
+        minutesRemaining: 0,
+        secondsRemaining: 0,
+        formattedCountdown: 'Active Lifetime Access',
+        formattedExpiryDate: 'Never',
+      };
+    },
+    [isCourseEnrolled, user?.id]
+  );
+
+  const isCourseAccessActive = useCallback(
+    (courseSlug: string): boolean => {
+      if (!isCourseEnrolled(courseSlug)) return false;
+      const details = getCourseAccessDetails(courseSlug);
+      return details.isActive;
+    },
+    [isCourseEnrolled, getCourseAccessDetails]
+  );
+
   const enrollInCourse = useCallback(
     (_courseSlug: string) => {
       // Direct self-enrollment is strictly disabled.
@@ -299,6 +348,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         reportedBugs: state.reportedBugs,
         enrolledCourses: state.enrolledCourses || [],
         isCourseEnrolled,
+        isCourseAccessActive,
+        getCourseAccessDetails,
         enrollInCourse,
         isLessonCompleted,
         markLessonComplete,
@@ -314,6 +365,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
+
 export const useProgress = (): ProgressContextType => {
   const context = useContext(ProgressContext);
   if (!context) {
@@ -321,6 +373,8 @@ export const useProgress = (): ProgressContextType => {
       completedLessons: [],
       enrolledCourses: [],
       isCourseEnrolled: () => false,
+      isCourseAccessActive: () => false,
+      getCourseAccessDetails: () => campaignService.calculateAccessDetails(null, null),
       enrollInCourse: () => {},
       quizScores: {},
       reportedBugs: {

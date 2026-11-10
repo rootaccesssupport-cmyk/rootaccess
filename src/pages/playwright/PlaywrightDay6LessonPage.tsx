@@ -34,8 +34,9 @@ import {
 import type { PlaywrightDay6AssignmentRubric } from '../../types/playwrightCourse';
 
 export const PlaywrightDay6LessonPage: React.FC = () => {
-  const { isCourseEnrolled, markLessonComplete, isLessonCompleted } = useProgress();
-  const isEnrolled = isCourseEnrolled('playwright-automation');
+  const { isCourseAccessActive, getCourseAccessDetails, markLessonComplete, isLessonCompleted } = useProgress();
+  const isEnrolled = isCourseAccessActive('playwright-automation');
+  const accessDetails = getCourseAccessDetails('playwright-automation');
   const isDay5Completed = isLessonCompleted('lesson-playwright-day-5');
 
   // Navigation tab states
@@ -253,6 +254,9 @@ test.describe('Day 6 Practical Lab - Forms & Dialogs', () => {
           'Course completion certificate and WhatsApp study group access',
         ]}
         backLink="/courses/playwright-automation"
+        accentColor="purple"
+        isExpired={accessDetails.isExpired}
+        expiresAt={accessDetails.formattedExpiryDate}
       />
     );
   }

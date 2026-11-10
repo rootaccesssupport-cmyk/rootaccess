@@ -30,6 +30,8 @@ import {
   Gauge,
   Smartphone,
   Bot,
+  Clock,
+  AlertTriangle,
 } from 'lucide-react';
 import { Alert } from '../components/common/Alert';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -203,7 +205,12 @@ const COURSE_CATEGORIES = [
 
 export const StudentDashboardPage: React.FC = () => {
   const { user, profile, signOut, refreshProfile } = useAuth();
-  const { overallStats, getCourseProgress, isCourseEnrolled } = useProgress();
+  const {
+    overallStats,
+    getCourseProgress,
+    isCourseEnrolled,
+    getCourseAccessDetails,
+  } = useProgress();
   const { state: devOpsState, getOverallStats: getDevOpsStats } = useDevOps();
   const devopsStats = getDevOpsStats();
   const { state: manualQaState } = useManualQa();
@@ -774,20 +781,33 @@ export const StudentDashboardPage: React.FC = () => {
                       progressPercent = getCourseProgress(course.slug).percent || 0;
                     }
 
+                    const access = getCourseAccessDetails(course.slug);
+                    const isPlaywright = course.slug === 'playwright-automation';
+                    const isExpired = isPlaywright && access.isExpired;
+
                     return (
                       <div
                         key={course.id}
-                        className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between"
+                        className={`bg-white rounded-2xl border p-5 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between ${
+                          isExpired ? 'border-rose-200' : 'border-slate-200'
+                        }`}
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
                               {course.category}
                             </span>
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                              <Check className="w-3 h-3 text-emerald-600" />
-                              <span>Enrolled</span>
-                            </span>
+                            {isExpired ? (
+                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
+                                <AlertTriangle className="w-3 h-3 text-rose-600" />
+                                <span>Access Expired</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                <Check className="w-3 h-3 text-emerald-600" />
+                                <span>{isPlaywright ? 'Active (30 Days)' : 'Enrolled'}</span>
+                              </span>
+                            )}
                           </div>
 
                           <div>
@@ -805,7 +825,48 @@ export const StudentDashboardPage: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="space-y-1.5 pt-2">
+                          {/* 30-Day Access Expiry Countdown Card for Playwright */}
+                          {isPlaywright && (
+                            <div
+                              className={`p-3 rounded-xl border text-xs space-y-1 ${
+                                isExpired
+                                  ? 'bg-rose-50/80 border-rose-200 text-rose-900'
+                                  : 'bg-purple-50/80 border-purple-200 text-purple-900'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between font-bold">
+                                <div className="flex items-center gap-1.5">
+                                  <Clock className={`w-3.5 h-3.5 ${isExpired ? 'text-rose-600' : 'text-purple-600'}`} />
+                                  <span>
+                                    {isExpired
+                                      ? '30-Day Access Period Expired'
+                                      : 'Founding 100 • 30 Days Access'}
+                                  </span>
+                                </div>
+                                <span
+                                  className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                                    isExpired
+                                      ? 'bg-rose-100 text-rose-800'
+                                      : 'bg-emerald-100 text-emerald-800'
+                                  }`}
+                                >
+                                  {isExpired ? 'Expired' : 'Active'}
+                                </span>
+                              </div>
+                              <p className="text-[11px] font-mono font-medium">
+                                {isExpired
+                                  ? `Expired on: ${access.formattedExpiryDate}`
+                                  : access.formattedCountdown}
+                              </p>
+                              {isExpired && (
+                                <p className="text-[10px] text-slate-600 pt-0.5">
+                                  Your completed lessons ({progressPercent}%) are preserved. Renew to unlock Days 2+.
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="space-y-1.5 pt-1">
                             <div className="flex items-center justify-between text-xs text-slate-600 font-medium">
                               <span>Progress</span>
                               <span className="font-bold text-slate-900">{progressPercent}%</span>
@@ -838,13 +899,24 @@ export const StudentDashboardPage: React.FC = () => {
                               </Link>
                             )}
                           </div>
-                          <Link
-                            to={course.courseUrl}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-xs"
-                          >
-                            <Play className="w-3.5 h-3.5 fill-white" />
-                            <span>Continue Learning</span>
-                          </Link>
+
+                          {isExpired ? (
+                            <button
+                              onClick={() => handleEnrollCourse(course.slug, course.title)}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-xs cursor-pointer"
+                            >
+                              <MessageCircle className="w-3.5 h-3.5" />
+                              <span>Renew (₹149)</span>
+                            </button>
+                          ) : (
+                            <Link
+                              to={course.courseUrl}
+                              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-xs"
+                            >
+                              <Play className="w-3.5 h-3.5 fill-white" />
+                              <span>Continue Learning</span>
+                            </Link>
+                          )}
                         </div>
                       </div>
                     );

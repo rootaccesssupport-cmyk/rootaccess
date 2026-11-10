@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { getStoredCampaignConfig } from '../data/campaignConfig';
 
 export interface EnrollmentRequest {
   id: string;
@@ -13,9 +14,31 @@ export interface EnrollmentRequest {
   requested_at: string;
   reviewed_at?: string;
   reviewed_by?: string;
+  // Founding 100 Campaign and Access Tracking
+  campaign_tag?: string;
+  enrollment_id?: string;
+  amount_paid?: number;
+  access_duration_days?: number;
+  activated_at?: string;
+  expires_at?: string;
+}
+
+export interface StudentCourseAccess {
+  courseSlug: string;
+  enrolled: boolean;
+  isActive: boolean;
+  isExpired: boolean;
+  campaignTag?: string;
+  enrollmentId?: string;
+  amountPaid?: number;
+  activatedAt?: string;
+  expiresAt?: string;
+  durationDays?: number;
 }
 
 const LOCAL_STORAGE_REQUESTS_KEY = 'rootaccess_enrollment_requests';
+const LOCAL_STORAGE_ACCESS_PREFIX = 'rootaccess_course_access_';
+
 
 function getLocalRequests(): EnrollmentRequest[] {
   try {
@@ -34,6 +57,23 @@ function saveLocalRequests(reqs: EnrollmentRequest[]) {
   }
 }
 
+function getLocalStudentAccess(userId: string): Record<string, StudentCourseAccess> {
+  try {
+    const raw = localStorage.getItem(`${LOCAL_STORAGE_ACCESS_PREFIX}${userId}`);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveLocalStudentAccess(userId: string, accessMap: Record<string, StudentCourseAccess>) {
+  try {
+    localStorage.setItem(`${LOCAL_STORAGE_ACCESS_PREFIX}${userId}`, JSON.stringify(accessMap));
+  } catch (err) {
+    console.error('Failed to save student course access:', err);
+  }
+}
+
 export const enrollmentService = {
   // Submit or update a student's enrollment request
   async submitRequest(params: {
@@ -44,8 +84,36 @@ export const enrollmentService = {
     courseTitle: string;
     upiReference?: string;
     studentNotes?: string;
+    campaignTag?: string;
+    enrollmentId?: string;
+    amountPaid?: number;
+    accessDurationDays?: number;
   }): Promise<{ success: boolean; error?: string; request?: EnrollmentRequest }> {
     const normalizedSlug = params.courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : params.courseSlug;
+
+    const campaignTag =
+      params.campaignTag ||
+      (normalizedSlug === 'playwright-automation' ? 'founding-100' : undefined);
+
+    const amountPaid =
+      params.amountPaid !== undefined
+        ? params.amountPaid
+        : campaignTag === 'founding-100'
+        ? 149
+        : undefined;
+
+    const accessDurationDays =
+      params.accessDurationDays !== undefined
+        ? params.accessDurationDays
+        : campaignTag === 'founding-100'
+        ? 30
+        : undefined;
+
+    const enrollmentId =
+      params.enrollmentId ||
+      (campaignTag === 'founding-100'
+        ? `FA-100-${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+        : undefined);
 
     const newRequest: EnrollmentRequest = {
       id: `req-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -58,6 +126,10 @@ export const enrollmentService = {
       upi_reference: params.upiReference || '',
       student_notes: params.studentNotes || '',
       requested_at: new Date().toISOString(),
+      campaign_tag: campaignTag,
+      enrollment_id: enrollmentId,
+      amount_paid: amountPaid,
+      access_duration_days: accessDurationDays,
     };
 
     // Save locally
@@ -90,7 +162,8 @@ export const enrollmentService = {
         if (error) {
           console.warn('Supabase enrollment_requests upsert warning:', error.message);
         } else if (data) {
-          return { success: true, request: data as EnrollmentRequest };
+          const merged = { ...newRequest, ...(data as EnrollmentRequest) };
+          return { success: true, request: merged };
         }
       } catch (err: any) {
         console.warn('Network error syncing enrollment request:', err.message);
@@ -117,7 +190,7 @@ export const enrollmentService = {
           .maybeSingle();
 
         if (data) {
-          return data as EnrollmentRequest;
+          return { ...local, ...(data as EnrollmentRequest) };
         }
       } catch {
         // fallback to local
@@ -137,9 +210,22 @@ export const enrollmentService = {
           .order('requested_at', { ascending: false });
 
         if (!error && data && data.length > 0) {
-          // Merge with any local ones
-          const remoteList = data as EnrollmentRequest[];
-          return remoteList;
+          // Merge with local requests to retain local campaign tags/metadata
+          const local = getLocalRequests();
+          const merged = data.map((remote: any) => {
+            const loc = local.find((l) => l.id === remote.id || (l.user_id === remote.user_id && l.course_slug === remote.course_slug));
+            return {
+              ...loc,
+              ...remote,
+              campaign_tag: remote.campaign_tag || loc?.campaign_tag,
+              enrollment_id: remote.enrollment_id || loc?.enrollment_id,
+              amount_paid: remote.amount_paid || loc?.amount_paid,
+              activated_at: remote.activated_at || loc?.activated_at,
+              expires_at: remote.expires_at || loc?.expires_at,
+              access_duration_days: remote.access_duration_days || loc?.access_duration_days,
+            } as EnrollmentRequest;
+          });
+          return merged;
         }
       } catch (err) {
         console.warn('Failed to fetch from supabase enrollment_requests:', err);
@@ -168,7 +254,7 @@ export const enrollmentService = {
           .select('*')
           .eq('id', requestId)
           .maybeSingle();
-        if (data) target = data as EnrollmentRequest;
+        if (data) target = { ...target, ...(data as EnrollmentRequest) };
       } catch {
         // fallback
       }
@@ -178,8 +264,43 @@ export const enrollmentService = {
       return { success: false, error: 'Request not found' };
     }
 
+    const courseToGrant = target.course_slug;
+    const targetUserId = target.user_id;
+    const campaignConfig = getStoredCampaignConfig();
+    const isFounding100 =
+      target.campaign_tag === 'founding-100' ||
+      (courseToGrant === 'playwright-automation' && (target.amount_paid === 149 || !target.campaign_tag));
+
+    // Atomic seat check for Founding 100 Campaign
+    if (isFounding100) {
+      const allCurrent = await this.getAllRequests();
+      const currentApprovedFoundingCount = allCurrent.filter(
+        (r) =>
+          r.status === 'approved' &&
+          r.course_slug === 'playwright-automation' &&
+          (r.campaign_tag === 'founding-100' || r.amount_paid === 149 || !r.campaign_tag) &&
+          r.id !== requestId
+      ).length;
+
+      if (currentApprovedFoundingCount >= campaignConfig.maxSeats) {
+        return {
+          success: false,
+          error: `Cannot approve: Founding 100 seats limit reached (${campaignConfig.maxSeats}/${campaignConfig.maxSeats}). Offer is sold out!`,
+        };
+      }
+    }
+
     const finalUpiRef = updatedUpiRef !== undefined ? updatedUpiRef.trim() : (target.upi_reference || '');
     const finalNotes = adminNotes !== undefined ? adminNotes.trim() : (target.student_notes || '');
+
+    // Compute activation and 30-day expiry
+    const now = new Date();
+    const activatedAt = now.toISOString();
+    const durationDays = target.access_duration_days || (isFounding100 ? campaignConfig.durationDays : 30);
+    const expiresAt = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000).toISOString();
+    const campaignTag = isFounding100 ? 'founding-100' : target.campaign_tag;
+    const amountPaid = target.amount_paid || (isFounding100 ? campaignConfig.launchPriceInr : undefined);
+    const enrollmentId = target.enrollment_id || (isFounding100 ? `FA-100-${Math.random().toString(36).substring(2, 7).toUpperCase()}` : undefined);
 
     // 2. Mark request as approved
     const updatedLocal = local.map((r) =>
@@ -189,17 +310,36 @@ export const enrollmentService = {
             status: 'approved' as const,
             upi_reference: finalUpiRef,
             student_notes: finalNotes,
-            reviewed_at: new Date().toISOString(),
+            reviewed_at: activatedAt,
             reviewed_by: adminEmail,
+            campaign_tag: campaignTag,
+            enrollment_id: enrollmentId,
+            amount_paid: amountPaid,
+            access_duration_days: durationDays,
+            activated_at: activatedAt,
+            expires_at: expiresAt,
           }
         : r
     );
     saveLocalRequests(updatedLocal);
 
-    // 3. Grant course access to target user in public.profiles
-    const courseToGrant = target.course_slug;
-    const targetUserId = target.user_id;
+    // 3. Save student access record locally
+    const accessMap = getLocalStudentAccess(targetUserId);
+    accessMap[courseToGrant] = {
+      courseSlug: courseToGrant,
+      enrolled: true,
+      isActive: true,
+      isExpired: false,
+      campaignTag,
+      enrollmentId,
+      amountPaid,
+      activatedAt,
+      expiresAt,
+      durationDays,
+    };
+    saveLocalStudentAccess(targetUserId, accessMap);
 
+    // 4. Grant course access to target user in public.profiles
     if (isSupabaseConfigured) {
       try {
         // Update request row
@@ -209,7 +349,7 @@ export const enrollmentService = {
             status: 'approved',
             upi_reference: finalUpiRef,
             student_notes: finalNotes,
-            reviewed_at: new Date().toISOString(),
+            reviewed_at: activatedAt,
             reviewed_by: adminEmail,
           })
           .eq('id', requestId);
@@ -255,6 +395,57 @@ export const enrollmentService = {
 
     return { success: true };
   },
+
+  // Get student access info for a course
+  getStudentCourseAccess(userId: string, courseSlug: string): StudentCourseAccess | null {
+    const normalizedSlug = courseSlug === 'manual-testing' ? 'manual-qa-fundamentals' : courseSlug;
+    const accessMap = getLocalStudentAccess(userId);
+    const record = accessMap[normalizedSlug];
+
+    if (record) {
+      const now = Date.now();
+      const isExpired = record.expiresAt ? new Date(record.expiresAt).getTime() <= now : false;
+      return {
+        ...record,
+        isExpired,
+        isActive: !isExpired,
+      };
+    }
+
+    // If not in accessMap, check approved requests
+    const local = getLocalRequests();
+    const req = local.find(
+      (r) => r.user_id === userId && r.course_slug === normalizedSlug && r.status === 'approved'
+    );
+    if (req) {
+      const now = Date.now();
+      const expiresAt = req.expires_at || (req.activated_at ? new Date(new Date(req.activated_at).getTime() + 30 * 86400000).toISOString() : undefined);
+      const isExpired = expiresAt ? new Date(expiresAt).getTime() <= now : false;
+
+      return {
+        courseSlug: normalizedSlug,
+        enrolled: true,
+        isActive: !isExpired,
+        isExpired,
+        campaignTag: req.campaign_tag,
+        enrollmentId: req.enrollment_id,
+        amountPaid: req.amount_paid,
+        activatedAt: req.activated_at,
+        expiresAt,
+        durationDays: req.access_duration_days || 30,
+      };
+    }
+
+    return null;
+  },
+
+  // Synchronous active access checker
+  isStudentAccessActive(userId: string, courseSlug: string): boolean {
+    const access = this.getStudentCourseAccess(userId, courseSlug);
+    if (!access) return false;
+    return access.isActive;
+  },
+
 
   // Admin: Reject request
   async rejectRequest(requestId: string, adminEmail: string): Promise<{ success: boolean; error?: string }> {

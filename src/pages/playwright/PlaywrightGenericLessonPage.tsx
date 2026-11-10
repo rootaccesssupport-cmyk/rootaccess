@@ -58,8 +58,9 @@ export const PlaywrightGenericLessonPage: React.FC<PlaywrightGenericLessonPagePr
   nextLessonUrl,
   pdfFileName,
 }) => {
-  const { isCourseEnrolled, markLessonComplete, isLessonCompleted } = useProgress();
-  const isEnrolled = isCourseEnrolled('playwright-automation');
+  const { isCourseAccessActive, getCourseAccessDetails, markLessonComplete, isLessonCompleted } = useProgress();
+  const isEnrolled = isCourseAccessActive('playwright-automation');
+  const accessDetails = getCourseAccessDetails('playwright-automation');
   const isPrevCompleted = isLessonCompleted(prevLessonId);
 
   // Tabs state
@@ -321,6 +322,8 @@ export const PlaywrightGenericLessonPage: React.FC<PlaywrightGenericLessonPagePr
         backLink="/courses/playwright-automation"
         backLinkText="Back to 20-Day Curriculum"
         accentColor="purple"
+        isExpired={accessDetails.isExpired}
+        expiresAt={accessDetails.formattedExpiryDate}
       />
     );
   }
