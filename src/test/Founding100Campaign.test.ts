@@ -105,10 +105,10 @@ describe('Founding 500 Students Launch Offer Campaign', () => {
   });
 
   describe('Live Database-backed Seat Counter', () => {
-    it('should start at 0 when there are no approved enrollments', async () => {
+    it('should start with baseline of 78 approved enrollments', async () => {
       const stats = await campaignService.getFounding500Stats();
-      expect(stats.enrolledCount).toBe(0);
-      expect(stats.remainingSeats).toBe(500);
+      expect(stats.enrolledCount).toBe(78);
+      expect(stats.remainingSeats).toBe(422);
       expect(stats.totalSeats).toBe(500);
       expect(stats.isSoldOut).toBe(false);
     });
@@ -159,13 +159,13 @@ describe('Founding 500 Students Launch Offer Campaign', () => {
       localStorage.setItem('rootaccess_enrollment_requests', JSON.stringify(mockRequests));
 
       const stats = await campaignService.getFounding500Stats();
-      expect(stats.enrolledCount).toBe(1);
-      expect(stats.remainingSeats).toBe(499);
+      expect(stats.enrolledCount).toBe(79); // 78 baseline + 1 approved
+      expect(stats.remainingSeats).toBe(421);
       expect(stats.isSoldOut).toBe(false);
     });
 
     it('should mark campaign as sold out when 500 seats are filled', async () => {
-      const mockApproved: EnrollmentRequest[] = Array.from({ length: 500 }, (_, i) => ({
+      const mockApproved: EnrollmentRequest[] = Array.from({ length: 422 }, (_, i) => ({
         id: `req-${i}`,
         user_id: `user-${i}`,
         user_email: `user${i}@example.com`,
@@ -182,7 +182,7 @@ describe('Founding 500 Students Launch Offer Campaign', () => {
       localStorage.setItem('rootaccess_enrollment_requests', JSON.stringify(mockApproved));
 
       const stats = await campaignService.getFounding500Stats();
-      expect(stats.enrolledCount).toBe(500);
+      expect(stats.enrolledCount).toBe(500); // 78 baseline + 422 approved = 500
       expect(stats.remainingSeats).toBe(0);
       expect(stats.isSoldOut).toBe(true);
     });
@@ -232,8 +232,8 @@ describe('Founding 500 Students Launch Offer Campaign', () => {
     });
 
     it('should prevent approving more than maxSeats (500) students for the campaign', async () => {
-      // Fill 500 seats
-      const mockApproved: EnrollmentRequest[] = Array.from({ length: 500 }, (_, i) => ({
+      // Fill remaining seats to reach 500 (78 baseline + 422 = 500)
+      const mockApproved: EnrollmentRequest[] = Array.from({ length: 422 }, (_, i) => ({
         id: `seat-${i}`,
         user_id: `student-${i}`,
         user_email: `student${i}@example.com`,

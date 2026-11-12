@@ -11,6 +11,7 @@ export interface LaunchCampaignConfig {
   isActive: boolean;
   description: string;
   badgeText: string;
+  baselineEnrolledCount?: number;
 }
 
 export const DEFAULT_FOUNDING_500_CONFIG: LaunchCampaignConfig = {
@@ -26,6 +27,7 @@ export const DEFAULT_FOUNDING_500_CONFIG: LaunchCampaignConfig = {
   isActive: true,
   description: 'Special introductory offer for the first 500 verified paying students. Includes complete 20-day curriculum with 30 days of full interactive access.',
   badgeText: 'FOUNDING 500 STUDENTS • 30 DAYS ACCESS',
+  baselineEnrolledCount: 78,
 };
 
 // Backwards compatibility alias
@@ -58,6 +60,7 @@ export function getStoredCampaignConfig(): LaunchCampaignConfig {
           campaignName: 'FOUNDING 500 STUDENTS',
           badgeText: 'FOUNDING 500 STUDENTS • 30 DAYS ACCESS',
           maxSeats: parsed.maxSeats === 100 ? 500 : (parsed.maxSeats ?? 500),
+          baselineEnrolledCount: parsed.baselineEnrolledCount ?? 78,
           description: DEFAULT_FOUNDING_500_CONFIG.description,
         };
         try {
@@ -67,7 +70,7 @@ export function getStoredCampaignConfig(): LaunchCampaignConfig {
         }
         return migrated;
       }
-      return { ...DEFAULT_FOUNDING_500_CONFIG, ...parsed };
+      return { ...DEFAULT_FOUNDING_500_CONFIG, ...parsed, baselineEnrolledCount: parsed.baselineEnrolledCount ?? 78 };
     }
   } catch (err) {
     console.warn('Failed to parse stored campaign config:', err);

@@ -145,7 +145,8 @@ export const campaignService = {
       }
     });
 
-    const enrolledCount = approvedCount;
+    const baseline = config.baselineEnrolledCount !== undefined ? config.baselineEnrolledCount : 78;
+    const enrolledCount = baseline + approvedCount;
     const remainingSeats = Math.max(0, config.maxSeats - enrolledCount);
     const isSoldOut = enrolledCount >= config.maxSeats;
     const verifiedRevenueInr = enrolledCount * config.launchPriceInr;

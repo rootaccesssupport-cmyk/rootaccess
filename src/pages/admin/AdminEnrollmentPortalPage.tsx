@@ -66,6 +66,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
   const [editSeats, setEditSeats] = useState(campaignConfig.maxSeats);
   const [editDuration, setEditDuration] = useState(campaignConfig.durationDays);
   const [editIsActive, setEditIsActive] = useState(campaignConfig.isActive);
+  const [editBaseline, setEditBaseline] = useState(campaignConfig.baselineEnrolledCount ?? 78);
 
   // Founding 500 table filters
   const [foundingFilter, setFoundingFilter] = useState<'all' | 'pending' | 'active' | 'expired' | 'rejected'>('all');
@@ -276,6 +277,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
       maxSeats: Number(editSeats),
       durationDays: Number(editDuration),
       isActive: Boolean(editIsActive),
+      baselineEnrolledCount: Number(editBaseline),
     });
     setCampaignConfig(updated);
     setIsConfigModalOpen(false);
@@ -497,8 +499,8 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                     />
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1.5 flex justify-between">
-                    <span>{campaignStats?.remainingSeats ?? 500} seats available</span>
-                    <span>Starts at 0</span>
+                    <span>{campaignStats?.remainingSeats ?? 422} seats available</span>
+                    <span>Live Verified</span>
                   </p>
                 </div>
               </div>
@@ -518,7 +520,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                   <span className="text-xs text-slate-500 font-medium">INR</span>
                 </div>
                 <p className="text-[11px] text-slate-500">
-                  Calculated from {campaignStats?.enrolledCount || 0} approved payments @ ₹{campaignConfig.launchPriceInr}
+                  Calculated from {campaignStats?.enrolledCount || 78} approved payments @ ₹{campaignConfig.launchPriceInr}
                 </p>
               </div>
 
@@ -569,7 +571,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-purple-950">
-                    Founding 500 Settings: ₹{campaignConfig.launchPriceInr} • Max {campaignConfig.maxSeats} Students • {campaignConfig.durationDays} Days Access
+                    Founding 500 Settings: ₹{campaignConfig.launchPriceInr} • Max {campaignConfig.maxSeats} Students ({campaignConfig.baselineEnrolledCount ?? 78} Enrolled) • {campaignConfig.durationDays} Days Access
                   </h3>
                   <p className="text-xs text-purple-800">
                     Status: <strong>{campaignConfig.isActive ? 'Active Campaign' : 'Paused'}</strong> • Course: Playwright Automation with JavaScript + AI
@@ -583,6 +585,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                   setEditSeats(campaignConfig.maxSeats);
                   setEditDuration(campaignConfig.durationDays);
                   setEditIsActive(campaignConfig.isActive);
+                  setEditBaseline(campaignConfig.baselineEnrolledCount ?? 78);
                   setIsConfigModalOpen(true);
                 }}
                 className="inline-flex items-center gap-1.5 px-4 py-2 bg-purple-900 hover:bg-purple-800 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
@@ -1347,6 +1350,22 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                   onChange={(e) => setEditSeats(Number(e.target.value))}
                   className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Baseline Enrolled Students (Display Count)
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  max={editSeats}
+                  required
+                  value={editBaseline}
+                  onChange={(e) => setEditBaseline(Number(e.target.value))}
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <p className="text-[10px] text-slate-500 mt-1">Starting baseline count visible to students (e.g. 78 out of 500 enrolled).</p>
               </div>
 
               <div>

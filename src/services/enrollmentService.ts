@@ -324,7 +324,8 @@ export const enrollmentService = {
           r.id !== requestId
       ).length;
 
-      if (currentApprovedFoundingCount >= campaignConfig.maxSeats) {
+      const baseline = campaignConfig.baselineEnrolledCount !== undefined ? campaignConfig.baselineEnrolledCount : 78;
+      if (baseline + currentApprovedFoundingCount >= campaignConfig.maxSeats) {
         return {
           success: false,
           error: `Cannot approve: Founding 500 seats limit reached (${campaignConfig.maxSeats}/${campaignConfig.maxSeats}). Offer is sold out!`,
