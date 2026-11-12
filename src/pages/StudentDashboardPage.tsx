@@ -840,7 +840,7 @@ export const StudentDashboardPage: React.FC = () => {
                                   <span>
                                     {isExpired
                                       ? '30-Day Access Period Expired'
-                                      : 'Founding 100 • 30 Days Access'}
+                                      : 'Founding 500 • 30 Days Access'}
                                   </span>
                                 </div>
                                 <span

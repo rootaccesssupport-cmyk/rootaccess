@@ -55,10 +55,10 @@ function getLocalEnrollmentRequests(): EnrollmentRequest[] {
 }
 
 /**
- * Generates a unique, professional enrollment reference ID for the Founding 100 offer.
- * Example: FA-100-7X9K2
+ * Generates a unique, professional enrollment reference ID for the Founding 500 offer.
+ * Example: FA-500-7X9K2
  */
-export function generateEnrollmentId(prefix = 'FA-100'): string {
+export function generateEnrollmentId(prefix = 'FA-500'): string {
   const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
   let code = '';
   for (let i = 0; i < 5; i++) {
@@ -77,10 +77,11 @@ export const campaignService = {
   },
 
   /**
-   * Genuine database-backed live stats for Founding 100.
+   * Genuine database-backed live stats for Founding 500.
    * Starts at 0. Counts ONLY approved/verified students for playwright-automation under this campaign.
+   * Preserves historical Founding 100 records and counts them towards the 500 cap.
    */
-  async getFounding100Stats(): Promise<CampaignStats> {
+  async getFounding500Stats(): Promise<CampaignStats> {
     const config = this.getConfig();
     let requests: EnrollmentRequest[] = [];
 
@@ -106,10 +107,10 @@ export const campaignService = {
     }
 
     // Filter requests matching the campaign:
-    // Either campaign_tag === 'founding-100' or (no campaign_tag set and priced at 149 / playwright launch)
+    // Matches 'founding-500', historical 'founding-100', or untagged playwright requests with launch price 149
     const campaignRequests = requests.filter((r) => {
       if (r.campaign_tag) {
-        return r.campaign_tag === 'founding-100';
+        return r.campaign_tag === 'founding-500' || r.campaign_tag === 'founding-100';
       }
       // If legacy or direct request for playwright-automation
       return true;
@@ -169,6 +170,13 @@ export const campaignService = {
       activeStudentsCount,
       expiredStudentsCount,
     };
+  },
+
+  /**
+   * Backwards compatibility alias for getFounding500Stats.
+   */
+  async getFounding100Stats(): Promise<CampaignStats> {
+    return this.getFounding500Stats();
   },
 
   /**

@@ -51,19 +51,19 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
 
   useEffect(() => {
     if (isPlaywright && isOpen) {
-      campaignService.getFounding100Stats().then(setCampaignStats);
+      campaignService.getFounding500Stats().then(setCampaignStats);
     }
   }, [isPlaywright, isOpen]);
 
   if (!isOpen) return null;
 
-  const isFounding100Active = isPlaywright && !campaignStats?.isSoldOut;
-  const priceDetails = getCoursePriceDetails(courseSlug, { isFounding100: isFounding100Active });
+  const isFounding500Active = isPlaywright && !campaignStats?.isSoldOut;
+  const priceDetails = getCoursePriceDetails(courseSlug, { isFounding500: isFounding500Active });
 
   const userName = profile?.full_name || user?.user_metadata?.full_name || 'Student';
   const userEmail = user?.email || '';
 
-  const whatsAppUrl = isFounding100Active
+  const whatsAppUrl = isFounding500Active
     ? campaignService.getWhatsAppPaymentUrl({
         userName,
         userEmail,
@@ -103,10 +103,10 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
         courseTitle,
         upiReference: upiRef,
         studentNotes: notes,
-        campaignTag: isFounding100Active ? 'founding-100' : undefined,
-        enrollmentId: isFounding100Active ? enrollmentId : undefined,
-        amountPaid: isFounding100Active ? 149 : priceDetails.inr,
-        accessDurationDays: isFounding100Active ? 30 : undefined,
+        campaignTag: isFounding500Active ? 'founding-500' : undefined,
+        enrollmentId: isFounding500Active ? enrollmentId : undefined,
+        amountPaid: isFounding500Active ? 149 : priceDetails.inr,
+        accessDurationDays: isFounding500Active ? 30 : undefined,
       });
 
       if (res.success) {
@@ -128,7 +128,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
         {/* Top Header */}
         <div
           className={`p-6 relative text-white ${
-            isFounding100Active
+            isFounding500Active
               ? 'bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950'
               : 'bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900'
           }`}
@@ -142,10 +142,10 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
           </button>
 
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            {isFounding100Active ? (
+            {isFounding500Active ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-gradient-to-r from-amber-400 to-amber-300 text-slate-900 shadow-xs">
                 <Sparkles className="w-3.5 h-3.5 text-slate-900" />
-                <span>FOUNDING 100 STUDENTS • 30 DAYS ACCESS</span>
+                <span>FOUNDING 500 STUDENTS • 30 DAYS ACCESS</span>
               </span>
             ) : (
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400 text-slate-900">
@@ -157,7 +157,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
             {isPlaywright && campaignStats?.isSoldOut && (
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500 text-white">
                 <ShieldAlert className="w-3 h-3" />
-                <span>Founding 100 Sold Out</span>
+                <span>Founding 500 Sold Out</span>
               </span>
             )}
           </div>
@@ -166,8 +166,8 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
             {courseTitle}
           </h2>
           <p className="text-xs text-indigo-200 mt-1 leading-relaxed">
-            {isFounding100Active
-              ? 'First 100 verified students introductory launch offer. Get 30 days of complete hands-on course access for ₹149!'
+            {isFounding500Active
+              ? 'First 500 verified students introductory launch offer. Get 30 days of complete hands-on course access for ₹149!'
               : 'Complete your enrollment via UPI to get instant instructor verification and course access unlock.'}
           </p>
 
@@ -184,8 +184,8 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
         <div className="p-6 sm:p-7 space-y-6 max-h-[75vh] overflow-y-auto">
           {step === 'info' ? (
             <>
-              {/* Unique Enrollment ID Banner for Founding 100 */}
-              {isFounding100Active && (
+              {/* Unique Enrollment ID Banner for Founding 500 */}
+              {isFounding500Active && (
                 <div className="p-3.5 bg-purple-50/80 border border-purple-200 rounded-2xl flex items-center justify-between gap-3 text-xs">
                   <div>
                     <span className="text-[10px] uppercase font-bold text-purple-700 tracking-wider block">
@@ -224,7 +224,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
                 <p className="text-xs text-emerald-900 leading-relaxed">
                   Click the button below to message our instructor directly on WhatsApp at{' '}
                   <strong className="text-emerald-950 font-mono">{ENROLLMENT_PAYMENT_CONFIG.whatsappNumber}</strong>. You will receive the direct UPI ID / QR code to pay <strong>{priceDetails.formattedInr}</strong>.
-                  {isFounding100Active && (
+                  {isFounding500Active && (
                     <span className="block mt-1 font-medium text-purple-900">
                       Include Enrollment ID: <strong className="font-mono">{enrollmentId}</strong> in your message.
                     </span>
@@ -250,7 +250,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
                   <span>Step 2: Submit Your Payment Details for Instant Approval</span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  After sending payment or texting on WhatsApp, record your details here so the admin can verify your payment and activate your {isFounding100Active ? '30-day course access' : 'course'} immediately.
+                  After sending payment or texting on WhatsApp, record your details here so the admin can verify your payment and activate your {isFounding500Active ? '30-day course access' : 'course'} immediately.
                 </p>
 
                 {errorMsg && (
@@ -294,10 +294,10 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
                     <span className="text-slate-500">Registered Email:</span>
                     <strong className="text-slate-900 font-mono">{userEmail}</strong>
                   </div>
-                  {isFounding100Active && (
+                  {isFounding500Active && (
                     <div className="flex items-center justify-between">
                       <span className="text-slate-500">Campaign &amp; Access:</span>
-                      <strong className="text-purple-700 font-semibold">Founding 100 • 30 Days Full Access</strong>
+                      <strong className="text-purple-700 font-semibold">Founding 500 • 30 Days Full Access</strong>
                     </div>
                   )}
                 </div>
@@ -325,12 +325,12 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
 
               <div>
                 <h3 className="text-lg font-bold text-slate-900">
-                  {isFounding100Active ? 'Founding 100 Enrollment Logged!' : 'Enrollment Request Received!'}
+                  {isFounding500Active ? 'Founding 500 Enrollment Logged!' : 'Enrollment Request Received!'}
                 </h3>
                 <p className="text-xs text-slate-600 mt-1 max-w-sm mx-auto leading-relaxed">
                   Your request to enroll in <strong>{courseTitle}</strong> has been logged. Admin will verify your WhatsApp / UPI payment and activate your access.
                 </p>
-                {isFounding100Active && (
+                {isFounding500Active && (
                   <p className="text-xs font-mono font-bold text-purple-700 mt-2 bg-purple-50 inline-block px-3 py-1 rounded-lg border border-purple-200">
                     Enrollment ID: {enrollmentId}
                   </p>

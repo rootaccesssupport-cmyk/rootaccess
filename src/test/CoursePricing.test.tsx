@@ -4,8 +4,8 @@ import { getCoursePriceDetails } from '../data/enrollmentPaymentConfig';
 import { CoursePricingDisplay } from '../components/common/CoursePricingDisplay';
 
 describe('Course Pricing Configuration & Calculations', () => {
-  it('Playwright Automation has exact ₹149 Founding 100 launch price and ₹649 standard price', () => {
-    // 1. With Founding 100 active
+  it('Playwright Automation has exact ₹149 Founding 500 launch price and ₹649 standard price', () => {
+    // 1. With Founding 500 active
     const details = getCoursePriceDetails('playwright-automation');
     expect(details.originalInr).toBe(1599);
     expect(details.inr).toBe(149);
@@ -16,8 +16,8 @@ describe('Course Pricing Configuration & Calculations', () => {
     expect(details.formattedSavings).toBe('₹1,450');
     expect(details.isLaunchOffer).toBe(true);
 
-    // 2. Standard pricing when Founding 100 is excluded or sold out
-    const standardDetails = getCoursePriceDetails('playwright-automation', { isFounding100: false });
+    // 2. Standard pricing when Founding 500 is excluded or sold out
+    const standardDetails = getCoursePriceDetails('playwright-automation', { isFounding500: false });
     expect(standardDetails.originalInr).toBe(1599);
     expect(standardDetails.inr).toBe(649);
     expect(standardDetails.savings).toBe(950);

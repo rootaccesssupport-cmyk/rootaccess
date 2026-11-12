@@ -23,7 +23,7 @@ export const ENROLLMENT_PAYMENT_CONFIG = {
   pricing: {
     'manual-qa-fundamentals': { inr: 299, originalInr: 599, label: 'Manual Testing', isLaunchOffer: true },
     'manual-testing': { inr: 299, originalInr: 599, label: 'Manual Testing', isLaunchOffer: true },
-    'playwright-automation': { inr: 149, originalInr: 1599, label: 'Playwright Automation with JavaScript + AI (Founding 100)', isLaunchOffer: true },
+    'playwright-automation': { inr: 149, originalInr: 1599, label: 'Playwright Automation with JavaScript + AI (Founding 500)', isLaunchOffer: true },
     'sql-for-qa-engineers': { inr: 299, originalInr: 599, label: 'SQL', isLaunchOffer: true },
     'api-testing-postman': { inr: 299, originalInr: 599, label: 'API Testing', isLaunchOffer: true },
     'ai-prompt-engineering': { inr: 299, originalInr: 599, label: 'AI Fundamentals & Prompt Engineering', isLaunchOffer: true },
@@ -52,7 +52,7 @@ import { getStoredCampaignConfig } from './campaignConfig';
  */
 export const getCoursePriceDetails = (
   courseSlug: string,
-  options?: { isFounding100?: boolean }
+  options?: { isFounding100?: boolean; isFounding500?: boolean }
 ): CoursePriceDetails => {
   let priceInfo: CoursePriceInfo = ENROLLMENT_PAYMENT_CONFIG.pricing[courseSlug] || {
     inr: 299,
@@ -62,7 +62,7 @@ export const getCoursePriceDetails = (
   };
 
   if (courseSlug === 'playwright-automation') {
-    if (options?.isFounding100 === false) {
+    if (options?.isFounding500 === false || options?.isFounding100 === false) {
       priceInfo = {
         inr: 649,
         originalInr: 1599,

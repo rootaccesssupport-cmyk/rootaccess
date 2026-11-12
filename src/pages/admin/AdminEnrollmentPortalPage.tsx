@@ -49,8 +49,8 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
     profile?.role === 'admin' ||
     user?.email === 'pavankalyan.d@gmail.com';
 
-  // Navigation tab: 'founding100' | 'requests' | 'tools'
-  const [adminMainTab, setAdminMainTab] = useState<'founding100' | 'requests' | 'tools'>('founding100');
+  // Navigation tab: 'founding500' | 'requests' | 'tools'
+  const [adminMainTab, setAdminMainTab] = useState<'founding500' | 'requests' | 'tools'>('founding500');
 
   const [requests, setRequests] = useState<EnrollmentRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +67,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
   const [editDuration, setEditDuration] = useState(campaignConfig.durationDays);
   const [editIsActive, setEditIsActive] = useState(campaignConfig.isActive);
 
-  // Founding 100 table filters
+  // Founding 500 table filters
   const [foundingFilter, setFoundingFilter] = useState<'all' | 'pending' | 'active' | 'expired' | 'rejected'>('all');
   const [foundingSearch, setFoundingSearch] = useState('');
 
@@ -101,7 +101,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
     try {
       const data = await enrollmentService.getAllRequests();
       setRequests(data);
-      const stats = await campaignService.getFounding100Stats();
+      const stats = await campaignService.getFounding500Stats();
       setCampaignStats(stats);
       setCampaignConfig(getStoredCampaignConfig());
     } catch (err: any) {
@@ -286,10 +286,10 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
     loadRequests();
   };
 
-  // Filter for Founding 100 students
+  // Filter for Founding 500 students (including historical Founding 100 entries)
   const foundingRequests = requests.filter((r) => {
     if (r.course_slug !== 'playwright-automation') return false;
-    return r.campaign_tag === 'founding-100' || r.amount_paid === 149 || !r.campaign_tag;
+    return r.campaign_tag === 'founding-500' || r.campaign_tag === 'founding-100' || r.amount_paid === 149 || !r.campaign_tag;
   });
 
   const nowMs = Date.now();
@@ -352,7 +352,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                 </span>
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 shadow-xs">
                   <Sparkles className="w-3.5 h-3.5 text-slate-950" />
-                  <span>FOUNDING 100 CAMPAIGN ACTIVE</span>
+                  <span>FOUNDING 500 CAMPAIGN ACTIVE</span>
                 </span>
                 {pendingCount > 0 && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-400 text-slate-900 animate-pulse">
@@ -362,10 +362,10 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                 )}
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                Playwright Founding 100 &amp; Enrollment Management
+                Playwright Founding 500 &amp; Enrollment Management
               </h1>
               <p className="text-xs sm:text-sm text-purple-200 max-w-2xl leading-relaxed">
-                Review WhatsApp / UPI payment requests (+91 9741243048), verify ₹149 Founding 100 student enrollments, trigger 30-day access timers, and manage campaign limits.
+                Review WhatsApp / UPI payment requests (+91 9741243048), verify ₹149 Founding 500 student enrollments, trigger 30-day access timers, and manage campaign limits.
               </p>
             </div>
 
@@ -407,17 +407,17 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
         {/* Admin Portal Tab Switcher */}
         <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto no-scrollbar">
           <button
-            onClick={() => setAdminMainTab('founding100')}
+            onClick={() => setAdminMainTab('founding500')}
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              adminMainTab === 'founding100'
+              adminMainTab === 'founding500'
                 ? 'bg-purple-900 text-white shadow-sm'
                 : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>FOUNDING 100 CAMPAIGN</span>
+            <span>FOUNDING 500 CAMPAIGN</span>
             <span className="px-2 py-0.5 rounded-full text-[10px] bg-amber-400 text-slate-950 font-black">
-              {campaignStats ? `${campaignStats.enrolledCount}/${campaignStats.totalSeats}` : '0/100'}
+              {campaignStats ? `${campaignStats.enrolledCount}/${campaignStats.totalSeats}` : '0/500'}
             </span>
           </button>
 
@@ -451,8 +451,8 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
           </button>
         </div>
 
-        {/* TAB 1: FOUNDING 100 CAMPAIGN */}
-        {adminMainTab === 'founding100' && (
+        {/* TAB 1: FOUNDING 500 CAMPAIGN */}
+        {adminMainTab === 'founding500' && (
           <div className="space-y-6 animate-fadeIn">
             {/* Campaign Metrics Strip */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -474,7 +474,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-mono">
-                    {campaignStats ? `${campaignStats.enrolledCount} / ${campaignStats.totalSeats}` : '0 / 100'}
+                    {campaignStats ? `${campaignStats.enrolledCount} / ${campaignStats.totalSeats}` : '0 / 500'}
                   </span>
                   <span className="text-xs text-slate-500 font-medium">Students</span>
                 </div>
@@ -489,7 +489,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                           100,
                           Math.round(
                             ((campaignStats?.enrolledCount || 0) /
-                              (campaignStats?.totalSeats || 100)) *
+                              (campaignStats?.totalSeats || 500)) *
                               100
                           )
                         )}%`,
@@ -497,7 +497,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                     />
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1.5 flex justify-between">
-                    <span>{campaignStats?.remainingSeats ?? 100} seats available</span>
+                    <span>{campaignStats?.remainingSeats ?? 500} seats available</span>
                     <span>Starts at 0</span>
                   </p>
                 </div>
@@ -569,7 +569,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-purple-950">
-                    Founding 100 Settings: ₹{campaignConfig.launchPriceInr} • Max {campaignConfig.maxSeats} Students • {campaignConfig.durationDays} Days Access
+                    Founding 500 Settings: ₹{campaignConfig.launchPriceInr} • Max {campaignConfig.maxSeats} Students • {campaignConfig.durationDays} Days Access
                   </h3>
                   <p className="text-xs text-purple-800">
                     Status: <strong>{campaignConfig.isActive ? 'Active Campaign' : 'Paused'}</strong> • Course: Playwright Automation with JavaScript + AI
@@ -592,15 +592,15 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Table of Founding 100 Students */}
+            {/* Table of Founding 500 Students */}
             <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-2xs space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-bold text-slate-900">
-                    Founding 100 Enrolments &amp; Access Expiry ({foundingRequests.length})
+                    Founding 500 Enrolments &amp; Access Expiry ({foundingRequests.length})
                   </h2>
                   <p className="text-xs text-slate-500">
-                    Live list of learners who requested or were approved for the Founding 100 Launch Offer
+                    Live list of learners who requested or were approved for the Founding 500 Launch Offer
                   </p>
                 </div>
 
@@ -630,7 +630,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                   type="text"
                   value={foundingSearch}
                   onChange={(e) => setFoundingSearch(e.target.value)}
-                  placeholder="Search by student name, email, Enrollment ID (FA-100-...), or UTR..."
+                  placeholder="Search by student name, email, Enrollment ID (FA-500-...), or UTR..."
                   className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
               </div>
@@ -639,14 +639,14 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
               {loading ? (
                 <div className="py-12 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
-                  <span>Loading Founding 100 records...</span>
+                  <span>Loading Founding 500 records...</span>
                 </div>
               ) : filteredFoundingRequests.length === 0 ? (
                 <div className="py-12 text-center text-slate-500 text-xs bg-slate-50 rounded-2xl border border-dashed border-slate-200 space-y-1">
-                  <p className="font-semibold text-slate-700">No Founding 100 records found</p>
+                  <p className="font-semibold text-slate-700">No Founding 500 records found</p>
                   <p className="text-slate-400">
                     {foundingFilter === 'pending'
-                      ? 'No pending Founding 100 payment requests.'
+                      ? 'No pending Founding 500 payment requests.'
                       : 'No records matched the selected filter.'}
                   </p>
                 </div>
@@ -1196,7 +1196,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                 <>
                   <div className="flex justify-between text-purple-900 font-medium">
                     <span>Campaign &amp; Duration:</span>
-                    <span className="font-bold">Founding 100 • 30 Days Full Access</span>
+                    <span className="font-bold">Founding 500 • 30 Days Full Access</span>
                   </div>
                   <div className="flex justify-between text-slate-700">
                     <span>Introductory Price:</span>
@@ -1217,14 +1217,14 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
               )}
             </div>
 
-            {/* Warning if Founding 100 seats are full */}
+            {/* Warning if Founding 500 seats are full */}
             {approvingRequest.course_slug === 'playwright-automation' &&
               campaignStats &&
               campaignStats.enrolledCount >= campaignStats.totalSeats && (
                 <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block font-bold">Founding 100 Limit Reached ({campaignStats.totalSeats}/{campaignStats.totalSeats})</strong>
+                    <strong className="block font-bold">Founding 500 Limit Reached ({campaignStats.totalSeats}/{campaignStats.totalSeats})</strong>
                     <span>All seats for this campaign have been claimed. You cannot approve further students at the ₹149 Founding rate.</span>
                   </div>
                 </div>
@@ -1313,7 +1313,7 @@ export const AdminEnrollmentPortalPage: React.FC = () => {
                 <span>Campaign Settings</span>
               </span>
               <h2 className="text-xl font-bold text-slate-900">
-                Founding 100 Parameters
+                Founding 500 Parameters
               </h2>
               <p className="text-xs text-slate-500">
                 Update introductory pricing, seat cap, access duration, and campaign status.

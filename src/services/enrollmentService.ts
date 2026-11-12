@@ -14,7 +14,7 @@ export interface EnrollmentRequest {
   requested_at: string;
   reviewed_at?: string;
   reviewed_by?: string;
-  // Founding 100 Campaign and Access Tracking
+  // Founding 500 Campaign and Access Tracking
   campaign_tag?: string;
   enrollment_id?: string;
   amount_paid?: number;
@@ -43,7 +43,29 @@ const LOCAL_STORAGE_ACCESS_PREFIX = 'rootaccess_course_access_';
 function getLocalRequests(): EnrollmentRequest[] {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_REQUESTS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const parsed: EnrollmentRequest[] = JSON.parse(raw);
+    let mutated = false;
+    const sanitized = parsed.map((req) => {
+      const r = { ...req };
+      if (r.campaign_tag === 'founding-100') {
+        r.campaign_tag = 'founding-500';
+        mutated = true;
+      }
+      if (r.enrollment_id && r.enrollment_id.startsWith('FA-100-')) {
+        r.enrollment_id = r.enrollment_id.replace('FA-100-', 'FA-500-');
+        mutated = true;
+      }
+      if (r.student_notes && r.student_notes.includes('Founding 100')) {
+        r.student_notes = r.student_notes.replace(/Founding 100/g, 'Founding 500');
+        mutated = true;
+      }
+      return r;
+    });
+    if (mutated) {
+      saveLocalRequests(sanitized);
+    }
+    return sanitized;
   } catch {
     return [];
   }
@@ -60,7 +82,24 @@ function saveLocalRequests(reqs: EnrollmentRequest[]) {
 function getLocalStudentAccess(userId: string): Record<string, StudentCourseAccess> {
   try {
     const raw = localStorage.getItem(`${LOCAL_STORAGE_ACCESS_PREFIX}${userId}`);
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const parsed: Record<string, StudentCourseAccess> = JSON.parse(raw);
+    let mutated = false;
+    for (const key of Object.keys(parsed)) {
+      const item = parsed[key];
+      if (item.campaignTag === 'founding-100') {
+        item.campaignTag = 'founding-500';
+        mutated = true;
+      }
+      if (item.enrollmentId && item.enrollmentId.startsWith('FA-100-')) {
+        item.enrollmentId = item.enrollmentId.replace('FA-100-', 'FA-500-');
+        mutated = true;
+      }
+    }
+    if (mutated) {
+      saveLocalStudentAccess(userId, parsed);
+    }
+    return parsed;
   } catch {
     return {};
   }
@@ -93,26 +132,28 @@ export const enrollmentService = {
 
     const campaignTag =
       params.campaignTag ||
-      (normalizedSlug === 'playwright-automation' ? 'founding-100' : undefined);
+      (normalizedSlug === 'playwright-automation' ? 'founding-500' : undefined);
+
+    const isFounding = campaignTag === 'founding-500' || campaignTag === 'founding-100';
 
     const amountPaid =
       params.amountPaid !== undefined
         ? params.amountPaid
-        : campaignTag === 'founding-100'
+        : isFounding
         ? 149
         : undefined;
 
     const accessDurationDays =
       params.accessDurationDays !== undefined
         ? params.accessDurationDays
-        : campaignTag === 'founding-100'
+        : isFounding
         ? 30
         : undefined;
 
     const enrollmentId =
       params.enrollmentId ||
-      (campaignTag === 'founding-100'
-        ? `FA-100-${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+      (isFounding
+        ? `FA-500-${Math.random().toString(36).substring(2, 7).toUpperCase()}`
         : undefined);
 
     const newRequest: EnrollmentRequest = {
@@ -267,25 +308,26 @@ export const enrollmentService = {
     const courseToGrant = target.course_slug;
     const targetUserId = target.user_id;
     const campaignConfig = getStoredCampaignConfig();
-    const isFounding100 =
+    const isFoundingCampaign =
+      target.campaign_tag === 'founding-500' ||
       target.campaign_tag === 'founding-100' ||
       (courseToGrant === 'playwright-automation' && (target.amount_paid === 149 || !target.campaign_tag));
 
-    // Atomic seat check for Founding 100 Campaign
-    if (isFounding100) {
+    // Atomic seat check for Founding 500 Campaign
+    if (isFoundingCampaign) {
       const allCurrent = await this.getAllRequests();
       const currentApprovedFoundingCount = allCurrent.filter(
         (r) =>
           r.status === 'approved' &&
           r.course_slug === 'playwright-automation' &&
-          (r.campaign_tag === 'founding-100' || r.amount_paid === 149 || !r.campaign_tag) &&
+          (r.campaign_tag === 'founding-500' || r.campaign_tag === 'founding-100' || r.amount_paid === 149 || !r.campaign_tag) &&
           r.id !== requestId
       ).length;
 
       if (currentApprovedFoundingCount >= campaignConfig.maxSeats) {
         return {
           success: false,
-          error: `Cannot approve: Founding 100 seats limit reached (${campaignConfig.maxSeats}/${campaignConfig.maxSeats}). Offer is sold out!`,
+          error: `Cannot approve: Founding 500 seats limit reached (${campaignConfig.maxSeats}/${campaignConfig.maxSeats}). Offer is sold out!`,
         };
       }
     }
@@ -296,11 +338,11 @@ export const enrollmentService = {
     // Compute activation and 30-day expiry
     const now = new Date();
     const activatedAt = now.toISOString();
-    const durationDays = target.access_duration_days || (isFounding100 ? campaignConfig.durationDays : 30);
+    const durationDays = target.access_duration_days || (isFoundingCampaign ? campaignConfig.durationDays : 30);
     const expiresAt = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000).toISOString();
-    const campaignTag = isFounding100 ? 'founding-100' : target.campaign_tag;
-    const amountPaid = target.amount_paid || (isFounding100 ? campaignConfig.launchPriceInr : undefined);
-    const enrollmentId = target.enrollment_id || (isFounding100 ? `FA-100-${Math.random().toString(36).substring(2, 7).toUpperCase()}` : undefined);
+    const campaignTag = target.campaign_tag || (isFoundingCampaign ? 'founding-500' : undefined);
+    const amountPaid = target.amount_paid || (isFoundingCampaign ? campaignConfig.launchPriceInr : undefined);
+    const enrollmentId = target.enrollment_id || (isFoundingCampaign ? `FA-500-${Math.random().toString(36).substring(2, 7).toUpperCase()}` : undefined);
 
     // 2. Mark request as approved
     const updatedLocal = local.map((r) =>

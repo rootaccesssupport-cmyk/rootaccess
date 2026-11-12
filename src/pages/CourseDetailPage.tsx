@@ -84,7 +84,7 @@ export const CourseDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (course.slug === 'playwright-automation') {
-      campaignService.getFounding100Stats().then(setCampaignStats);
+      campaignService.getFounding500Stats().then(setCampaignStats);
     }
   }, [course.slug]);
 
@@ -177,7 +177,7 @@ export const CourseDetailPage: React.FC = () => {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
-        {/* Playwright Founding 100 Launch Offer Banner */}
+        {/* Playwright Founding 500 Launch Offer Banner */}
         {course.slug === 'playwright-automation' && (
           <div className="bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white border border-purple-800/40 shadow-xl relative overflow-hidden animate-fadeIn">
             <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
@@ -186,11 +186,14 @@ export const CourseDetailPage: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 shadow-sm">
                     <Sparkles className="w-3.5 h-3.5 text-slate-950" />
-                    <span>FOUNDING 100 STUDENTS LAUNCH OFFER</span>
+                    <span>FOUNDING 500 STUDENTS</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    <span>₹149 ONLY</span>
                   </span>
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-800/60 text-purple-200 border border-purple-700/50">
                     <Clock className="w-3 h-3 text-purple-300" />
-                    <span>30 Days Full Access</span>
+                    <span>30 DAYS COURSE ACCESS</span>
                   </span>
                   {campaignStats?.isSoldOut && (
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500 text-white">
@@ -200,10 +203,10 @@ export const CourseDetailPage: React.FC = () => {
                 </div>
 
                 <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                  First 100 Students • Special ₹149 Introductory Access
+                  First 500 Students • Special ₹149 Introductory Access
                 </h2>
                 <p className="text-xs sm:text-sm text-purple-200 leading-relaxed">
-                  Master real-world Playwright browser automation in pure JavaScript with 20 daily hands-on milestones, simulated locator labs, and AI tooling. Offer limited to the first 100 verified paying learners with 30-day course access.
+                  Master real-world Playwright browser automation in pure JavaScript with 20 daily hands-on milestones, simulated locator labs, and AI tooling. Offer limited to the first 500 verified paying learners with 30-day course access.
                 </p>
 
                 <div className="flex flex-wrap items-baseline gap-3 pt-1">
@@ -220,9 +223,13 @@ export const CourseDetailPage: React.FC = () => {
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/15 w-full lg:w-80 shrink-0 space-y-4">
                 <div>
                   <div className="flex items-center justify-between text-xs font-bold text-slate-200 mb-1.5">
-                    <span>Verified Founding Enrolments</span>
+                    <span>
+                      {(campaignStats?.enrolledCount || 0) > 0
+                        ? `${campaignStats?.enrolledCount} / ${campaignStats?.totalSeats || 500} STUDENTS ENROLLED`
+                        : '500 LAUNCH SPOTS AVAILABLE'}
+                    </span>
                     <span className="text-amber-300 font-mono text-sm">
-                      {campaignStats ? `${campaignStats.enrolledCount} / ${campaignStats.totalSeats}` : '0 / 100'}
+                      {campaignStats ? `${campaignStats.enrolledCount}/${campaignStats.totalSeats}` : '0/500'}
                     </span>
                   </div>
                   <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden border border-white/10">
@@ -237,7 +244,7 @@ export const CourseDetailPage: React.FC = () => {
                           100,
                           Math.round(
                             ((campaignStats?.enrolledCount || 0) /
-                              (campaignStats?.totalSeats || 100)) *
+                              (campaignStats?.totalSeats || 500)) *
                               100
                           )
                         )}%`,
@@ -247,8 +254,10 @@ export const CourseDetailPage: React.FC = () => {
                   <div className="flex items-center justify-between text-[11px] text-purple-200 mt-1.5 font-medium">
                     <span>
                       {campaignStats?.isSoldOut
-                        ? 'Offer Sold Out!'
-                        : `${campaignStats?.remainingSeats ?? 100} Seats Remaining`}
+                        ? 'FOUNDING 500 OFFER SOLD OUT'
+                        : (campaignStats?.enrolledCount || 0) > 0
+                        ? `${campaignStats?.remainingSeats} LAUNCH SEATS REMAINING`
+                        : 'YOUR CHANCE TO JOIN THE FOUNDING 500'}
                     </span>
                     <span>Starts at 0 • Live Verified</span>
                   </div>
@@ -281,7 +290,7 @@ export const CourseDetailPage: React.FC = () => {
                 ) : campaignStats?.isSoldOut ? (
                   <div className="space-y-2">
                     <div className="p-2.5 bg-rose-500/20 border border-rose-400/30 rounded-xl text-center">
-                      <p className="text-xs font-bold text-rose-200">Founding 100 Offer Sold Out</p>
+                      <p className="text-xs font-bold text-rose-200">FOUNDING 500 OFFER SOLD OUT</p>
                       <p className="text-[11px] text-slate-300 mt-0.5">
                         Regular launch enrollment is available at ₹649.
                       </p>
@@ -305,7 +314,7 @@ export const CourseDetailPage: React.FC = () => {
                     className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
                   >
                     <Sparkles className="w-4 h-4 text-slate-950" />
-                    <span>CLAIM FOUNDING SEAT — ₹149</span>
+                    <span>BE AMONG THE FIRST 500 LEARNERS — ₹149</span>
                   </button>
                 )}
               </div>
@@ -418,7 +427,7 @@ export const CourseDetailPage: React.FC = () => {
                     <div>
                       <p className="font-semibold">
                         {course.slug === 'playwright-automation'
-                          ? 'Founding 100 Enrollment (30 Days)'
+                          ? 'Founding 500 Enrollment (30 Days)'
                           : 'Full Track Enrollment (UPI)'}
                       </p>
                       <p className="text-[11px] text-amber-800 mt-0.5">
@@ -479,7 +488,7 @@ export const CourseDetailPage: React.FC = () => {
                   {course.slug === 'playwright-automation' && (
                     <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-0.5">
                       <span className="text-[10px] uppercase font-bold text-emerald-800 tracking-wider block">
-                        Active Access (Founding 100)
+                        Active Access (Founding 500)
                       </span>
                       <span className="text-xs font-mono font-semibold text-emerald-700">
                         {accessDetails.formattedCountdown}

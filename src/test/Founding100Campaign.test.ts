@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
+  DEFAULT_FOUNDING_500_CONFIG,
   DEFAULT_FOUNDING_100_CONFIG,
   getStoredCampaignConfig,
   saveStoredCampaignConfig,
@@ -12,41 +13,57 @@ import {
 import { enrollmentService, type EnrollmentRequest } from '../services/enrollmentService';
 import { getCoursePriceDetails } from '../data/enrollmentPaymentConfig';
 
-describe('Founding 100 Students Launch Offer Campaign', () => {
+describe('Founding 500 Students Launch Offer Campaign', () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
   describe('Campaign Configuration', () => {
-    it('should have default Founding 100 parameters', () => {
-      expect(DEFAULT_FOUNDING_100_CONFIG.id).toBe('playwright-founding-100');
-      expect(DEFAULT_FOUNDING_100_CONFIG.courseSlug).toBe('playwright-automation');
-      expect(DEFAULT_FOUNDING_100_CONFIG.launchPriceInr).toBe(149);
-      expect(DEFAULT_FOUNDING_100_CONFIG.regularPriceInr).toBe(649);
-      expect(DEFAULT_FOUNDING_100_CONFIG.originalPriceInr).toBe(1599);
-      expect(DEFAULT_FOUNDING_100_CONFIG.maxSeats).toBe(100);
-      expect(DEFAULT_FOUNDING_100_CONFIG.durationDays).toBe(30);
-      expect(DEFAULT_FOUNDING_100_CONFIG.isActive).toBe(true);
+    it('should have default Founding 500 parameters', () => {
+      expect(DEFAULT_FOUNDING_500_CONFIG.id).toBe('playwright-founding-500');
+      expect(DEFAULT_FOUNDING_500_CONFIG.campaignName).toBe('FOUNDING 500 STUDENTS');
+      expect(DEFAULT_FOUNDING_500_CONFIG.courseSlug).toBe('playwright-automation');
+      expect(DEFAULT_FOUNDING_500_CONFIG.launchPriceInr).toBe(149);
+      expect(DEFAULT_FOUNDING_500_CONFIG.regularPriceInr).toBe(649);
+      expect(DEFAULT_FOUNDING_500_CONFIG.originalPriceInr).toBe(1599);
+      expect(DEFAULT_FOUNDING_500_CONFIG.maxSeats).toBe(500);
+      expect(DEFAULT_FOUNDING_500_CONFIG.durationDays).toBe(30);
+      expect(DEFAULT_FOUNDING_500_CONFIG.isActive).toBe(true);
+    });
+
+    it('should provide backwards-compatible alias DEFAULT_FOUNDING_100_CONFIG', () => {
+      expect(DEFAULT_FOUNDING_100_CONFIG.maxSeats).toBe(500);
+    });
+
+    it('should automatically migrate legacy 100-seat localStorage config to 500 seats', () => {
+      localStorage.setItem('rootaccess_campaign_config_playwright', JSON.stringify({
+        id: 'playwright-founding-100',
+        maxSeats: 100,
+        campaignName: 'FOUNDING 100 STUDENTS',
+      }));
+      const loaded = getStoredCampaignConfig();
+      expect(loaded.maxSeats).toBe(500);
+      expect(loaded.campaignName).toBe('FOUNDING 500 STUDENTS');
     });
 
     it('should persist and load modified campaign settings', () => {
       const customConfig: Partial<LaunchCampaignConfig> = {
         launchPriceInr: 199,
-        maxSeats: 50,
+        maxSeats: 450,
       };
       saveStoredCampaignConfig(customConfig);
       const loaded = getStoredCampaignConfig();
       expect(loaded.launchPriceInr).toBe(199);
-      expect(loaded.maxSeats).toBe(50);
+      expect(loaded.maxSeats).toBe(450);
     });
   });
 
   describe('Campaign Service & Utilities', () => {
-    it('should generate unique enrollment IDs prefixed with FA-100-', () => {
+    it('should generate unique enrollment IDs prefixed with FA-500-', () => {
       const id1 = generateEnrollmentId();
       const id2 = generateEnrollmentId();
-      expect(id1).toMatch(/^FA-100-[A-Z0-9]{5}$/);
-      expect(id2).toMatch(/^FA-100-[A-Z0-9]{5}$/);
+      expect(id1).toMatch(/^FA-500-[A-Z0-9]{5}$/);
+      expect(id2).toMatch(/^FA-500-[A-Z0-9]{5}$/);
       expect(id1).not.toBe(id2);
     });
 
@@ -54,10 +71,10 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
       const url = campaignService.getWhatsAppPaymentUrl({
         userName: 'Pavan Tester',
         userEmail: 'pavan@test.com',
-        enrollmentId: 'FA-100-TEST1',
+        enrollmentId: 'FA-500-TEST1',
       });
       expect(url).toContain('https://wa.me/919741243048');
-      expect(url).toContain('FA-100-TEST1');
+      expect(url).toContain('FA-500-TEST1');
       expect(url).toContain('149');
       expect(url).toContain('Playwright%20Automation');
     });
@@ -89,13 +106,14 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
 
   describe('Live Database-backed Seat Counter', () => {
     it('should start at 0 when there are no approved enrollments', async () => {
-      const stats = await campaignService.getFounding100Stats();
+      const stats = await campaignService.getFounding500Stats();
       expect(stats.enrolledCount).toBe(0);
-      expect(stats.remainingSeats).toBe(100);
+      expect(stats.remainingSeats).toBe(500);
+      expect(stats.totalSeats).toBe(500);
       expect(stats.isSoldOut).toBe(false);
     });
 
-    it('should count only approved enrollments and ignore pending or rejected ones', async () => {
+    it('should count only approved enrollments and preserve historical founding-100 entries', async () => {
       const mockRequests: EnrollmentRequest[] = [
         {
           id: 'req-1',
@@ -106,7 +124,7 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
           course_title: 'Playwright Automation',
           upi_reference: 'UTR111',
           amount_paid: 149,
-          campaign_tag: 'founding-100',
+          campaign_tag: 'founding-500',
           status: 'pending',
           requested_at: new Date().toISOString(),
         },
@@ -119,7 +137,7 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
           course_title: 'Playwright Automation',
           upi_reference: 'UTR222',
           amount_paid: 149,
-          campaign_tag: 'founding-100',
+          campaign_tag: 'founding-100', // Historical record preserved!
           status: 'approved',
           requested_at: new Date().toISOString(),
         },
@@ -132,7 +150,7 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
           course_title: 'Playwright Automation',
           upi_reference: 'UTR333',
           amount_paid: 149,
-          campaign_tag: 'founding-100',
+          campaign_tag: 'founding-500',
           status: 'rejected',
           requested_at: new Date().toISOString(),
         },
@@ -140,14 +158,14 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
 
       localStorage.setItem('rootaccess_enrollment_requests', JSON.stringify(mockRequests));
 
-      const stats = await campaignService.getFounding100Stats();
+      const stats = await campaignService.getFounding500Stats();
       expect(stats.enrolledCount).toBe(1);
-      expect(stats.remainingSeats).toBe(99);
+      expect(stats.remainingSeats).toBe(499);
       expect(stats.isSoldOut).toBe(false);
     });
 
-    it('should mark campaign as sold out when 100 seats are filled', async () => {
-      const mockApproved: EnrollmentRequest[] = Array.from({ length: 100 }, (_, i) => ({
+    it('should mark campaign as sold out when 500 seats are filled', async () => {
+      const mockApproved: EnrollmentRequest[] = Array.from({ length: 500 }, (_, i) => ({
         id: `req-${i}`,
         user_id: `user-${i}`,
         user_email: `user${i}@example.com`,
@@ -156,15 +174,15 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
         course_title: 'Playwright Automation',
         upi_reference: `UTR${i}`,
         amount_paid: 149,
-        campaign_tag: 'founding-100',
+        campaign_tag: i < 50 ? 'founding-100' : 'founding-500',
         status: 'approved' as const,
         requested_at: new Date().toISOString(),
       }));
 
       localStorage.setItem('rootaccess_enrollment_requests', JSON.stringify(mockApproved));
 
-      const stats = await campaignService.getFounding100Stats();
-      expect(stats.enrolledCount).toBe(100);
+      const stats = await campaignService.getFounding500Stats();
+      expect(stats.enrolledCount).toBe(500);
       expect(stats.remainingSeats).toBe(0);
       expect(stats.isSoldOut).toBe(true);
     });
@@ -180,9 +198,9 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
         courseSlug: 'playwright-automation',
         courseTitle: 'Playwright Automation',
         upiReference: 'UTR998877',
-        studentNotes: 'Founding 100 student',
-        campaignTag: 'founding-100',
-        enrollmentId: 'FA-100-TESTX',
+        studentNotes: 'Founding 500 student',
+        campaignTag: 'founding-500',
+        enrollmentId: 'FA-500-TESTX',
         amountPaid: 149,
         accessDurationDays: 30,
       });
@@ -213,9 +231,9 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
       expect(isActive).toBe(true);
     });
 
-    it('should prevent approving more than maxSeats (100) students for the campaign', async () => {
-      // Fill 100 seats
-      const mockApproved: EnrollmentRequest[] = Array.from({ length: 100 }, (_, i) => ({
+    it('should prevent approving more than maxSeats (500) students for the campaign', async () => {
+      // Fill 500 seats
+      const mockApproved: EnrollmentRequest[] = Array.from({ length: 500 }, (_, i) => ({
         id: `seat-${i}`,
         user_id: `student-${i}`,
         user_email: `student${i}@example.com`,
@@ -224,37 +242,37 @@ describe('Founding 100 Students Launch Offer Campaign', () => {
         course_title: 'Playwright Automation',
         upi_reference: `UTR${i}`,
         amount_paid: 149,
-        campaign_tag: 'founding-100',
+        campaign_tag: 'founding-500',
         status: 'approved' as const,
         requested_at: new Date().toISOString(),
       }));
 
-      // Add 101th pending request
+      // Add 501st pending request
       const pendingReq: EnrollmentRequest = {
-        id: 'seat-101',
-        user_id: 'student-101',
-        user_email: 'student101@example.com',
-        user_name: 'Student 101',
+        id: 'seat-501',
+        user_id: 'student-501',
+        user_email: 'student501@example.com',
+        user_name: 'Student 501',
         course_slug: 'playwright-automation',
         course_title: 'Playwright Automation',
-        upi_reference: 'UTR101',
+        upi_reference: 'UTR501',
         amount_paid: 149,
-        campaign_tag: 'founding-100',
+        campaign_tag: 'founding-500',
         status: 'pending',
         requested_at: new Date().toISOString(),
       };
 
       localStorage.setItem('rootaccess_enrollment_requests', JSON.stringify([...mockApproved, pendingReq]));
 
-      // Attempt to approve 101st request
-      const result = await enrollmentService.approveRequest('seat-101', 'admin-1');
+      // Attempt to approve 501st request
+      const result = await enrollmentService.approveRequest('seat-501', 'admin-1');
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Cannot approve: Founding 100 seats limit reached');
+      expect(result.error).toContain('Cannot approve: Founding 500 seats limit reached');
     });
   });
 
   describe('Course Pricing Display', () => {
-    it('should return Founding 100 ₹149 pricing for playwright-automation when active', () => {
+    it('should return Founding 500 ₹149 pricing for playwright-automation when active', () => {
       const pricing = getCoursePriceDetails('playwright-automation');
       expect(pricing.inr).toBe(149);
       expect(pricing.originalInr).toBe(1599);

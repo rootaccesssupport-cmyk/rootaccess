@@ -42,7 +42,7 @@ export const HomePage: React.FC = () => {
       title: 'Automation Testing Foundations',
       courseName: 'Playwright Automation with JavaScript + AI',
       tag: 'Code & Automation',
-      badge: '20-Day Masterclass • Live Now',
+      badge: 'Founding 500 • ₹149 Launch Offer',
       icon: <Code2 className="w-5 h-5 text-purple-600" />,
       description: 'Master browser automation from scratch with pure JavaScript and AI tools. Zero TypeScript overhead. DevTools architecture, robust locators, and Page Object Model frameworks.',
       skills: ['Playwright Test Runner', 'Locators & Auto-Waiting', 'Web-First Assertions', 'AI Locator Selection', 'Page Object Model', 'CI/CD & Headless'],
